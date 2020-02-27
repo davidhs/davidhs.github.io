@@ -1,0 +1,41 @@
+
+
+1 inch = 2.54 cm
+
+
+15 turns per 38 - 39 cm
+
+Mouse DPI was either 200, 400 or 600 (I suspect 600).
+It was 600
+
+
+2.5333 - 2.6 cm per turn OR
+0.99737 - 1.0236 inches per turn
+
+
+I suspect that with
+
+
+MouseSensitivity=50
+
+MouseSensitivityMultiplierUnit=0.020000
+XFactorAiming=0.020000
+AimDownSightsMouse=100
+
+that when you move your mouse one inch you complete a rotation.
+
+Yes
+
+Settings
+
+
+MouseYawSensitivity=25
+MousePitchSensitivity=25
+
+means you need to move your mouse 4 inches to complete a rotation.
+
+
+I suspect MouseSensitivity and MouseSensitivityMultiplierUnit are multiplied 
+together to get a general sensitivity
+
+Actually I suspect it move at 1 / 2pi of an angle

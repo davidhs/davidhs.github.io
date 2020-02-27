@@ -1,0 +1,40 @@
+CompilationUnit -> _OptPackageStatement
+CompilationUnit -> _OptImportStatementSeq
+CompilationUnit -> _OptTypeDeclarationSeq
+
+_OptImportStatementSeq -> _ImportStatementSeq
+_OptImportStatementSeq -> #
+
+_ImportStatementSeq -> ImportStatement _ImportStatementSeqCont
+_ImportStatementSeqCont -> ImportStatement _ImportStatementSeqCont
+_ImportStatementSeqCont -> #
+
+_OptTypeDeclarationSeq -> _TypeDeclarationSeq
+_OptTypeDeclarationSeq -> #
+
+_TypeDeclarationSeq     -> TypeDeclaration _TypeDeclarationSeqCont
+_TypeDeclarationSeqCont -> TypeDeclaration _TypeDeclarationSeqCont
+_TypeDeclarationSeqCont -> #
+
+_OptPackageStatement -> PackageStatement
+_OptPackageStatement -> #
+
+PackageStatement -> package PackageName ;
+
+PackageName -> identifier
+PackageName -> PackageName . identifier
+
+ImportStatement -> import _ImportStatementCont ;
+_ImportStatementCont -> PackageName . * ;
+_ImportStatementCont -> ClassName
+_ImportStatementCont -> InterfaceName
+
+ClassName -> identifier
+ClassName -> PackageName . identifier
+
+InterfaceName -> identifier
+InterfaceName -> PackageName . identifier
+
+
+
+TypeDeclaration -> 3

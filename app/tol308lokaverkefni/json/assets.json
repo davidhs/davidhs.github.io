@@ -1,0 +1,640 @@
+{
+    "textureAtlas": {
+        "dungeon": {
+            "dep": ["raw.image.dungeon"],
+            "cfg": {
+                "image": "raw.image.dungeon",
+                "tileWidth": 16,
+                "tileHeight": 16
+            }
+        },
+        "muzzle": {
+            "dep": ["raw.image.muzzle"],
+            "cfg": {
+                "image": "raw.image.muzzle",
+                "tileWidth": 100,
+                "tileHeight": 100,
+                "nrOfTiles": 5,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "blood": {
+            "dep": ["raw.image.blood"],
+            "cfg": {
+                "image": "raw.image.blood",
+                "tileWidth": 100,
+                "tileHeight": 100,
+                "nrOfTiles": 9,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "blood2": {
+            "dep": ["raw.image.blood2"],
+            "cfg": {
+                "image": "raw.image.blood2",
+                "tileWidth": 100,
+                "tileHeight": 100,
+                "nrOfTiles": 6,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "blood3": {
+            "dep": ["raw.image.blood3"],
+            "cfg": {
+                "image": "raw.image.blood3",
+                "tileWidth": 98.125,
+                "tileHeight": 98.125,
+                "nrOfTiles": 64,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "explosion": {
+            "dep": ["raw.image.explosion"],
+            "cfg": {
+                "image": "raw.image.explosion",
+                "tileWidth": 100,
+                "tileHeight": 100,
+                "nrOfTiles": 74,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "explosion2": {
+            "dep": ["raw.image.explosion2"],
+            "cfg": {
+                "image": "raw.image.explosion2",
+                "tileWidth": 100,
+                "tileHeight": 125,
+                "nrOfTiles": 20,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "explosion3": {
+            "dep": ["raw.image.explosion3"],
+            "cfg": {
+                "image": "raw.image.explosion3",
+                "tileWidth": 100,
+                "tileHeight": 100,
+                "nrOfTiles": 49,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "explosionMedic": {
+            "dep": ["raw.image.explosionMedic"],
+            "cfg": {
+                "image": "raw.image.explosionMedic",
+                "tileWidth": 100,
+                "tileHeight": 100,
+                "nrOfTiles": 30,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "explosionSpritesheet2": {
+            "dep": ["raw.image.explosionSpritesheet2"],
+            "cfg": {
+                "image": "raw.image.explosionSpritesheet2",
+                "tileWidth": 16,
+                "tileHeight": 16
+            }
+        },
+        "explosionSpritesheet3": {
+            "dep": ["raw.image.explosionSpritesheet3"],
+            "cfg": {
+                "image": "raw.image.explosionSpritesheet3",
+                "tileWidth": 16,
+                "tileHeight": 16
+            }
+        },
+        "explosionSpritesheet5": {
+            "dep": ["raw.image.explosionSpritesheet5"],
+            "cfg": {
+                "image": "raw.image.explosionSpritesheet5",
+                "tileWidth": 16,
+                "tileHeight": 16
+            }
+        },
+        "explosionSpritesheet6": {
+            "dep": ["raw.image.explosionSpritesheet6"],
+            "cfg": {
+                "image": "raw.image.explosionSpritesheet6",
+                "tileWidth": 16,
+                "tileHeight": 16
+            }
+        },
+        "terroristExplosion":{
+            "dep": ["raw.image.terroristExplosion"],
+            "cfg": {
+                "image": "raw.image.terroristExplosion",
+                "tileWidth": 96,
+                "tileHeight": 96,
+                "nrOfTiles": 15,
+                "primaryDirection": "right",
+                "secondaryDirection": "down"
+            }
+        },
+        "spritesheet1": {
+            "dep": ["raw.image.tileset3"],
+            "cfg": {
+                "image": "raw.image.tileset3",
+                "tileWidth": 32,
+                "tileHeight": 32
+            }
+        },
+        "tileset4": {
+            "dep": ["raw.image.ta_tileset4"],
+            "cfg": {
+                "image": "raw.image.ta_tileset4",
+                "tileWidth": 32,
+                "tileHeight": 32
+            }
+        },
+        "terrain_atlas": {
+            "dep": ["raw.image.ta_terrainAtlas"],
+            "cfg": {
+                "image": "raw.image.ta_terrainAtlas",
+                "tileWidth": 32,
+                "tileHeight": 32
+            }
+        }
+    },
+    "texture": {
+        "background": {
+            "dep": ["textureAtlas.dungeon"],
+            "cfg": {
+                "image": {
+                    "target": "textureAtlas.dungeon",
+                    "coordinate": [1, 6]
+                },
+                "scale": 4
+            }
+        }
+    },
+    "sequence": {
+      "explosionMedic": {
+          "dep": ["textureAtlas.explosionMedic"],
+          "cfg": {
+              "all": true,
+              "primaryDirection": "right",
+              "secondaryDirection": "down",
+              "textureAtlas": "textureAtlas.explosionMedic"
+          }
+      },
+        "explosion": {
+            "dep": ["textureAtlas.explosion"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.explosion"
+            }
+        },
+        "explosion2": {
+            "dep": ["textureAtlas.explosion2"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.explosion2"
+            }
+        },
+        "explosion3": {
+            "dep": ["textureAtlas.explosion3"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.explosion3"
+            }
+        },
+        "terrorExplosion":{
+            "dep": ["textureAtlas.terroristExplosion"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.terroristExplosion"
+          }
+        },
+        "muzzle": {
+            "dep": ["textureAtlas.muzzle"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.muzzle"
+            }
+        },
+        "blood": {
+            "dep": ["textureAtlas.blood"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.blood"
+            }
+        },
+        "blood2": {
+            "dep": ["textureAtlas.blood2"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.blood2"
+            }
+        },
+        "blood3": {
+            "dep": ["textureAtlas.blood3"],
+            "cfg": {
+                "all": true,
+                "primaryDirection": "right",
+                "secondaryDirection": "down",
+                "textureAtlas": "textureAtlas.blood3"
+            }
+        }
+    },
+    "sprite": {
+        "rock": {
+            "dep": ["raw.image.rock"],
+            "cfg": {
+                "image": "raw.image.rock"
+            }
+        },
+        "bullet": {
+            "dep": ["raw.image.bullet"],
+            "cfg": {
+                "scale": 0.15,
+                "image": "raw.image.bullet"
+            }
+        },
+        "beam": {
+            "dep": ["raw.image.beam"],
+            "cfg": {
+                "scale": 0.5,
+                "image": "raw.image.beam"
+            }
+        },
+        "muzzle": {
+            "dep": ["raw.image.muzzle"],
+            "cfg": {
+                "scale": 0.5,
+                "image": "raw.image.muzzle"
+            }
+        },
+        "player": {
+            "dep": ["raw.image.rifle"],
+            "cfg": {
+                "scale": 0.2,
+                "image": "raw.image.rifle"
+            }
+        },
+        "donkey": {
+            "dep": ["raw.image.donkey"],
+            "cfg": {
+                "scale": 0.2,
+                "image": "raw.image.donkey"
+            }
+        },
+        "medicpack": {
+            "dep": ["raw.image.medicpack"],
+            "cfg": {
+                "scale": 0.8,
+                "image": "raw.image.medicpack"
+            }
+        },
+        "ammopack": {
+            "dep": ["raw.image.ammopack"],
+            "cfg": {
+                "scale": 0.8,
+                "image": "raw.image.ammopack"
+            }
+        },
+        "blood": {
+            "dep": ["raw.image.blood"],
+            "cfg": {
+                "image": "raw.image.blood"
+            }
+        },
+        "terrorist": {
+          "dep": ["raw.image.terrorist"],
+          "cfg": {
+            "scale": 0.3,
+            "image": "raw.image.terrorist"
+          }
+        }
+    },
+    "tiledMap": {
+        "tm1": {
+            "dep": [
+                "raw.xml.pmap1",
+                "tiledTileset.map1tileset1",
+                "tiledTileset.map1tileset2",
+                "tiledTileset.map1tileset3"
+            ],
+            "cfg": {
+                "type": 1,
+                "map": "raw.xml.pmap1",
+                "tilesets": [
+                    "tiledTileset.map1tileset2",
+                    "tiledTileset.map1tileset3",
+                    "tiledTileset.map1tileset1"
+                ]
+            }
+        },
+        "tm2": {
+            "dep": [
+                "raw.xml.pmap2",
+                "tiledTileset.map2tileset1",
+                "tiledTileset.map2tileset2",
+                "tiledTileset.map2tileset3",
+                "tiledTileset.map2tileset4"
+            ],
+            "cfg": {
+                "type": 1,
+                "map": "raw.xml.pmap2",
+                "tilesets": [
+                    "tiledTileset.map2tileset3",
+                    "tiledTileset.map2tileset2",
+                    "tiledTileset.map2tileset4"
+                ]
+            }
+        },
+        "tm3": {
+            "dep": [
+                 "raw.xml.pmap3",
+                 "tiledTileset.map3tileset1",
+                 "tiledTileset.map3tileset2",
+                 "tiledTileset.map3tileset3",
+                 "tiledTileset.map3tileset4"
+             ],
+             "cfg": {
+                 "type": 1,
+                 "map": "raw.xml.pmap3",
+                 "tilesets": [
+                     "tiledTileset.map3tileset2",
+                     "tiledTileset.map3tileset3",
+                     "tiledTileset.map3tileset1"
+                 ]
+             }
+           }
+         },
+    "tiledTileset": {
+        "map1tileset1": {
+            "dep": [
+                "raw.xml.pmap1tileset1",
+                "textureAtlas.spritesheet1"
+            ],
+            "cfg": {
+                "textureAtlas": "textureAtlas.spritesheet1",
+                "cfg": "raw.xml.pmap1tileset1"
+            }
+        },
+        "map1tileset2": {
+            "dep": [
+                "raw.xml.pmap1tileset2",
+                "textureAtlas.tileset4"
+            ],
+            "cfg": {
+                "textureAtlas": "textureAtlas.tileset4",
+                "cfg": "raw.xml.pmap1tileset2"
+            }
+        },
+        "map1tileset3": {
+            "dep": [
+                "raw.xml.pmap1tileset3",
+                "textureAtlas.terrain_atlas"
+            ],
+            "cfg": {
+                "textureAtlas": "textureAtlas.terrain_atlas",
+                "cfg": "raw.xml.pmap1tileset3"
+            }
+        },
+
+
+
+        "map2tileset1": {
+            "dep": [
+                "raw.xml.pmap2tileset1",
+                "textureAtlas.dungeon"
+            ],
+            "cfg": {
+                "textureAtlas": "textureAtlas.dungeon",
+                "cfg": "raw.xml.pmap2tileset1"
+            }
+        },
+        "map2tileset2": {
+            "dep": [
+                "raw.xml.pmap2tileset2",
+                "textureAtlas.terrain_atlas"
+            ],
+            "cfg": {
+                "textureAtlas": "textureAtlas.terrain_atlas",
+                "cfg": "raw.xml.pmap2tileset2"
+            }
+        },
+        "map2tileset3": {
+            "dep": [
+                "raw.xml.pmap2tileset3",
+                "textureAtlas.tileset4"
+            ],
+            "cfg": {
+                "textureAtlas": "textureAtlas.tileset4",
+                "cfg": "raw.xml.pmap2tileset3"
+            }
+        },
+        "map2tileset4":{
+          "dep": [
+            "raw.xml.pmap2tileset4",
+            "textureAtlas.spritesheet1"
+          ],
+          "cfg": {
+            "textureAtlas": "textureAtlas.spritesheet1",
+            "cfg": "raw.xml.pmap2tileset4"
+          }
+        },
+
+
+
+        "map3tileset1": {
+             "dep": [
+                 "raw.xml.pmap3tileset1",
+                 "textureAtlas.dungeon"
+             ],
+             "cfg": {
+                 "textureAtlas": "textureAtlas.dungeon",
+                 "cfg": "raw.xml.pmap3tileset1"
+             }
+         },
+         "map3tileset2": {
+             "dep": [
+                 "raw.xml.pmap3tileset2",
+                 "textureAtlas.terrain_atlas"
+             ],
+             "cfg": {
+                 "textureAtlas": "textureAtlas.terrain_atlas",
+                 "cfg": "raw.xml.pmap3tileset2"
+             }
+         },
+         "map3tileset3": {
+             "dep": [
+                 "raw.xml.pmap3tileset3",
+                 "textureAtlas.tileset4"
+             ],
+             "cfg": {
+                 "textureAtlas": "textureAtlas.tileset4",
+                 "cfg": "raw.xml.pmap3tileset3"
+             }
+         },
+         "map3tileset4":{
+           "dep": [
+             "raw.xml.pmap3tileset4",
+             "textureAtlas.spritesheet1"
+           ],
+           "cfg": {
+             "textureAtlas": "textureAtlas.spritesheet1",
+             "cfg": "raw.xml.pmap3tileset4"
+           }
+
+         }
+       },
+    "fastImage": {
+        "cursor": {
+            "dep": ["raw.image.cursor"],
+            "cfg": {
+                "image": "raw.image.cursor"
+            }
+        },
+        "cursor2": {
+            "dep": ["raw.image.crosshair"],
+            "cfg": {
+                "scale": 0.05,
+                "bias": {
+                    "x": "-50%",
+                    "y": "-50%"
+                },
+                "image": "raw.image.crosshair"
+            }
+        }
+    },
+    "raw": {
+        "image": [{
+            "prefix": "img/",
+            "paths": {
+                "cursor": "cursor.png",
+                "rock": "rock.png",
+                "bullet": "bullet.png",
+                "beam": "beam.png",
+                "rifle": "survivor-shoot_rifle_0.png",
+                "blockMap": "block-map.png",
+                "donkey": "notdonkey.png",
+                "medicpack": "medic.png",
+                "ammopack": "ammo.png",
+                "crosshair": "crosshair.png",
+                "heart": "hp.png",
+                "Hbackground": "HUD.png",
+                "Line": "line.png",
+                "blood": "blood.png",
+                "minimap3": "minimap3.png",
+                "minimap1": "minimap1.png",
+                "terrorist": "terrorist.png"
+
+            }
+        }, {
+            "prefix": "img/spritesheets/explosions/",
+            "paths": {
+                "muzzle": "muzzle.png",
+                "explosionMedic": "explosionMedic.png",
+                "blood": "blood.png",
+                "blood2": "blood2.png",
+                "blood3": "blood3.png",
+                "explosion": "spritesheet1.png",
+                "explosion2": "spritesheet2.png",
+                "explosion3": "spritesheet3.png",
+                "explosionSpritesheet2": "explosionSpritesheet2.png",
+                "explosionSpritesheet3": "explosionSpritesheet3.png",
+                "explosionSpritesheet5": "explosionSpritesheet5.png",
+                "explosionSpritesheet6": "explosionSpritesheet6.png",
+                "terroristExplosion": "terroristExplosion.png"
+            }
+        }, {
+            "prefix": "img/spritesheets/",
+            "paths": {
+                "dungeon": "dungeonTileset.png",
+                "tileset3": "tileset3.png",
+                "ta_terrainAtlas": "terrain_atlas.png",
+                "ta_tileset4": "tileset4.png",
+                "guns": "guns.png"
+            }
+        },  {
+          "prefix": "img/spritesheets/numbers/",
+          "paths": {
+            "exists": "exists.png",
+            "notexists": "notexists.png",
+            "selected": "selected.png"
+          }
+        }],
+        "audio": [{
+            "prefix": "audio/",
+            "paths": {
+                "bulletFire": "bulletFire.ogg",
+                "beamFire": "beamFire.ogg",
+                "bulletZapped": "bulletZapped.ogg",
+                "rockEvapoate": "rockEvaporate.ogg",
+                "rockSplit": "rockSplit.ogg",
+                "dying": "dying.ogg",
+                "gunsound1": "gunsound1.ogg",
+                "running1": "running1.ogg",
+                "impact1": "impact1.ogg",
+                "explosion1": "explosion.ogg",
+                "clawing": "clawing.ogg",
+                "ambiance": "ambiance.ogg"
+            }
+        }],
+        "text": [{
+            "prefix": "glsl/",
+            "paths": {
+                "lights": "lights.vert",
+                "shadowMap": "shadowMap.frag",
+                "shadowMask": "shadowMask.frag"
+            }
+        }],
+        "json": [{
+            "prefix": "json/",
+            "paths": {}
+        }],
+        "xml": [{
+            "prefix": "xml/map1/",
+            "paths": {
+                "pmap1": "map1.tmx",
+                "pmap1tileset1": "map1-tileset1.tsx",
+                "pmap1tileset2": "map1-tileset2.tsx",
+                "pmap1tileset3": "map1-tileset3.tsx"
+            }
+        }, {
+            "prefix": "xml/map3/",
+            "paths": {
+                "pmap2": "map3.tmx",
+                "pmap2tileset1": "tiles1.tsx",
+                "pmap2tileset2": "tiles2.tsx",
+                "pmap2tileset3": "tiles3.tsx",
+                "pmap2tileset4": "tiles4.tsx"
+            }
+        }, {
+           "prefix": "xml/map4/",
+           "paths": {
+               "pmap3": "map4.tmx",
+               "pmap3tileset1": "tiles1.tsx",
+               "pmap3tileset2": "tiles2.tsx",
+               "pmap3tileset3": "tiles3.tsx",
+               "pmap3tileset4": "tiles4.tsx"
+           }
+
+           }]
+    }
+}

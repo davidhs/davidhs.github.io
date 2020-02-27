@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>LL(1) Grammar</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="flexbox">
+    <header class="header">
+      <select id="select_syntax" name="syntax">
+        <option value="cfg" selected="selected">CFG</option>
+        <option value="ebnf">EBNF</option>
+        <option value="js">JavaScript</option>
+        <option value="morpho">Morpho</option>
+        <option value="txt">Plain text</option>
+      </select>
+      <select id="select_example" name="example">
+        <option disabled selected value> -- select an example -- </option>
+        <option value="txt/example-simple.txt">Simple Example</option>
+        <option value="txt/example-nanomorpho.txt">NanoMorpho</option>
+      </select>
+    </header>
+    <div class="flexbox-row">
+      <div style="width:49%">
+        <div id="text_container">
+          <div id="text_back"  class="source" contenteditable="true" spellcheck="false"></div>
+          <div id="text_front" class="source u2" spellcheck="false"></div>
+        </div>
+      </div>
+      <div class="flexbox-col" style="width:50%">
+        <div style="background-color: #f00; height: 20%">
+          <textarea id="ta_top" style="width:100%;height:100%;font-family:monospace;background-color:#fff1e2" placeholder="FIRST"></textarea>
+        </div>
+        <div style="background-color: #0f0; height: 20%">
+          <textarea id="ta_middle" style="width:100%;height:100%;font-family:monospace;background-color:#ecffe2" placeholder="FOLLOW"></textarea>
+        </div>
+        <div style="height: 25%">
+          <textarea id="ta_parse_table" style="width:100%;height:100%;font-family:monospace;overflow:auto;background-color:#e2faff;" placeholder="PARSE TABLE" wrap="soft"></textarea>
+        </div>
+        <div style="background-color: #00f; height: 20%">
+          <textarea id="ta_bottom" style="width:100%;height:100%;font-family:monospace;background-color:#ede2ff" placeholder="ERROR MESSAGE"></textarea>
+        </div>
+        <div style="background-color: #00f; height: 20%">
+          <textarea id="ss_source" style="width:100%;height:100%;font-family:monospace;background-color:#ffd6d6" placeholder="RAILROAD SOURCE"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
