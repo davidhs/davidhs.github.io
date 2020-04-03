@@ -3,12 +3,17 @@
 
 var load = (function () {
 
+  /** @type {{ [key: number]: string }} */
   const _cache = {};
   const paths = [
     "html/about.html",
     "html/software.html"
   ];
 
+  /**
+   * 
+   * @param {number} pathNr 
+   */
   function load(pathNr) {
 
     if (pathNr in _cache) {

@@ -1,6 +1,9 @@
-var ImagePart = (function () {
+var ImagePart = /** @class */ (function () {
     function ImagePart(width, height, channels, arr) {
-        this.arr = (typeof arr !== 'undefined') ? arr : new Uint8ClampedArray(channels * width * height);
+        this.arr =
+            typeof arr !== "undefined"
+                ? arr
+                : new Uint8ClampedArray(channels * width * height);
         this.width = width;
         this.height = height;
         this.channels = channels;
@@ -20,3 +23,4 @@ var ImagePart = (function () {
     };
     return ImagePart;
 }());
+export default ImagePart;
