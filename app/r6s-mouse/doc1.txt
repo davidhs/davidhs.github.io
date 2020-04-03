@@ -1,0 +1,95 @@
+
+
+
+
+MouseSensitivity * MouseSensitivityMultiplierUnit
+
+
+
+
+(counts per inch)
+
+
+
+
+
+MouseAxisSensitivity / 100 * MouseSensitivity * MouseSensitivityMultiplierUnit * CPI * TurnCircumference = 2 * 100 * PI
+
+MouseAxisSensitivity * MouseSensitivity * MouseSensitivityMultiplierUnit * CPI * TurnCircumference = 2 * 100 * 100 * PI
+
+
+
+(in inches)
+
+(100 * 100 * 2 * PI) / (4900 * 1 * 50 * 0.02)
+
+
+TurnCircumference = (100 * 100 * 2 * PI) / (CPI * MouseAxisSensitivity * MouseSensitivity * MouseSensitivityMultiplierUnit)
+                                            counts per inch
+                           (counts     )
+
+
+(100 * 100 * 2 * PI) / (4900 * 1 * 50 * 0.02) = 12.82282715750936
+
+
+12.82282715750936 * 2.54 = 32.56998098007377
+
+
+----
+
+Suspect
+
+TurnCircumference = (100 * 100 * 2 * PI) / (4900 * 1 * 50 * 0.020000)
+
+12.82282715750936 inches
+32.56998098007377 cm
+
+Mouse:
+
+
+CPI*: a = 1, 2, 3..., 79
+MouseAxisSensitivity: b = 1, 2, 3..., 100
+MouseSensitivity: c = 1, 2, 3..., 100
+MouseSensitivityMultiplierUnit*: 1, 2, ..., 1000000
+
+
+
+TurnCircumference = 62831.853071795864 / ((150 + 50 * a) * b * c * d / 1000000)
+
+TurnCircumference = 62831853071.79586 / ((150 + 50 * a) * b * c * d)
+
+SIMPLIFIED
+
+(in inches)
+TurnCircumference = 62831853072 / ((150 + 50 * a) * b * c * d)
+
+
+CPI*: a = 1, 2, 3..., 79
+MouseAxisSensitivity: b = 1, 2, 3..., 100
+MouseSensitivity: c = 1, 2, 3..., 100
+MouseSensitivityMultiplierUnit*: 1, 2, ..., 1000000
+
+SIMPLIFIED 2
+(mul 100000)
+(in )
+
+100000 * TurnCircumference = 6283185307179586 / ((150 + 50 * a) * b * c * d)
+100000 * e = 6283185307179586 / ((150 + 50 * a) * b * c * d)
+
+100000 * e = 6283185307179586 / ((150 + 50 * a) * b * c * d)
+
+
+PROBLEM
+
+Sölvi
+
+400 eða 550
+20/20/90
+
+
+
+
+
+
+
+

@@ -1,0 +1,12 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: #ccc;
+}
+
+canvas {
+    display: block; /* To remove the scrollbars */
+    margin: 0;
+    padding: 0;
+}
+

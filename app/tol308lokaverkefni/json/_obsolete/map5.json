@@ -1,0 +1,299 @@
+{
+    "type": "map",
+    "name": "Yet another test! (3)",
+    "cfg": {
+        "world": {
+            "width": 32,
+            "height": 32,
+            "unit": "t"
+        },
+        "tile": {
+            "width": 32,
+            "height": 32
+        },
+        "shadowSize": 256,
+        "muted": true
+    },
+
+    "mouse": {
+        "image": "assets.raw.image.cursor",
+        "cursorLock": false
+    },
+
+    "init": {
+        "entities": {
+            "player": {
+                "position": {
+                    "x": 200,
+                    "y": 300
+                },
+                "sprite": {
+                    "path": "assets.sprite.player"
+                }
+            }
+        }
+    },
+
+    "assets": {
+        "textureAtlas": {
+            "dungeon": {
+                "dep": ["raw.image.dungeon"],
+                "cfg": {
+                    "image": "raw.image.dungeon",
+                    "tileWidth": 16,
+                    "tileHeight": 16
+                }
+            },
+            "explosion": {
+                "dep": ["raw.image.explosion"],
+                "cfg": {
+                    "image": "raw.image.explosion",
+                    "tileWidth": 100,
+                    "tileHeight": 100,
+                    "nrOfTiles": 74,
+                    "primaryDirection": "right",
+                    "secondaryDirection": "down"
+                }
+            },
+            "explosionSpritesheet2": {
+                "dep": ["raw.image.explosionSpritesheet2"],
+                "cfg": {
+                    "image": "raw.image.explosionSpritesheet2",
+                    "tileWidth": 16,
+                    "tileHeight": 16
+                }
+            },
+            "explosionSpritesheet3": {
+                "dep": ["raw.image.explosionSpritesheet3"],
+                "cfg": {
+                    "image": "raw.image.explosionSpritesheet3",
+                    "tileWidth": 16,
+                    "tileHeight": 16
+                }
+            },
+            "explosionSpritesheet5": {
+                "dep": ["raw.image.explosionSpritesheet5"],
+                "cfg": {
+                    "image": "raw.image.explosionSpritesheet5",
+                    "tileWidth": 16,
+                    "tileHeight": 16
+                }
+            },
+            "explosionSpritesheet6": {
+                "dep": ["raw.image.explosionSpritesheet6"],
+                "cfg": {
+                    "image": "raw.image.explosionSpritesheet6",
+                    "tileWidth": 16,
+                    "tileHeight": 16
+                }
+            },
+            "blood": {
+                "dep": ["raw.image.blood"],
+                "cfg": {
+                    "image": "raw.image.blood",
+                    "tileWidth": 512,
+                    "tileHeight": 512
+                }
+            },
+            "spritesheet1": {
+                "dep": ["raw.image.tileset3"],
+                "cfg": {
+                    "image": "raw.image.tileset3",
+                    "tileWidth": 32,
+                    "tileHeight": 32
+                }
+            },
+            "tileset4": {
+                "dep": ["raw.image.ta_tileset4"],
+                "cfg": {
+                    "image": "raw.image.ta_tileset4",
+                    "tileWidth": 32,
+                    "tileHeight": 32
+                }
+            },
+            "terrain_atlas": {
+                "dep": ["raw.image.ta_terrainAtlas"],
+                "cfg": {
+                    "image": "raw.image.ta_terrainAtlas",
+                    "tileWidth": 32,
+                    "tileHeight": 32
+                }
+            }
+        },
+        "texture": {
+            "background": {
+                "dep": ["textureAtlas.dungeon"],
+                "cfg": {
+                    "image": {
+                        "target": "textureAtlas.dungeon",
+                        "coordinate": [1, 6]
+                    },
+                    "scale": 4
+                }
+            }
+        },
+        "sequence": {
+            "explosion": {
+                "dep": ["textureAtlas.explosion"],
+                "cfg": {
+                    "all": true,
+                    "primaryDirection": "right",
+                    "secondaryDirection": "down",
+                    "textureAtlas": "textureAtlas.explosion"
+                }
+            }
+        },
+        "sprite": {
+            "bullet": {
+                "dep": ["raw.image.bullet"],
+                "cfg": {
+                    "scale": 0.15,
+                    "image": "raw.image.bullet"
+                }
+            },
+            "player": {
+                "dep": ["raw.image.rifle"],
+                "cfg": {
+                    "scale": 0.2,
+                    "image": "raw.image.rifle"
+                }
+            },
+            "blood": {
+                "dep": ["raw.image.blood"],
+                "cfg": {
+                    "image": "raw.image.blood"
+                }
+            },
+            "donkey": {
+                "dep": ["raw.image.donkey"],
+                "cfg": {
+                    "scale": 0.15,
+                    "image": "raw.image.donkey"
+                }
+            }
+        },
+        "tiledMap": {
+            "tm1": {
+                "dep": [
+                    "raw.xml.pmap",
+                    "fastImage.mapTileset1"
+                ],
+                "cfg": {
+                    "type": 1,
+                    "map": "raw.xml.pmap",
+                    "tilesets": [
+                        "tiledTileset.mapTileset1"
+                    ]
+                }
+            }
+        },
+        "tiledTileset": {
+            "mapTileset1": {
+                "dep": [
+                    "raw.xml.pmaptileset1",
+                    "textureAtlas.terrain_atlas"
+                ],
+                "cfg": {
+                    "textureAtlas": "textureAtlas.terrain_atlas",
+                    "cfg": "raw.xml.pmaptileset1"
+                }
+            }
+        },
+        "fastImage": {
+            "cursor": {
+                "dep": ["raw.image.cursor"],
+                "cfg": {
+                    "image": "raw.image.cursor"
+                }
+            },
+            "cursor2": {
+                "dep": ["raw.image.crosshair"],
+                "cfg": {
+                    "scale": 0.05,
+                    "bias": {
+                        "x": "-50%",
+                        "y": "-50%"
+                    },
+                    "image": "raw.image.crosshair"
+                }
+            }
+        },
+        "raw": {
+            "image": [{
+                "prefix": "img/",
+                "paths": {
+                    "cursor": "cursor.png",
+                    "rock": "rock.png",
+                    "blood": "blood.png",
+                    "bullet": "bullet.png",
+                    "rifle": "survivor-shoot_rifle_0.png",
+                    "blockMap": "block-map.png",
+                    "donkey": "notdonkey.png",
+                    "crosshair": "crosshair.png",
+                    "heart": "hp.png",
+                    "Hbackground": "HUD.png",
+                    "Line": "line.png"
+                }
+            }, {
+                "prefix": "img/spritesheets/explosions/",
+                "paths": {
+                    "explosion": "spritesheet1.png",
+                    "explosionSpritesheet2": "explosionSpritesheet2.png",
+                    "explosionSpritesheet3": "explosionSpritesheet3.png",
+                    "explosionSpritesheet5": "explosionSpritesheet5.png",
+                    "explosionSpritesheet6": "explosionSpritesheet6.png"
+                }
+            }, {
+                "prefix": "img/spritesheets/",
+                "paths": {
+                    "dungeon": "dungeonTileset.png",
+                    "tileset3": "tileset3.png",
+                    "ta_terrainAtlas": "terrain_atlas.png",
+                    "ta_tileset4": "tileset4.png",
+                    "guns": "guns.png"
+                }
+            },{
+              "prefix": "img/spritesheets/numbers/",
+              "paths": {
+                "exists": "exists.png",
+                "notexists": "notexists.png",
+                "selected": "selected.png"
+              }
+              }],
+            "audio": [{
+                "prefix": "audio/",
+                "paths": {
+                    "bulletFire": "bulletFire.ogg",
+                    "bulletZapped": "bulletZapped.ogg",
+                    "rockEvapoate": "rockEvaporate.ogg",
+                    "rockSplit": "rockSplit.ogg",
+                    "dying": "dying.ogg",
+                    "gunsound1": "gunsound1.ogg",
+                    "running1": "running1.ogg",
+                    "impact1": "impact1.ogg",
+                    "explosion1": "explosion.ogg",
+                    "clawing": "clawing.ogg"
+                }
+            }],
+            "text": [{
+                "prefix": "glsl/",
+                "paths": {
+                    "lights": "lights.vert",
+                    "shadowMap": "shadowMap.frag",
+                    "shadowMask": "shadowMask.frag"
+                }
+            }],
+            "json": [{
+                "prefix": "json/",
+                "paths": {}
+            }],
+            "xml": [{
+                "prefix": "xml/map2/",
+                "paths": {
+                    "pmap": "map2.tmx",
+                    "pmaptileset1": "map2-tileset1.tsx"
+                }
+            }]
+        }
+    }
+}

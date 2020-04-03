@@ -1,0 +1,187 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tom Clancy's Rainbow Six Siege: Mouse Settings</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <h1>Tom Clancy's Rainbow Six Siege</h1>
+
+    <p>This document assumes you're using Windows and have
+        <span style="font-weight:bold">raw mouse input</span> enabled.</p>
+
+    <p>
+        For maximum precision you want your in-game sensitivity to be as low as possible. Then use your mouse DPI to compensate for
+        the rotation speed.
+    </p>
+
+    <p>Turn circumference is the number you wish to calculate.</p>
+
+    <h2>Terminology</h2>
+
+    <ul>
+        <li>
+            <span style="font-weight:bold">CPI</span>: counts per inch, the number of steps the mouse will report to the OS when it moves one inch.
+            <ul>
+                <li>Often erroneously referred to as DPI or dots per inch.</li>
+            </ul>
+        </li>
+        <li>
+            <span style="font-weight:bold">DPI</span>: dots per inch, or how many dots per inch an injet printer is capable of.
+            <ul>
+                <li>Usually referring to CPI</li>
+            </ul>
+        </li>
+        <li>
+            <span style="font-weight:bold">Inch</span>: 1 inch is
+            <em>exactly</em> 2.54 cm.</li>
+        <li>
+            <span style="font-weight:bold">Turn Circumference</span>: the distance you need to move your mouse to complete a full rotation. Measured in
+            cm/rev.</li>
+    </ul>
+
+    <h2>Formula</h2>
+
+    <p>TurnCircumference = 2.54 * (100 * 100 * 2 * PI) / (CPI * MouseAxisSensitivity * MouseSensitivity * MouseSensitivityMultiplierUnit)</p>
+
+    <ul>
+        <li>
+            <span style="font-weight:bold">TurnCircumference</span>: how far you need to move your mouse in cm to complete a full revolution in-game.</li>
+        <li>
+            <span style="font-weight:bold">PI</span>: constant, about 3.14.</li>
+        <li>
+            <span style="font-weight:bold">CPI</span>: CPI or DPI of your mouse, e.g. 400.</li>
+        <li>
+            <span style="font-weight:bold">MouseAxisSensitivity</span>: Either
+            <span style="font-weight:bold">Mouse Sensitivity Horizontal</span> or
+            <span style="font-weight:bold">Mouse Sensitivity Vertical</span>, a value from 1 to 100. </li>
+        <li>
+            <span style="font-weight:bold">MouseSensitivity</span>: default value is 50. Not possible to change in-game.</li>
+        <li>
+            <span style="font-weight:bold">MouseSensitivityMultiplierUnit:</span> default value is 0.020000. Not possible to change in-game.</li>
+
+    </ul>
+
+    We can simplify the formula by using the default values you cannot change in-game.
+
+    <p>TurnCircumference = 159592.90680236148 / (CPI * MouseAxisSensitivity)</p>
+
+
+    <h2>Forms</h2>
+
+    <!-- Form 1 -->
+    <div class="section">
+        <h3>Get turn circumference</h3>
+        <div>
+            <label>Mouse DPI:
+                <input id="f1_mdpi" type="number" value="400" min="1" max="100000" />
+            </label>
+
+            <label>In-game sensitivity:
+                <input id="f1_igs" type="number" value="100" min="1" max="100" />
+            </label>
+            Turn circumference:
+                <span id="f1_rd"></span>
+            
+            <div style="margin-left: 20px">
+                <fieldset>
+                    <legend>Unit</legend>
+                    <label><input type="radio" id="f1_ui" name="f1u" value="inch" checked> inch</label>
+                    <label><input type="radio" id="f1_uc" name="f1u" value="cm"> cm</label>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form 2 -->
+    <div class="section">
+        <h3>Get mouse DPI</h3>
+        <div>
+            <label>In-game sensitivity:
+                <input id="f2_igs" type="number" value="100" min="1" max="100" />
+            </label>
+            <label>Turn circumference:
+                <input id="f2_rd" type="number" value="10" min="0" step="0.001" />
+            </label>
+            <div style="margin-left: 20px">
+                <fieldset>
+                    <legend>Unit</legend>
+                    <label>
+                        <input type="radio" name="f2u" id="f2_ui" value="inch" checked> inch</label>
+                    <label>
+                        <input type="radio" name="f2u" id="f2_uc" value="cm"> cm</label>
+                </fieldset>
+            </div>
+            Mouse DPI:
+            <span id="f2_mdpi"></span>
+        </div>
+    </div>
+
+    <!-- Form 3 -->
+    <div class="section">
+        <h3>Get in-game sensitivity</h3>
+
+        <div>
+            <label for="f3_mdpi">Mouse DPI:
+                <input id="f3_mdpi" name="f3_mdpi" type="number" value="400" min="1" max="100000" />
+            </label>
+            <label>Turn circumference:
+                <input id="f3_rd" type="number" value="10" min="0" step="0.001" />
+            </label>
+            <div style="margin-left: 20px">
+
+                <fieldset>
+                    <legend>Unit</legend>
+
+                    <label>
+                        <input type="radio" id="f3_ui" name="f3u" value="inch" checked> inch</label>
+                    <label>
+                        <input type="radio" id="f3_uc" name="f3u" value="cm"> cm</label>
+
+                </fieldset>
+
+            </div>
+            In-game sensitivity:
+            <span id="f3_igs"></span>
+        </div>
+    </div>
+
+    <h2>Profiles</h2>
+
+    <ul>
+        <li>
+            <button id="profile_shroud">Shroud</button>
+        </li>
+        <li>
+            <button id="profile_king_george">King George</button>
+        </li>
+    </ul>
+
+    <h2>Notes</h2>
+
+    <ul>
+        <li>The smallest angle you can move with no modifier (in-game sensitivity of 100) is about 0.58 degrees, and with in-game
+            sensitivity of 1 would be 0.0058 degrees or 0.35 minutes of arc. (With 20/20 vision you're able to resolve spatial
+            pattern by a visual angle of 1 minute of arc)</li>
+    </ul>
+
+    <h2>Sources</h2>
+
+    <ul>
+        <li>[1]
+            <a href="https://liquipedia.net/counterstrike/Mouse_settings">https://liquipedia.net/counterstrike/Mouse_settings</a>
+        </li>
+        <li>[2]
+            <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Yaw_Axis_Corrected.svg/798px-Yaw_Axis_Corrected.svg.png">https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Yaw_Axis_Corrected.svg/798px-Yaw_Axis_Corrected.svg.png</a>
+        </li>
+        <li>[3]
+            <a href="https://www.reddit.com/r/Rainbow6/comments/3vl3yn/calculating_your_exact_mouse_sensitivities/">https://www.reddit.com/r/Rainbow6/comments/3vl3yn/calculating_your_exact_mouse_sensitivities/</a>
+        </li>
+    </ul>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

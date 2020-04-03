@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PoC: Top-down shooter</title>
+    <link rel="stylesheet" type="text/css" href="css/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css" charset="utf-8"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="center" style="width: 100%">
+    <div id="canvi">
+      <p>
+      <img id="img" src="https://i.imgur.com/Dqg9zlo.png"/>
+      <p>
+      <canvas id="myCanvas" width="300" height="200">
+        Sorry, your browser does not support the HTML5 canvas tag.
+      </canvas>
+    </div>
+  </div>
+  <div>
+    <p id="objective">What's the objective? Don't die. Kill everything.
+    <p id="text">
+      W: move up<br>
+      A: move left<br>
+      S: move down<br>
+      D: move right<br>
+    </p>
+    <p id="text">
+      T: toggle timer <br>
+      <br>
+      O: toggle step mode<br>
+      N: next frame in step mode<br>
+      <br>
+      P: toggle pause mode <br>
+    </p>
+    <p id="text">
+      C: toggle clear <br>
+      B: toggle box <br>
+      U: toggle undo box <br>
+      F: toggle flip flop <br>
+      R: toggle render <br>
+      <br>
+      H: toggle show collision volume<br>
+      K: no clip<br>
+      <br><br>
+      M: mute
+    </p>
+  </div>
+
+    <!-- UI Elements -->
+  <script src="js/screen/ui/UIElement.js"></script>
+  <script src="js/screen/ui/UIFrame.js"></script>
+  <script src="js/screen/ui/UIContainer.js"></script>
+  <script src="js/screen/ui/UIList.js"></script>
+  <script src="js/screen/ui/UIButton.js"></script>
+  <script src="js/screen/ui/UIBlank.js"></script>
+  <script src="js/lib/datastructure/QuickList.js"></script>
+
+  <!-- LIB -->
+  <script src="js/lib/util.js"></script>
+  <script src="js/lib/loader.js"></script>
+  <script src="js/lib/glutil.js"></script>
+  <script src="js/lib/consts.js"></script>
+  <script src="js/lib/audioManager.js"></script>
+
+  <!-- PATH FINDING -->
+  <script src="js/lib/datastructure/PriorityQueue.js"></script>
+  <script src="js/lib/datastructure/Set2D.js"></script>
+  <script src="js/lib/Grid.js"></script>
+
+  <!-- 2D GFX -->
+  <script src="js/gfx/TextureAtlas.js"></script>
+  <script src="js/gfx/AnimatedImage.js"></script>
+  <script src="js/gfx/Sprite.js"></script>
+  <script src="js/gfx/Texture.js"></script>
+  <script src="js/gfx/FastImage.js"></script>
+  <script src="js/gfx/Sequence.js"></script>
+
+  <!-- 3D GFX -->
+  <script src="js/gfx/webgl/lighting.js"></script>
+  <script src="js/gfx/webgl/shadows.js"></script>
+
+  <!-- GAME SPECIFIC GLOBALS -->
+  <script src="js/globals.js"></script>
+
+  <!-- INPUT -->
+  <script src="js/inputs/mouse.js"></script>
+  <script src="js/inputs/keys.js"></script>
+
+  <!-- WORLD... SOMETHING... -->
+  <script src="js/screen/g_world.js"></script>
+  <script src="js/screen/g_viewport.js"></script>
+
+  <!-- ENTITIES -->
+  <script src="js/entities/entityManager.js"></script>
+  <script src="js/entities/spatialManager.js"></script>
+  <script src="js/entities/Entity.js"></script>
+  <script src="js/entities/type/Player.js"></script>
+  <script src="js/entities/type/MedicPack.js"></script>
+  <script src="js/entities/type/AmmoPack.js"></script>
+  <script src="js/entities/type/Rock.js"></script>
+  <script src="js/entities/type/Bullet.js"></script>
+  <script src="js/entities/type/Muzzle.js"></script>
+  <script src="js/entities/type/GenericEnemyOne.js"></script>
+  <script src="js/entities/type/Terrorist.js"></script>
+
+  <!-- PLUMBING -->
+  <script src="js/plumbing/update.js"></script>
+  <script src="js/plumbing/render.js"></script>
+  <script src="js/plumbing/main.js"></script>
+
+  <!-- L0 -->
+  <script src="js/screen/Minimap.js"></script>
+  <script src="js/screen/HUD.js"></script>
+
+  <!-- EXPERIMENTAL -->
+  <script src="js/experimental/TiledTileset.js"></script>
+  <script src="js/experimental/TiledMap.js"></script>
+  <script src="js/experimental/mapHandler.js"></script>
+  <script src="js/lib/assetLoader.js"></script>
+
+  <!-- GAME ITSELF -->
+  <script src="js/GAME.js"></script>
+
+  <script type="module" src="mjs/main.js"></script>
+
+</body>
+</html>

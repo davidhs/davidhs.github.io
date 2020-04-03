@@ -1,0 +1,23 @@
+{
+    "type": "map",
+    "name": "Yet another test! (2)",
+    "cfg": {
+        "tiledMap": "tiledMap.tm1"
+    },
+
+    "mouse": {
+        "image": "raw.image.cursor",
+        "cursorLock": false
+    },
+
+    "init": {
+        "entities": {
+            "player": {
+                "sprite": {
+                    "path": "sprite.player"
+                }
+            }
+        }
+
+    }
+}

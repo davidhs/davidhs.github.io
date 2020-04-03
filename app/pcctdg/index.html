@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perceptual Color Contrast Training Data Generator</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body onload="main()">
+    <div id="frame">
+        <div id="container">
+            <div id="suggestion">
+                <div id="thetext">A paragraph is a group of words put together to form a group that is  usually longer than a sentence. Paragraphs are often made up of many sentences. They are     usually between four to eight sentences. Paragraphs can begin with an indentation (about five   spaces), or by missing a line out, and then starting again; this makes telling when one   paragraph ends and another begins easier.
+                </div>
+            </div>
+            <canvas id="score"></canvas>
+        </div>
+        <div id="remainder">
+            <a class="button no-drag" id="export" href>Export</a>
+            <p id="coord" class="noselect">0</p>
+        </div>
+    </div>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Graph Interactive</title>
+        <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+        <!--<link rel="stylesheet" type="text/css" href="reset.css">-->
+        <!--<link rel="stylesheet/less" type="text/css" href="less/style.less">-->
+        <!--<link rel="stylesheet" type="text/css" href="css/style.css">-->
+    </head>
+    <body> 
+
+        <div class="layout main">
+            <div class="layout top">
+                <button class="button" id="btnvdel">DELETE VERTEX</button>
+                <button class="button" id="btnedel">DELETE EDGE</button>
+            </div>
+            <div class="layout left">
+
+                <p>Vertex Description</p>
+                <textarea id="vertexdescription" class="textbox"></textarea>
+                <p>Edge Description</p>
+                <textarea id="edgedescription" class="textbox"></textarea>
+    
+
+                <p>Vertex Info</p>
+                <textarea id="vertexinfo" class="textbox" readonly></textarea>
+                <p>Edge Info</p>
+                <textarea id="edgeinfo" class="textbox" readonly></textarea>
+
+                <p class="textbox">
+                    Hold Ctrl and left press the left mouse button to create
+                    a vertex.
+                </p>
+    
+    
+            </div>
+            <div class="layout right">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div class="layout bottom">
+                <div class="">
+                    <div class="no-drag" style="padding-left: 2px">
+                        <label id="label-input" for="import" class="    custom-file-upload no-drag">Import</label>
+                        <input id="import" type="file"/></label>
+                        <a class="button no-drag" id="export" href="">Export</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!--<script src="lib/less.js"></script>-->
+        <script src="bundle.js"></script>
+    </body>
+</html>

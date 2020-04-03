@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- START OF HEAD -->
+<title>Clock</title>
+<style type="text/css">
+html, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+canvas {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+</style>
+<!-- END OF HEAD -->
+</head>
+<body>
+<!-- START OF BODY -->
+<canvas id="canvas"></canvas>
+
+<!-- START OF SCRIPTS -->
+<script type="text/javascript">
+const canvas = document.getElementById('canvas');
+
+// 256 pixels
+const size = -1;
+let w = -1;
+let h = -1;
+let x0 = -1;
+let y0 = -1;
+let radius = -1;
+
+const TAU = 2.0 * Math.PI;
+
+const ctx = canvas.getContext('2d');
+
+
+
+
+function render() {
+
+    // Retain old state
+
+
+    const old = {};
+
+    old.fillStyle = ctx.fillStyle;
+    old.strokeStyle = ctx.strokeStyle;
+    old.lineWidth = ctx.lineWidth;
+
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, w, h);
+
+
+    const now = new Date();
+
+    // Circle
+    ctx.beginPath();
+    ctx.arc(x0, y0, radius, 0, TAU, true);
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    // Draw spokes
+
+
+    {
+        ctx.strokeStyle = 'black';
+
+        const a = 12;
+        const b = 5;
+        const n = a * b;
+
+        for (let i = 0; i < n; i += 1) {
+
+            const inc = TAU / n;
+
+
+            let r1 = radius - radius * 0.06;
+            let r2 = radius - radius * 0.03;
+
+            if (i % b === 0) {
+                ctx.lineWidth = 3;
+                r1 = radius - radius * 0.08;
+            } else {
+                ctx.lineWidth = 1;
+            }
+
+            const angle = i * inc;
+
+            const cosA = Math.cos(angle);
+            const sinA = Math.sin(angle);
+
+
+            const x1 = x0 + r1 * cosA;
+            const y1 = y0 + r1 * sinA;
+
+            const x2 = x0 + r2 * cosA;
+            const y2 = y0 + r2 * sinA;
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            // Draw time
+            if (i % b === 0) {
+                ctx.lineWidth = 3;
+                r1 = radius - radius * 0.08;
+            }
+        }
+    }
+
+
+    // Hour hand
+    {
+        let angle = 0;
+        angle += now.getHours();
+        angle += now.getMinutes() / 60;
+        angle += now.getSeconds() / (60 * 60);
+        angle += now.getMilliseconds() / (60 * 60 * 1000);
+
+
+        angle = angle / 12;
+        angle = angle * TAU;
+
+
+        const per = 0.7;
+
+        const x1 = x0 + per * radius * Math.cos(angle - TAU / 4);
+        const y1 = y0 + per * radius * Math.sin(angle - TAU / 4);
+
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+    }
+
+    // Minute hand
+    {
+        const angle = TAU * (now.getMinutes() + now.getSeconds() / 60 + now.getMilliseconds() / 60 / 1000) / 60;
+
+        const per = 0.8;
+
+        const x1 = x0 + per * radius * Math.cos(angle - TAU / 4);
+        const y1 = y0 + per * radius * Math.sin(angle - TAU / 4);
+
+        ctx.strokeStyle = 'green';
+        ctx.lineWidth = 2;
+
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+    }
+
+    // Second hand
+    {
+        const angle = TAU * (now.getSeconds() + now.getMilliseconds() / 1000) / 60;
+
+        const per = 0.9;
+
+        const x1 = x0 + per * radius * Math.cos(angle - TAU / 4);
+        const y1 = y0 + per * radius * Math.sin(angle - TAU / 4);
+
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+
+    }
+
+
+
+
+
+    // Restore
+
+    ctx.fillStyle = old.fillStyle;
+    ctx.strokeStyle = old.strokeStyle;
+     ctx.lineWidth = old.lineWidth;
+}
+
+
+
+function mainloop(t) {
+
+    // Readjust radius
+
+    if (w !== window.innerWidth || h !== window.innerHeight) {
+        // Readjust
+        w = window.innerWidth - 4;
+        h = window.innerHeight - 4;
+
+        x0 = w / 2;
+        y0 = h / 2;
+
+        radius = Math.min(x0, y0);
+
+
+        canvas.width = w;
+        canvas.height = h;
+    }
+
+
+    render();
+
+
+    window.requestAnimationFrame(mainloop);
+}
+
+mainloop();
+
+</script>
+<!-- END OF SCRIPTS -->
+<!-- END OF BODY -->
+</body>
+</html>

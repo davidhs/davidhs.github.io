@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tapper</title>
+    <link href="css/reset.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <!-- Disable double-tap zoom on iPhone -->
+    <!--<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">-->
+    <!-- Disabloe zoom iPhone -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+
+    <link rel="apple-touch-icon" sizes="57x57"
+    href="icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png" />
+</head>
+<body>
+<div class="center">
+    <div id="tapper">
+        <div style="float:left">
+
+            <canvas id="canvas" width="380" height="380"></canvas>
+        </div>
+        <div style="float:left">
+
+            <button id="pauseBtn" class="btn">Pause</button>
+            <div>
+                <div class="block">
+                    <label>From:</label>
+                    <input type="text" onClick="this.setSelectionRange(0, this.value.length)" pattern="\d*" name="from" id="inpf" placeholder="1">
+                </div>
+                <div class="block">
+                    <label>To:</label>
+                    <input type="text" pattern="\d*" name="to" id="inpt" placeholder="100">
+                </div>
+            </div>
+            <p id="stat"></p>
+        </div>
+    </div>
+</div>
+<script type="module" src="js/app.js"></script>
+<script nomodule>
+    document.getElementsByTagName('body')[0].innerHTML = "Your browser DOES NOT support ES modules.";
+</script>
+
+</body>
+</html>

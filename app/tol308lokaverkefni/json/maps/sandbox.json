@@ -1,0 +1,23 @@
+{
+    "type": "map",
+    "name": "sandbox",
+
+    "cfg": {
+        "tiledMap": "tiledMap.tm3"
+    },
+
+    "mouse": {
+        "image": "raw.image.cursor",
+        "cursorLock": false
+    },
+
+    "init": {
+        "entities": {
+            "player": {
+                "sprite": {
+                    "path": "sprite.player"
+                }
+            }
+        }
+    }
+}
