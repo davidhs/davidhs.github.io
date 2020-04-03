@@ -227,23 +227,6 @@ export function reflect(u, v) {
 
 /**
  * 
- * @param {number[]} incident 
- * @param {number[]} normal 
- * @param {number} n1 
- * @param {number} n2 
- */
-export function refract(incident, normal, n1, n2) {
-
-  const n = unit(normal);
-  const i = incident;
-  const mu = n1 / n2;
-
-  const t = plus(scale(n, Math.sqrt(1 - mu * mu * (1 - dot(n, i) ** 2))), scale(minus(i, scale(n, dot(n, i))), mu));
-  return t;
-}
-
-/**
- * 
  * @param {number[]} u 
  * @param {number[]} v 
  * @param {number[]} w

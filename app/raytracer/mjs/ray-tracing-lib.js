@@ -1,5 +1,9 @@
 import * as vec from './vec3.js';
 
+import {
+  fastLogisticFunction,
+  assert,
+} from './utils.js';
 
 
 // -----------------------------------------------------------------------------
@@ -22,12 +26,7 @@ import * as vec from './vec3.js';
 // -----------------------------------------------------------------------------
 
 
-import {
-  logisticFunction,
-  clamp,
-  fastLogisticFunction,
-  assert,
-} from './utils.js';
+
 
 
 /**
@@ -328,7 +327,7 @@ function surface(ray, scene, object, point, normal, depth) {
   // Lambert shading
   if (object.lambert) {
     for (let i = 0; i < scene.light.length; i++) {
-      const light = scene.light[i];
+      const light = scene.light[0];
       const lightPoint = light.pos;
 
       if (true) {
@@ -367,7 +366,7 @@ function surface(ray, scene, object, point, normal, depth) {
     const rr_pos = point;
     const rr_dir = vec.reflect(ray[1], normal);
 
-    if (false) {
+    if (true) {
       // NOTE: checking
       assert(Array.isArray(rr_dir));
       assert(rr_dir.length === 3);
@@ -385,7 +384,7 @@ function surface(ray, scene, object, point, normal, depth) {
 
     const reflectedColor = trace(rr, scene, depth + 1, object);
 
-    if (false) {
+    if (true) {
       assert(Array.isArray(reflectedColor));
       assert(reflectedColor.length === 3);
       assert(Number.isFinite(reflectedColor[0]));
@@ -394,7 +393,7 @@ function surface(ray, scene, object, point, normal, depth) {
 
     }
 
-    if (false) {
+    if (true) {
       // Gather incremental mean
       ur[0] = ur[0] + (reflectedColor[0] - ur[0]) / (ur[3] + 1);
       ur[1] = ur[1] + (reflectedColor[1] - ur[1]) / (ur[3] + 1);
@@ -403,36 +402,12 @@ function surface(ray, scene, object, point, normal, depth) {
       ur[3] += 1;
     }
 
-    const sm = 100;
+    const sm = 256;
 
 
     c[0] = c[0] + reflectedColor[0] * object.specular * sm;
     c[1] = c[1] + reflectedColor[1] * object.specular * sm;
     c[2] = c[2] + reflectedColor[2] * object.specular * sm;
-  }
-
-  if (false) {
-    // Refraction
-    const rr_pos = point;
-    const n1 = 1;
-    const n2 = 0.9;
-    
-    const rr_dir = vec.refract(ray[1], normal, n1, n2);
-
-    // Add translucency
-    // reflect ray
-    const rr = [rr_pos, rr_dir];
-
-    const refractedColor = trace(rr, scene, depth + 1, object);
-
-    const sm = 500;
-
-    // refraction
-
-
-    c[0] = c[0] + refractedColor[0] * object.specular * sm;
-    c[1] = c[1] + refractedColor[1] * object.specular * sm;
-    c[2] = c[2] + refractedColor[2] * object.specular * sm;
   }
 
   lambertAmount = Math.min(1, lambertAmount);
@@ -673,7 +648,7 @@ export function trace(ray, scene, depth, ignoreObj) {
     assert(color[0] >= 0);
     assert(color[1] >= 0);
     assert(color[2] >= 0);
-
+    
     // Maybe
     assert(color[0] < 1000);
     assert(color[1] < 1000);

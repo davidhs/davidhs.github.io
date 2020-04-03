@@ -104,8 +104,8 @@ const scene = {
 
         color: [235, 122, 220],
         specular: 0.2,
-        lambert: 0.0,
-        ambient: 0.0,
+        lambert: 0.7,
+        ambient: 0.1,
       },
       {
         pos: [5, 9, 4],
@@ -197,9 +197,9 @@ const scene = {
       ambient: 0.1,
     }
     */
-
-
-    ]
+  
+  
+  ]
   },
   camera: [
     // camera 1
@@ -353,7 +353,7 @@ if (false) {
 
   // Add random balls
 
-  const n = 50;
+  const n = 40;
   const spread = 50;
 
   const minRadius = 0.5;
@@ -870,25 +870,6 @@ function render(canvas, viewport, camera, scene) {
   ctx.putImageData(imageData, 0, 0);
 }
 
-/**
- * 
- * @param {number} dt 
- */
-function processScene(dt) {
-
-  if (false) {
-    // jitering lights
-    const k = 0.05;
-
-    for (let i = 0; i < scene.light.length; i++) {
-      scene.light[i].pos[0] += k * (-0.5 + Math.random()) * dt;
-      scene.light[i].pos[1] += k * (-0.5 + Math.random()) * dt;
-      scene.light[i].pos[2] += k * (-0.5 + Math.random()) * dt;
-    }
-  }
-
-
-}
 
 
 let last_timestamp = null;
@@ -909,8 +890,6 @@ function step(timestamp) {
 
   // Process input
   processInput(dt);
-
-  processScene(dt);
 
   render(canvas, viewport, camera, scene);
 
