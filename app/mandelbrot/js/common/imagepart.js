@@ -1,5 +1,5 @@
-var ImagePart = /** @class */ (function () {
-    function ImagePart(width, height, channels, arr) {
+export default class ImagePart {
+    constructor(width, height, channels, arr) {
         this.arr =
             typeof arr !== "undefined"
                 ? arr
@@ -8,19 +8,17 @@ var ImagePart = /** @class */ (function () {
         this.height = height;
         this.channels = channels;
     }
-    ImagePart.prototype.getSize = function () {
+    getSize() {
         return this.width * this.height * this.channels;
-    };
-    ImagePart.prototype.getBuffer = function () {
+    }
+    getBuffer() {
         return this.arr.buffer;
-    };
-    ImagePart.prototype.getAdditionalData = function () {
+    }
+    getAdditionalData() {
         return {
             width: this.width,
             height: this.height,
             channels: this.channels
         };
-    };
-    return ImagePart;
-}());
-export default ImagePart;
+    }
+}

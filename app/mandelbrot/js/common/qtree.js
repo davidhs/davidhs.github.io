@@ -1,5 +1,5 @@
-var Qtree = /** @class */ (function () {
-    function Qtree(path, parent) {
+export default class Qtree {
+    constructor(path, parent) {
         this.parent = typeof parent !== "undefined" ? parent : null;
         this.children = [];
         this.data = {};
@@ -7,35 +7,35 @@ var Qtree = /** @class */ (function () {
         this.flag = false;
         this.splits = 0;
     }
-    Qtree.prototype.getPath = function () {
+    getPath() {
         return this.path;
-    };
-    Qtree.prototype.getDepth = function () {
+    }
+    getDepth() {
         return this.splits;
-    };
-    Qtree.prototype.setData = function (data) {
+    }
+    setData(data) {
         this.data = data;
-    };
-    Qtree.prototype.getFlag = function () {
+    }
+    getFlag() {
         return this.flag;
-    };
-    Qtree.prototype.setFlag = function (flag) {
+    }
+    setFlag(flag) {
         this.flag = flag;
         if (this.parent !== null) {
             this.parent.checkFlagStatus();
         }
-    };
+    }
     /**
      * TODO: maybe implement an iterator for the children?
      */
-    Qtree.prototype.getChildren = function () {
+    getChildren() {
         return this.children;
-    };
-    Qtree.prototype.checkFlagStatus = function () {
-        var sum = 0;
+    }
+    checkFlagStatus() {
+        let sum = 0;
         if (this.children.length === 4) {
-            for (var i = 0; i < this.children.length; i += 1) {
-                var child = this.children[i];
+            for (let i = 0; i < this.children.length; i += 1) {
+                let child = this.children[i];
                 if (child.getFlag() === true) {
                     sum += 1;
                 }
@@ -47,60 +47,58 @@ var Qtree = /** @class */ (function () {
                 }
             }
         }
-    };
-    Qtree.prototype.isLeaf = function () {
+    }
+    isLeaf() {
         return this.children.length === 0;
-    };
+    }
     /**
      * Preorder: do self then children.
      *
      * @param fn
      */
-    Qtree.prototype.forAllPreorder = function (fn) {
+    forAllPreorder(fn) {
         fn(this);
         if (!this.isLeaf()) {
-            for (var i = 0; i < this.children.length; i += 1) {
+            for (let i = 0; i < this.children.length; i += 1) {
                 this.children[i].forAllPreorder(fn);
             }
         }
-    };
+    }
     /**
      * Postorder: do children then self.
      *
      * @param fn
      */
-    Qtree.prototype.forPostPreorder = function (fn) {
+    forPostPreorder(fn) {
         if (!this.isLeaf()) {
-            for (var i = 0; i < this.children.length; i += 1) {
+            for (let i = 0; i < this.children.length; i += 1) {
                 this.children[i].forPostPreorder(fn);
             }
         }
         fn(this);
-    };
-    Qtree.prototype.splitSelf = function () {
+    }
+    splitSelf() {
         if (this.children.length === 0) {
             this.splits += 1;
-            for (var i = 0; i < 4; i += 1) {
+            for (let i = 0; i < 4; i += 1) {
                 this.children.push(new Qtree(this.path + (i + 1), this));
             }
         }
-    };
-    Qtree.prototype._splitSubTree = function () {
+    }
+    _splitSubTree() {
         if (this.children.length === 0) {
             this.splitSelf();
         }
         else {
-            for (var i = 0; i < 4; i += 1) {
+            for (let i = 0; i < 4; i += 1) {
                 this.children[i]._splitSubTree();
             }
         }
-    };
-    Qtree.prototype.splitSubTree = function (times) {
+    }
+    splitSubTree(times) {
         times = typeof times !== "undefined" ? times : 1;
-        for (var i = 0; i < times; i += 1) {
+        for (let i = 0; i < times; i += 1) {
             this._splitSubTree();
         }
-    };
-    return Qtree;
-}());
-export default Qtree;
+    }
+}

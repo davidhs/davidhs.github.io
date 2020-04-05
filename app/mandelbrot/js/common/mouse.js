@@ -1,12 +1,12 @@
 import { assert } from "./utils.js";
 function getMousePosition(canvas, e) {
-    var rect = canvas.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
-    return { x: x, y: y };
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return { x, y };
 }
-var Mouse = /** @class */ (function () {
-    function Mouse() {
+export default class Mouse {
+    constructor() {
         this.x = 0;
         this.y = 0;
         this.cx = 0;
@@ -25,30 +25,30 @@ var Mouse = /** @class */ (function () {
         this.dcy = 0;
         this.wdy = 0; // wheel delta y
     }
-    Mouse.prototype.setXY = function (x, y) {
-        var px = this.x;
-        var py = this.y;
+    setXY(x, y) {
+        const px = this.x;
+        const py = this.y;
         this.x = x;
         this.y = y;
         this.cx = x;
         this.cy = y;
         this.px = px;
         this.py = py;
-    };
-    Mouse.prototype.consume = function (e) {
-        var target = e.target;
+    }
+    consume(e) {
+        const target = e.target;
         assert(target !== null);
         if (e instanceof WheelEvent) {
             if (e.type === "wheel") {
                 this.wdy = e.deltaY;
             }
             else {
-                throw new Error("Unhandled wheel event type: " + e.type);
+                throw new Error(`Unhandled wheel event type: ${e.type}`);
             }
         }
         else if (e instanceof MouseEvent) {
             // @ts-ignore
-            var _a = getMousePosition(e.target, e), x = _a.x, y = _a.y;
+            const { x, y } = getMousePosition(e.target, e);
             this.setXY(x, y);
             if (e.type === "mousemove") {
                 this.mmx = x;
@@ -73,14 +73,12 @@ var Mouse = /** @class */ (function () {
                 this.dcy = y;
             }
             else {
-                throw new Error("Unhandled mouse event type: " + e.type);
+                throw new Error(`Unhandled mouse event type: ${e.type}`);
             }
         }
         else {
             console.error("ERROR:", e);
             throw new Error("Unhandled event!");
         }
-    };
-    return Mouse;
-}());
-export default Mouse;
+    }
+}

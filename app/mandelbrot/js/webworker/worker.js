@@ -1,155 +1,189 @@
-import * as Utils from "../common/utils.js";
-// Constants
-var INV_NAT_LOG_2 = 1.0 / Math.log(2.0);
-var ESCAPE_THRESHOLD = 2147483647;
-var ONE_FOURTH = 1.0 / 4.0;
-var ONE_SIXTEENTH = 1.0 / 16.0;
-onmessage = function (e) {
-    var msg = e.data;
-    var cfg = msg.cfg;
-    var region = msg.region;
-    var workerIndex = msg.workerIndex;
-    var part = msg.part;
-    var arr = new Uint8ClampedArray(msg.imagePart.buffer); // data
-    var timestamp = msg.timestamp;
-    var threshold = cfg.scene.rendering.threshold;
-    var zoom = cfg.scene.zoom;
-    var wx0 = cfg.scene.point.re;
-    var wy0 = cfg.scene.point.im;
+/// <reference lib="esnext" />
+/// <reference lib="webworker" />
+import { clamp, feq } from "../common/utils.js";
+import * as Palette from "../common/palettes.js";
+function* edgePixels(region) {
+    // Edge checking
+    const { x, y, w, h } = region;
+    const x1 = x;
+    const x2 = x + w;
+    const y1 = y;
+    const y2 = x + h;
+    // Top -> Right -> Bottom -> Left (-> top)
+    // Top
+    {
+        const y = y1;
+        for (let x = x1; x < x2; x += 1) {
+            yield [x, y];
+        }
+    }
+    // Right
+    {
+        const x = x2 - 1;
+        for (let y = y1 + 1; y < y2; y += 1) {
+            yield [x, y];
+        }
+    }
+    // Bottom
+    {
+        const y = y2 - 1;
+        for (let x = x2 - 2; x >= x1; x -= 1) {
+            yield [x, y];
+        }
+    }
+    // Left
+    {
+        const x = x1;
+        for (let y = y2 - 2; y >= y1; y -= 1) {
+            yield [x, y];
+        }
+    }
+}
+function* pixelsRegion(cfg, region) {
+    const { cw, ch, z } = cfg;
+    let idx4 = 0;
+    const x1 = region.x;
+    const x2 = region.x + region.w;
+    const y1 = region.y;
+    const y2 = region.y + region.h;
+    const z0 = 1.0 / Math.min(cw, ch);
+    for (let y = y1; y < y2; y += 1) {
+        const im = cfg.im + -z * z0 * (y - ch / 2.0);
+        for (let x = x1; x < x2; x += 1, idx4 += 4) {
+            const re = cfg.re + +z * z0 * (x - cw / 2.0);
+            yield {
+                re: re,
+                im: im,
+                idx: idx4
+            };
+        }
+    }
+}
+function* processMaker(inMsg) {
+    // Constants
+    // const BAILOUT_RADIUS = 2147483647;
+    const bailout_radius = 2 ** 20;
+    const { cfg, region, part } = inMsg;
+    const arr = new Uint8ClampedArray(inMsg.imagePart.buffer); // data
+    /** What is the max. iteration we're willing to tolerate. */
+    const max_iterations = cfg.max_iter;
     /////////////////////////////////////
     // Render region of Mandelbrot set //
     /////////////////////////////////////
-    var z0 = cfg._precomputed.z0;
-    var z = zoom;
-    var sx0 = cfg._precomputed.sx0;
-    var sy0 = cfg._precomputed.sy0;
-    var cos = cfg._precomputed.cos;
-    var sin = cfg._precomputed.sin;
-    var x1 = region.x;
-    // TODO: this could be moved into the master thread, since each region is
-    // mostly of equal size, but I'm not 100% sure, so I'm going to leave this
-    // in here.
-    var x2 = region.x + region.w;
-    var y1 = region.y;
-    var y2 = region.y + region.h;
-    var rgb = [0, 0, 0];
-    var idx4 = 0;
-    for (var y = y1; y < y2; y += 1) {
-        var sdy = y - sy0;
-        var wdy = -z * z0 * sdy;
-        for (var x = x1; x < x2; x += 1, idx4 += 4) {
-            var sdx = x - sx0;
-            var wdx = z * z0 * sdx;
-            var wrdx = cos * wdx - sin * wdy;
-            var wrdy = sin * wdx + cos * wdy;
-            var wx = wx0 + wrdx;
-            var wy = wy0 + wrdy;
-            var re0 = wx;
-            var im0 = wy;
-            /////////////////////
-            // Comoplex number //
-            /////////////////////
-            /** Real part of the complex number. */
-            var re = wx;
-            /** Imaginary part of the complex number. */
-            var im = wy;
-            /** Threshold iterator */
-            var t = 0;
-            /////////////////////////////
-            // Cardoid / bulb checking //
-            /////////////////////////////
-            {
-                var x_1 = re;
-                var y_1 = im;
-                var y_sq = y_1 * y_1;
-                var _p1 = x_1 - ONE_FOURTH;
-                var p = Math.sqrt(_p1 * _p1 + y_sq);
-                // Check if we're in the cardioid.
-                if (x_1 <= p - 2.0 * p * p + ONE_FOURTH) {
-                    t = threshold; // Do early rejection.
-                }
-                var x_inc = x_1 + 1;
-                // Check if we're inside period-2 bulb.
-                if (x_inc * x_inc + y_sq <= ONE_SIXTEENTH) {
-                    t = threshold; // Do early rejection.
-                }
-            }
-            //////////////////////////////////////////
-            // Check if we're in the Mandelbrot set //
-            //////////////////////////////////////////
-            var s1 = 0;
-            var s2 = 0;
-            /** Escaped */
-            var escaped = false;
-            // Implementation of an optimized escape time algorithm.
-            for (; t < threshold && !escaped;) {
-                s1 = re * re;
-                s2 = im * im;
-                im = 2 * re * im + im0;
-                re = s1 - s2 + re0;
-                escaped = s1 + s2 > ESCAPE_THRESHOLD;
-                t += 1;
-            }
-            //////////////////////////////
-            // Determine color of pixel //
-            //////////////////////////////
-            if (false) {
-                var nu = INV_NAT_LOG_2 * Math.log(Math.log(s1 + s2));
-                var cv = Math.log(t + 1 - nu);
-                var hue = cv;
-                hue = 0;
-                var saturation = 1;
-                var luminance = escaped ? 0.5 : 0;
-                luminance = escaped ? 1 - (Math.sin(cv) + 1) / 2 : 0;
-                hue = Math.abs(hue) > 1 ? hue % 1 : hue;
-                saturation = Math.abs(saturation) > 1 ? saturation % 1 : saturation;
-                luminance = Math.abs(luminance) > 1 ? luminance % 1 : luminance;
-                Utils.hslToRgbRW(hue, saturation, luminance, rgb);
-            }
-            else if (false) {
-                // TODO: I don't know what unbounded here means.
-                var unbounded = ESCAPE_THRESHOLD;
-                var iterations = t;
-                var hue = Math.log(iterations);
-                var saturation = 1;
-                var luminance = 0.5 * unbounded;
-                hue = Math.abs(hue) > 1 ? hue % 1 : hue;
-                saturation = Math.abs(saturation) > 1 ? saturation % 1 : saturation;
-                luminance = Math.abs(luminance) > 1 ? luminance % 1 : luminance;
-                Utils.hslToRgbRW(hue, saturation, luminance, rgb);
-            }
-            else if (true) {
-                var nu = INV_NAT_LOG_2 * Math.log(Math.log(s1 + s2));
-                var cv = Math.log(t + 1 - nu);
-                var hue = cv;
-                var saturation = 1;
-                var luminance = escaped ? 0.5 : 0;
-                hue = Math.abs(hue) > 1 ? hue % 1 : hue;
-                saturation = Math.abs(saturation) > 1 ? saturation % 1 : saturation;
-                luminance = Math.abs(luminance) > 1 ? luminance % 1 : luminance;
-                Utils.hslToRgbRW(hue, saturation, luminance, rgb);
-            }
-            else {
-                throw new Error("Whoops!");
-            }
-            ////////////////////
-            // Color in pixel //
-            ////////////////////
-            arr[idx4] = rgb[0];
-            arr[idx4 + 1] = rgb[1];
-            arr[idx4 + 2] = rgb[2];
-            arr[idx4 + 3] = 255;
+    const rgba = [0, 0, 0, 1.0];
+    // Reset alpha channel of array
+    {
+        for (let i = 0; i < arr.length; i += 4) {
+            arr[i + 3] = 0;
         }
     }
-    var result = {
+    // Edge checking
+    for (const [x, y] of edgePixels(region)) {
+    }
+    // Border checking
+    {
+    }
+    // Flood Mandelbrot
+    {
+    }
+    // Color rest
+    let pixelCount = 0;
+    const pixelCountYield = 100;
+    for (const { re: re0, im: im0, idx: idx4 } of pixelsRegion(cfg, region)) {
+        let re = re0;
+        let im = im0;
+        /** What iteration we are on (fractional)? */
+        let iterations = 0;
+        /////////////////////////////
+        // Cardoid / bulb checking //
+        /////////////////////////////
+        {
+            const x = re;
+            const y = im;
+            const y_sq = y * y;
+            const _p1 = x - (1.0 / 4.0);
+            const p = Math.sqrt(_p1 * _p1 + y_sq);
+            // Check if we're in the cardioid.
+            if (x <= p - 2.0 * p * p + (1.0 / 4.0)) {
+                iterations = max_iterations; // Do early rejection.
+            }
+            const x_inc = x + 1;
+            // Check if we're inside period-2 bulb.
+            if (x_inc * x_inc + y_sq <= (1.0 / 16.0)) {
+                iterations = max_iterations; // Do early rejection.
+            }
+        }
+        //////////////////////////////////////////
+        // Check if we're in the Mandelbrot set //
+        //////////////////////////////////////////
+        /** re * re */
+        let re_sq = re * re;
+        /** im * im */
+        let im_sq = im * im;
+        // TODO: maybe do periodicity checking
+        let re_old = 0;
+        let im_old = 0;
+        let period = 0;
+        const period_limit = 100;
+        // Implementation of an optimized escape time algorithm.
+        while (re_sq + im_sq <= bailout_radius && iterations < max_iterations) {
+            im = 2 * re * im + im0;
+            re = re_sq - im_sq + re0;
+            re_sq = re * re;
+            im_sq = im * im;
+            iterations += 1;
+            if (feq(re, re_old, Number.EPSILON) && feq(im, im_old, Number.EPSILON)) {
+                // We're inside the Mandelbrot set
+                iterations = max_iterations;
+                break;
+            }
+            period += 1;
+            if (period > period_limit) {
+                period = 0;
+                re_old = re;
+                im_old = im;
+            }
+        }
+        /**
+         * A boolean whether we escaped, i.e. verified we're not part of the
+         * mandelbrot set.
+         */
+        const escaped = iterations < max_iterations;
+        if (iterations < max_iterations) {
+            // const nu = Math.log2(Math.log2(re_sq + im_sq)) - 1.0;
+            // iterations = iterations + 1 - nu;
+            const log_zn = Math.log(re * re + im * im) / Math.log(2);
+            const nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
+            iterations = iterations + 1 - nu;
+        }
+        // iterations += 4;
+        // NOTE: iterations may be negative.
+        // assert(Number.isFinite(iterations));
+        Palette.softrainbow(escaped, iterations, rgba);
+        arr[idx4 + 0] = clamp(Math.floor(256 * rgba[0]), 0, 255);
+        arr[idx4 + 1] = clamp(Math.floor(256 * rgba[1]), 0, 255);
+        arr[idx4 + 2] = clamp(Math.floor(256 * rgba[2]), 0, 255);
+        arr[idx4 + 3] = clamp(Math.floor(256 * rgba[3]), 0, 255);
+        pixelCount += 1;
+        if (pixelCount % pixelCountYield === 0) {
+            yield true;
+        }
+    }
+    const outMsg = {
         part: part,
         imgPart: arr.buffer,
-        workerIndex: workerIndex,
-        timestamp: timestamp,
-        // Position
-        re: cfg.scene.point.re,
-        im: cfg.scene.point.im,
-        zoom: cfg.scene.zoom
+        wi: inMsg.wi,
+        re: cfg.re,
+        im: cfg.im,
+        z: cfg.z,
     };
-    postMessage(result, [result.imgPart]);
-};
+    postMessage(outMsg, [outMsg.imgPart]);
+    return false;
+}
+;
+function messageHandler(e) {
+    const inMsg = e.data;
+    const process = processMaker(inMsg);
+    while (process.next().value) { }
+}
+onmessage = messageHandler;

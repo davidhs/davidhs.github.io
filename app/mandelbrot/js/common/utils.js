@@ -1,13 +1,21 @@
-export function assert(condition, message) {
-    if (message === void 0) { message = "Assertion failed!"; }
+/**
+ *
+ * @param condition
+ * @param message
+ */
+export function assert(condition, message = "Assertion failed!") {
     if (!condition) {
         throw new Error(message);
     }
 }
+/**
+ *
+ * @param array
+ */
 export function shuffle(array) {
-    var currentIndex = array.length;
-    var temporaryValue;
-    var randomIndex;
+    let currentIndex = array.length;
+    let temporaryValue;
+    let randomIndex;
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
         // Pick a remaining element...
@@ -34,16 +42,16 @@ export function rgbToHsl(r, g, b) {
     r /= 255;
     g /= 255;
     b /= 255;
-    var max = Math.max(r, g, b), min = Math.min(r, g, b);
-    var _t1 = (max + min) / 2;
-    var h = _t1;
-    var s = _t1;
-    var l = _t1;
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const _t1 = (max + min) / 2;
+    let h = _t1;
+    let s = _t1;
+    let l = _t1;
     if (max === min) {
         h = s = 0; // achromatic
     }
     else {
-        var d = max - min;
+        let d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         switch (max) {
             case r:
@@ -71,23 +79,23 @@ export function rgbToHsl(r, g, b) {
  * @param a
  */
 export function setPixel(imageData, x, y, r, g, b, a) {
-    var index = (x + y * imageData.width) * 4;
+    let index = (x + y * imageData.width) * 4;
     imageData.data[index] = r;
     imageData.data[index + 1] = g;
     imageData.data[index + 2] = b;
     imageData.data[index + 3] = a;
 }
 export function getSSArray(x_min, x_max, y_min, y_max, x_splits, y_splits) {
-    var i;
-    var x = [];
-    var y = [];
+    let i;
+    let x = [];
+    let y = [];
     if (x_splits < 2) {
         x.push(0);
     }
     else {
         // Normalize
         x_splits = Math.round(x_splits);
-        var dx = (x_max - x_min) / x_splits;
+        let dx = (x_max - x_min) / x_splits;
         // First element
         x.push(dx / 2 + x_min);
         for (i = 1; i < x_splits; i++) {
@@ -100,17 +108,17 @@ export function getSSArray(x_min, x_max, y_min, y_max, x_splits, y_splits) {
     else {
         // Normalize
         y_splits = Math.round(y_splits);
-        var dy = (y_max - y_min) / y_splits;
+        let dy = (y_max - y_min) / y_splits;
         // First element
         y.push(dy / 2 + y_min);
-        for (var i_1 = 1; i_1 < y_splits; i_1++) {
-            y.push(y[i_1 - 1] + dy);
+        for (let i = 1; i < y_splits; i++) {
+            y.push(y[i - 1] + dy);
         }
     }
     ////////
     // TODO do I need to do this? Does the compiler realise this? this is const
-    var LENGTH = x.length * y.length;
-    var index = [];
+    let LENGTH = x.length * y.length;
+    let index = [];
     for (i = 0; i < LENGTH; i++) {
         index.push({
             x: x[i % x.length],
@@ -123,8 +131,12 @@ export function getSSArray(x_min, x_max, y_min, y_max, x_splits, y_splits) {
         y: y
     };
 }
+/**
+ *
+ * @param obj
+ */
 export function getObjectSize(obj) {
-    var key, count = 0;
+    let key, count = 0;
     for (key in obj) {
         if (obj.hasOwnProperty(key)) {
             count++;
@@ -132,6 +144,12 @@ export function getObjectSize(obj) {
     }
     return count;
 }
+/**
+ *
+ * @param p
+ * @param q
+ * @param t
+ */
 export function hue2rgb(p, q, t) {
     if (t < 0)
         t += 1;
@@ -157,27 +175,34 @@ export function hue2rgb(p, q, t) {
  * @return  {Array}           The RGB representation
  */
 export function hslToRgb(h, s, l) {
-    var r, g, b;
+    let r, g, b;
     if (s === 0) {
         r = g = b = l; // achromatic
     }
     else {
-        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        var p = 2 * l - q;
+        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        let p = 2 * l - q;
         r = hue2rgb(p, q, h + 1 / 3);
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1 / 3);
     }
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
+/**
+ *
+ * @param h
+ * @param s
+ * @param l
+ * @param arr
+ */
 export function hslToRgbRW(h, s, l, arr) {
-    var r, g, b;
+    let r, g, b;
     if (s === 0) {
         r = g = b = l; // achromatic
     }
     else {
-        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        var p = 2 * l - q;
+        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        let p = 2 * l - q;
         r = hue2rgb(p, q, h + 1 / 3);
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1 / 3);
@@ -186,3 +211,53 @@ export function hslToRgbRW(h, s, l, arr) {
     arr[1] = Math.round(g * 255);
     arr[2] = Math.round(b * 255);
 }
+/**
+ *
+ * @param v0
+ * @param v1
+ * @param t
+ */
+export function lerp(v0, v1, t) {
+    return (1.0 - t) * v0 + t * v1;
+}
+/**
+ *
+ * @param value
+ * @param min
+ * @param max
+ */
+export function clamp(value, min, max) {
+    if (value < min) {
+        return min;
+    }
+    else if (value > max) {
+        return max;
+    }
+    else {
+        return value;
+    }
+}
+/**
+ * Fractual equivalence given tolerance
+ *
+ * @param a
+ * @param b
+ * @param t
+ */
+export function feq(a, b, t) {
+    let d = a - b;
+    if (d < 0)
+        d = -d;
+    return d <= t;
+}
+/**
+ *
+ * @param hex on the form `#aaaaaa`.
+ */
+export function hex2rgba(hex) {
+    const r = Number.parseInt(hex.substring(1, 3), 16);
+    const g = Number.parseInt(hex.substring(3, 5), 16);
+    const b = Number.parseInt(hex.substring(5, 7), 16);
+    return [r / 255, g / 255, b / 255, 1.0];
+}
+;
