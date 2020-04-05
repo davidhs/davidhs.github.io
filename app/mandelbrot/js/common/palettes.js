@@ -83,6 +83,7 @@ export const softrainbow = (() => {
             return;
         }
         iterations = Math.log2(Math.abs(iterations));
+        iterations = iterations * 0.5;
         gradient.getColorAt(iterations, rgba);
     };
 })();
