@@ -162,6 +162,7 @@ export default class App {
             this.cfg.re = re_new;
             this.cfg.im = im_new;
             this.refresh();
+            e.preventDefault();
         });
         canvas.addEventListener("dblclick", (e) => {
             this.mouse.consume(e);
