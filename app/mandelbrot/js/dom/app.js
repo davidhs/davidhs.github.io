@@ -6,20 +6,6 @@ import Mouse from "../common/mouse.js";
 import { assert } from "../common/utils.js";
 const WEB_WORKER_PATH = "js/webworker/worker.js";
 const DEFAULT_NUMBER_OF_WORKS = 8;
-/**
- * Source: https://gist.github.com/ca0v/73a31f57b397606c9813472f7493a940
- *
- * @param cb
- * @param wait
- */
-function debounce(cb, wait) {
-    let h = 0;
-    let callable = (...args) => {
-        clearTimeout(h);
-        h = setTimeout(() => cb(...args), wait);
-    };
-    return callable;
-}
 export default class App {
     constructor(canvas) {
         const ctx = canvas.getContext("2d");
@@ -33,10 +19,12 @@ export default class App {
             re: -0.5,
             im: +0.0,
             z: 4,
-            max_iter: 15000,
+            max_iter: 30000,
         };
-        this.#old_z = cfg.z;
-        this.#new_z = cfg.z;
+        this.#back_canvas = document.createElement("canvas");
+        const back_ctx = this.#back_canvas.getContext("2d");
+        assert(back_ctx !== null);
+        this.#back_ctx = back_ctx;
         const qtree = new Qtree();
         const imageParts = [];
         const isWorkerAvailable = [];
@@ -122,12 +110,10 @@ export default class App {
             this.mouse.consume(e);
             // Compute new zoom
             const old_zoom = this.cfg.z;
-            this.#old_z = old_zoom;
             const magnitude = 0.2;
             const sign = this.mouse.wdy > 0 ? -1.0 : 1.0;
             const factor = 1 - sign * magnitude;
             const new_zoom = old_zoom * factor;
-            this.#new_z = new_zoom;
             // -----------------------------------------------------------------------
             // Move
             const re_old = this.cfg.re;
@@ -178,17 +164,14 @@ export default class App {
             this.cfg.im = im;
             this.refresh();
         });
-        this.debouncedRefresh = debounce(() => {
-            this._doRefresh();
-        }, 1);
         this.refresh();
     }
-    #old_z;
-    #new_z;
     #dx;
     #dy;
     #dw;
     #dh;
+    #back_canvas;
+    #back_ctx;
     canvasDeltaToMandelbrotDelta(canvas_dx, canvas_dy) {
         const canvas_width = this.cfg.cw;
         const canvas_height = this.cfg.ch;
@@ -289,9 +272,20 @@ export default class App {
                 this.imageDataBuffer.data[i] = this.imageData.data[i];
             }
             this.imageData = this.ctx.getImageData(0, 0, cw, ch);
+            this.#back_canvas.width = cw;
+            this.#back_canvas.height = ch;
+            const back_ctx = this.#back_canvas.getContext("2d");
+            assert(back_ctx !== null);
+            this.#back_ctx = back_ctx;
         }
         // Move and scale the previous image
-        this.ctx.drawImage(this.canvas, 0, 0, cw, ch, this.#dx, this.#dy, this.#dw, this.#dh);
+        this.#back_ctx.clearRect(0, 0, cw, ch);
+        // Draw to back canvas
+        this.#back_ctx.drawImage(this.canvas, 0, 0, cw, ch, this.#dx, this.#dy, this.#dw, this.#dh);
+        // Clear front canvas
+        this.ctx.clearRect(0, 0, cw, ch);
+        // Draw from back canvas to front canvas.
+        this.ctx.drawImage(this.#back_canvas, 0, 0);
         this.imageData = this.ctx.getImageData(0, 0, cw, ch);
         // this.ctx.putImageData(this.imageData, 0, 0);
         this.cfg.id = Date.now();
