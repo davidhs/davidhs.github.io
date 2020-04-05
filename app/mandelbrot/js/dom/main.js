@@ -9,6 +9,6 @@ async function main() {
         assert(element instanceof HTMLCanvasElement);
         canvas = element;
     }
-    const app = new App(canvas);
+    new App(canvas);
 }
 main();

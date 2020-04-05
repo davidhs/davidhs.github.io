@@ -109,11 +109,6 @@ export const wiki = (() => {
 })();
 export const fire2 = (() => {
     const gradient = new Gradient();
-    // #ffd400 0%,
-    // #ff7716 21%,
-    // #e00b0b 43%,
-    // #840e0e 66%,
-    // #000000 87%
     gradient.setPositionColor(0.00, hex2rgba("#ffd400"));
     gradient.setPositionColor(0.21, hex2rgba("#ff7716"));
     gradient.setPositionColor(0.43, hex2rgba("#e00b0b"));

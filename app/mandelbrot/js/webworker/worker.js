@@ -42,7 +42,12 @@ function* edgePixels(region) {
         }
     }
 }
-// It appears generators are MUCH slower :'(
+/**
+ * NOTE: appears to be much slow than to implement it without a generator.
+ *
+ * @param cfg
+ * @param region
+ */
 function* pixelsRegion(cfg, region) {
     const { cw, ch, z } = cfg;
     let idx4 = 0;
@@ -63,6 +68,10 @@ function* pixelsRegion(cfg, region) {
         }
     }
 }
+/**
+ *
+ * @param input_message
+ */
 function* processMaker(input_message) {
     // Constants
     // const BAILOUT_RADIUS = 2147483647;
@@ -121,9 +130,7 @@ function* processMaker(input_message) {
         //////////////////////////////////////////
         // Check if we're in the Mandelbrot set //
         //////////////////////////////////////////
-        /** re * re */
         let re_sq = re * re;
-        /** im * im */
         let im_sq = im * im;
         let re_old = 0;
         let im_old = 0;
