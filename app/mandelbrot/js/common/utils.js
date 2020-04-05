@@ -188,6 +188,13 @@ export function hslToRgb(h, s, l) {
     }
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
+export function ditherToInt(f) {
+    const co = f;
+    const ci = Math.floor(co);
+    const cf = co - ci;
+    const c = ci + ((Math.random() < cf) ? 1 : 0);
+    return c;
+}
 /**
  *
  * @param h

@@ -6,6 +6,15 @@ import Mouse from "../common/mouse.js";
 import { assert } from "../common/utils.js";
 const WEB_WORKER_PATH = "js/webworker/worker.js";
 const DEFAULT_NUMBER_OF_WORKS = 8;
+/*
+
+      this.#dw = dw;
+      this.#dh = dh;
+
+      this.#dx = dx;
+      this.#dy = dy;
+
+*/
 export default class App {
     constructor(canvas) {
         const ctx = canvas.getContext("2d");
@@ -26,6 +35,10 @@ export default class App {
         const qtree = new Qtree();
         const imageParts = [];
         const isWorkerAvailable = [];
+        this.#dx = 0;
+        this.#dy = 0;
+        this.#dw = 0;
+        this.#dh = 0;
         this.canvas = canvas;
         this.ctx = ctx;
         this.workers = workers;
@@ -70,19 +83,30 @@ export default class App {
         canvas.addEventListener("mousemove", e => {
             this.mouse.consume(e);
             if (this.mouse.mbdr) {
-                let L = Math.min(this.cfg.cw, this.cfg.ch);
-                let z0 = 1 / L;
-                let z = this.cfg.z;
-                let sdx = this.mouse.px - this.mouse.cx;
-                let sdy = this.mouse.py - this.mouse.cy;
-                let wx0 = this.cfg.re;
-                let wy0 = this.cfg.im;
-                let wdx = +z * z0 * sdx;
-                let wdy = -z * z0 * sdy;
-                let wx = wx0 + wdx;
-                let wy = wy0 + wdy;
-                this.cfg.re = wx;
-                this.cfg.im = wy;
+                const canvas_dx = this.mouse.px - this.mouse.cx;
+                const canvas_dy = this.mouse.py - this.mouse.cy;
+                const re_old = this.cfg.re;
+                const im_old = this.cfg.im;
+                // -----------------------------------------------------------------------
+                const [re_delta, im_delta] = this.canvasDeltaToMandelbrotDelta(canvas_dx, canvas_dy);
+                const re_new = re_old + re_delta;
+                const im_new = im_old + im_delta;
+                // -----------------------------------------------------------------------
+                const cw = this.cfg.cw;
+                const ch = this.cfg.ch;
+                const f = 1.0; // old_zoom / new_zoom;
+                const dw = f * cw;
+                const dh = f * ch;
+                const [pan_x, pan_y] = this.mandelbrotDeltaToCanvasDelta(re_old - re_new, im_old - im_new);
+                const dx = pan_x + (cw - dw) / 2;
+                const dy = pan_y + (ch - dh) / 2;
+                this.#dw = dw;
+                this.#dh = dh;
+                this.#dx = dx;
+                this.#dy = dy;
+                // -----------------------------------------------------------------------
+                this.cfg.re = re_new;
+                this.cfg.im = im_new;
                 this.refresh();
             }
         });
@@ -91,52 +115,116 @@ export default class App {
         });
         canvas.addEventListener("wheel", (e) => {
             this.mouse.consume(e);
-            let dy = this.mouse.wdy;
-            let z = this.cfg.z;
-            this.#old_z = z;
-            ;
-            let factor = 1;
-            let magnitude = 0.2;
-            const toggle = false;
-            const sign = toggle ? 1.0 : -1.0;
-            if (dy > 0) {
-                factor = 1 - sign * magnitude;
-            }
-            else {
-                factor = 1 + sign * magnitude;
-            }
-            z *= factor;
-            this.cfg.z = z;
-            this.#new_z = z;
+            // Compute new zoom
+            const old_zoom = this.cfg.z;
+            this.#old_z = old_zoom;
+            const magnitude = 0.2;
+            const sign = this.mouse.wdy > 0 ? -1.0 : 1.0;
+            const factor = 1 - sign * magnitude;
+            const new_zoom = old_zoom * factor;
+            this.#new_z = new_zoom;
+            // -----------------------------------------------------------------------
+            // Move
+            const re_old = this.cfg.re;
+            const im_old = this.cfg.im;
+            const canvas_x_old = this.mouse.x;
+            const canvas_y_old = this.mouse.y;
+            const canvas_width = this.cfg.cw;
+            const canvas_height = this.cfg.ch;
+            // Distance from center of canvas
+            const canvas_dx = canvas_x_old - canvas_width / 2;
+            const canvas_dy = canvas_y_old - canvas_height / 2;
+            // Center canvas to mouse pointer
+            const [re_center, im_center] = this.canvasToMandelbrot(canvas_x_old, canvas_y_old);
+            // Apply (re, im)
+            this.cfg.re = re_center;
+            this.cfg.im = im_center;
+            // Apply zoom
+            this.cfg.z = new_zoom;
+            // Move canvas
+            const [re_delta, im_delta] = this.canvasDeltaToMandelbrotDelta(-canvas_dx, -canvas_dy);
+            const re_new = re_center + re_delta;
+            const im_new = im_center + im_delta;
+            // -----------------------------------------------------------------------
+            const cw = this.cfg.cw;
+            const ch = this.cfg.ch;
+            const f = old_zoom / new_zoom;
+            const dw = f * cw;
+            const dh = f * ch;
+            const [pan_x, pan_y] = this.mandelbrotDeltaToCanvasDelta(re_old - re_new, im_old - im_new);
+            const dx = pan_x + (cw - dw) / 2;
+            const dy = pan_y + (ch - dh) / 2;
+            this.#dw = dw;
+            this.#dh = dh;
+            this.#dx = dx;
+            this.#dy = dy;
+            // -----------------------------------------------------------------------
+            this.cfg.re = re_new;
+            this.cfg.im = im_new;
             this.refresh();
         });
         canvas.addEventListener("dblclick", (e) => {
             this.mouse.consume(e);
-            let rect = this.canvas.getBoundingClientRect();
-            let x = e.clientX - rect.left;
-            let y = e.clientY - rect.top;
-            let L = Math.min(this.cfg.cw, this.cfg.ch);
-            let z0 = 1 / L;
-            let z = this.cfg.z;
-            let sdx = x - this.cfg.cw / 2;
-            let sdy = y - this.cfg.ch / 2;
-            let wx0 = this.cfg.re;
-            let wy0 = this.cfg.im;
-            let wdx = +z * z0 * sdx;
-            let wdy = -z * z0 * sdy;
-            let sin = 0;
-            let cos = 1;
-            let wrdx = cos * wdx - sin * wdy;
-            let wrdy = sin * wdx + cos * wdy;
-            let wx = wx0 + wrdx;
-            let wy = wy0 + wrdy;
-            this.cfg.re = wx;
-            this.cfg.im = wy;
+            const canvas_x = this.mouse.x;
+            const canvas_y = this.mouse.y;
+            const [re, im] = this.canvasToMandelbrot(canvas_x, canvas_y);
+            this.cfg.re = re;
+            this.cfg.im = im;
             this.refresh();
         });
+        this.refresh();
     }
     #old_z;
     #new_z;
+    #dx;
+    #dy;
+    #dw;
+    #dh;
+    canvasDeltaToMandelbrotDelta(canvas_dx, canvas_dy) {
+        const canvas_width = this.cfg.cw;
+        const canvas_height = this.cfg.ch;
+        const canvas_minimum_dimension = Math.min(canvas_width, canvas_height);
+        const aspect_ratio_scale = 1.0 / canvas_minimum_dimension;
+        const zoom = this.cfg.z;
+        const re_delta = canvas_dx * (+zoom * aspect_ratio_scale);
+        const im_delta = canvas_dy * (-zoom * aspect_ratio_scale);
+        return [re_delta, im_delta];
+    }
+    mandelbrotDeltaToCanvasDelta(re_delta, im_delta) {
+        const canvas_width = this.cfg.cw;
+        const canvas_height = this.cfg.ch;
+        const canvas_minimum_dimension = Math.min(canvas_width, canvas_height);
+        const aspect_ratio_scale = 1.0 / canvas_minimum_dimension;
+        const zoom = this.cfg.z;
+        const canvas_dx = +1.0 * re_delta / (zoom * aspect_ratio_scale);
+        const canvas_dy = -1.0 * im_delta / (zoom * aspect_ratio_scale);
+        return [canvas_dx, canvas_dy];
+    }
+    canvasToMandelbrot(canvas_x, canvas_y) {
+        const canvas_width = this.cfg.cw;
+        const canvas_height = this.cfg.ch;
+        const re_old = this.cfg.re;
+        const im_old = this.cfg.im;
+        const canvas_dx = canvas_x - canvas_width / 2;
+        const canvas_dy = canvas_y - canvas_height / 2;
+        const [re_delta, im_delta] = this.canvasDeltaToMandelbrotDelta(canvas_dx, canvas_dy);
+        const re_new = re_old + re_delta;
+        const im_new = im_old + im_delta;
+        return [re_new, im_new];
+    }
+    mandelbrotToCanvas(re, im) {
+        // TODO: I'm not 100% sure this code works correctly.
+        const canvas_x_old = this.mouse.cx;
+        const canvas_y_old = this.mouse.cy;
+        const re_canvas = this.cfg.re;
+        const im_canvas = this.cfg.im;
+        const re_delta = im - im_canvas;
+        const im_delta = re - re_canvas;
+        const [canvas_dx, canvas_dy] = this.mandelbrotDeltaToCanvasDelta(re_delta, im_delta);
+        const canvas_x_new = canvas_x_old + canvas_dx;
+        const canvas_y_new = canvas_y_old + canvas_dy;
+        return [canvas_x_new, canvas_y_new];
+    }
     getRegion(code) {
         let x = 0;
         let y = 0;
@@ -169,12 +257,7 @@ export default class App {
                     throw new Error();
             }
         }
-        return {
-            x: x,
-            y: y,
-            w: w,
-            h: h
-        };
+        return { x, y, w, h };
     }
     /**
      * I guess any time you make any change, you need to call this function
@@ -187,6 +270,9 @@ export default class App {
             const ch = this.cfg.ch;
             this.canvas.width = cw;
             this.canvas.height = ch;
+            // Is this OK?
+            this.#dw = cw;
+            this.#dh = ch;
             const ctx = this.canvas.getContext("2d");
             assert(ctx !== null);
             this.ctx = ctx;
@@ -195,35 +281,44 @@ export default class App {
             }
             this.imageData = this.ctx.getImageData(0, 0, cw, ch);
         }
-        // Translate | scale image
-        const pan_x = this.mouse.cx - this.mouse.px;
-        const pan_y = this.mouse.cy - this.mouse.py;
-        // What we're going to do when we need to redraw the canvas
-        // this.ctx.putImageData();
+        // Move and scale the previous image
         const cw = this.cfg.cw;
         const ch = this.cfg.ch;
-        const old_z = this.#old_z;
-        const new_z = this.#new_z;
-        const sx = 0;
-        const sy = 0;
-        const sw = cw;
-        const sh = ch;
-        const f = old_z / new_z; //new_z / old_z;
-        const dw = f * cw;
-        const dh = f * ch;
-        const dx = pan_x + (cw - dw) / 2;
-        const dy = pan_y + (ch - dh) / 2;
-        this.ctx.drawImage(this.canvas, sx, sy, sw, sh, dx, dy, dw, dh);
-        // Eat this
-        this.#old_z = this.#new_z;
-        this.imageData = this.ctx.getImageData(0, 0, cw, ch);
-        // @ts-ignore
-        if (!window.DEBUG_1) {
-            this.cfg.id = Date.now();
-            this.stopCurrentWork();
-            this.qtree.free();
-            this.makeAllAvailableWorkersWork();
+        if (false) {
+            // TODO: now this doesn't work correctly
+            const pan_x = this.mouse.cx - this.mouse.px;
+            const pan_y = this.mouse.cy - this.mouse.py;
+            const old_z = this.#old_z;
+            const new_z = this.#new_z;
+            const sx = 0;
+            const sy = 0;
+            const sw = cw;
+            const sh = ch;
+            const f = old_z / new_z; //new_z / old_z;
+            const dw = f * cw;
+            const dh = f * ch;
+            const dx = pan_x + (cw - dw) / 2;
+            const dy = pan_y + (ch - dh) / 2;
+            this.ctx.drawImage(this.canvas, sx, sy, sw, sh, dx, dy, dw, dh);
+            // Eat the zoom change
+            this.#old_z = this.#new_z;
         }
+        else {
+            const sx = 0;
+            const sy = 0;
+            const sw = cw;
+            const sh = ch;
+            const dx = this.#dx;
+            const dy = this.#dy;
+            const dw = this.#dw;
+            const dh = this.#dh;
+            this.ctx.drawImage(this.canvas, sx, sy, sw, sh, dx, dy, dw, dh);
+        }
+        this.imageData = this.ctx.getImageData(0, 0, cw, ch);
+        this.cfg.id = Date.now();
+        this.stopCurrentWork();
+        this.qtree.free();
+        this.makeAllAvailableWorkersWork();
     }
     makeAllAvailableWorkersWork() {
         for (let i = 0; i < this.workers.length; i += 1) {
@@ -249,35 +344,17 @@ export default class App {
         this.isWorkerAvailable[workerIndex] = true;
         const arr = new Uint8ClampedArray(msg.imgPart);
         if (msg.done && msg.id === this.cfg.id) {
-            // TODO: the data received might be stale since the user might have moved 
-            // the viewport and zoomed in or zoomed out.  Should we try to scale up or
-            // scale down the area and redraw it?
-            // TODO: if the data is stale that is being received, maybe discard it
-            // or move it??
-            /////////////////////////////
-            // Draw region onto canvas //
-            /////////////////////////////
-            // TODO: reposition and rescale region.
-            /** Width of canvas. */
-            const w = this.cfg.cw;
-            /** How many color channels to iterate through. */
-            const channels = 4;
             const region = this.getRegion(msg.part);
             for (let y = 0; y < region.h; y += 1) {
                 for (let x = 0; x < region.w; x += 1) {
-                    const canvas_index = x + region.x + (y + region.y) * w;
+                    const canvas_index = x + region.x + (y + region.y) * this.cfg.cw;
                     const region_index = x + y * region.w;
-                    for (let ch = 0; ch < channels; ch += 1) {
+                    for (let ch = 0; ch < 4; ch += 1) {
                         this.imageData.data[4 * canvas_index + ch] = arr[4 * region_index + ch];
                     }
                 }
             }
-            // Paint
             this.ctx.putImageData(this.imageData, 0, 0);
-            // this.ctx.drawImage(this.canvas, 0, 0);
-        }
-        else {
-            // Aborted I guess
         }
         this.imageParts[workerIndex].arr = arr;
         this.requestJob(workerIndex);

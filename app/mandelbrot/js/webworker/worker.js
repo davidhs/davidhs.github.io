@@ -42,6 +42,7 @@ function* edgePixels(region) {
         }
     }
 }
+// It appears generators are MUCH slower :'(
 function* pixelsRegion(cfg, region) {
     const { cw, ch, z } = cfg;
     let idx4 = 0;
@@ -62,12 +63,12 @@ function* pixelsRegion(cfg, region) {
         }
     }
 }
-function* processMaker(inMsg) {
+function* processMaker(input_message) {
     // Constants
     // const BAILOUT_RADIUS = 2147483647;
     const bailout_radius = 2 ** 20;
-    const { cfg, region, part } = inMsg;
-    arr = new Uint8ClampedArray(inMsg.imagePart.buffer); // data
+    const { cfg, region, part } = input_message;
+    arr = new Uint8ClampedArray(input_message.imagePart.buffer); // data
     /** What is the max. iteration we're willing to tolerate. */
     const max_iterations = cfg.max_iter;
     /////////////////////////////////////
@@ -87,11 +88,11 @@ function* processMaker(inMsg) {
     // Color rest
     // TODO: maybe put the count limit such that it's proportional to region
     // size?
-    let pixelCount = 0;
-    const pixelCountYield = 2000;
+    let pixel_count = 0;
+    const pixel_count_yield = 2000;
     for (const { re: re0, im: im0, idx: idx4 } of pixelsRegion(cfg, region)) {
-        pixelCount += 1;
-        if (pixelCount % pixelCountYield === 0) {
+        pixel_count += 1;
+        if (pixel_count % pixel_count_yield === 0) {
             yield true;
         }
         let re = re0;
@@ -162,22 +163,26 @@ function* processMaker(inMsg) {
         // NOTE: iterations may be negative.
         // assert(Number.isFinite(iterations));
         Palette.softrainbow(escaped, iterations, rgba);
-        arr[idx4 + 0] = clamp(Math.floor(256 * rgba[0]), 0, 255);
-        arr[idx4 + 1] = clamp(Math.floor(256 * rgba[1]), 0, 255);
-        arr[idx4 + 2] = clamp(Math.floor(256 * rgba[2]), 0, 255);
-        arr[idx4 + 3] = clamp(Math.floor(256 * rgba[3]), 0, 255);
+        for (let i = 0; i < 4; i += 1) {
+            const co = 256 * rgba[i];
+            const ci = Math.floor(co);
+            const cf = co - ci;
+            // Apply dithering
+            const c = ci + ((Math.random() < cf) ? 1 : 0);
+            arr[idx4 + i] = clamp(c, 0, 255);
+        }
     }
-    const outMsg = {
-        id: inMsg.cfg.id,
+    const output_message = {
+        id: input_message.cfg.id,
         done: true,
         part: part,
         imgPart: arr.buffer,
-        wi: inMsg.wi,
+        wi: input_message.wi,
         re: cfg.re,
         im: cfg.im,
         z: cfg.z,
     };
-    postMessage(outMsg, [outMsg.imgPart]);
+    postMessage(output_message, [output_message.imgPart]);
     return false;
 }
 ;
@@ -193,7 +198,7 @@ function doWork(inMsg) {
     if (stop_current_work) {
         stop_current_work = false;
         const { cfg, part } = inMsg;
-        const outMsg = {
+        const output_message = {
             id: inMsg.cfg.id,
             done: false,
             part: part,
@@ -203,7 +208,7 @@ function doWork(inMsg) {
             im: cfg.im,
             z: cfg.z,
         };
-        postMessage(outMsg, [outMsg.imgPart]);
+        postMessage(output_message, [output_message.imgPart]);
     }
 }
 function doStop() {
@@ -212,11 +217,11 @@ function doStop() {
     }
 }
 function messageHandler(e) {
-    const inMsg = e.data;
-    if (inMsg.type === "work") {
-        doWork(inMsg);
+    const input_message = e.data;
+    if (input_message.type === "work") {
+        doWork(input_message);
     }
-    else if (inMsg.type === "stop") {
+    else if (input_message.type === "stop") {
         doStop();
     }
 }

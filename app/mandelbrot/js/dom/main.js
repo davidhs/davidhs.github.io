@@ -10,6 +10,5 @@ async function main() {
         canvas = element;
     }
     const app = new App(canvas);
-    app.makeAllAvailableWorkersWork();
 }
 main();
