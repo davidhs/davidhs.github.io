@@ -3,8 +3,9 @@
 import Qtree from "../common/qtree.js";
 import ImagePart from "../common/imagepart.js";
 import Mouse from "../common/mouse.js";
-import { assert, shuffle } from "../common/utils.js";
+import { assert } from "../common/utils.js";
 const WEB_WORKER_PATH = "js/webworker/worker.js";
+const DEFAULT_NUMBER_OF_WORKS = 8;
 export default class App {
     constructor(canvas) {
         const ctx = canvas.getContext("2d");
@@ -12,6 +13,7 @@ export default class App {
         const workers = [];
         const mouse = new Mouse();
         const cfg = {
+            id: Date.now(),
             cw: 0,
             ch: 0,
             re: -0.5,
@@ -19,16 +21,14 @@ export default class App {
             z: 4,
             max_iter: 15000,
         };
-        const workerScriptPath = WEB_WORKER_PATH;
+        this.#old_z = cfg.z;
+        this.#new_z = cfg.z;
         const qtree = new Qtree();
-        const defaultNumberOfWorkers = 8;
         const imageParts = [];
-        const workersAvailability = [];
+        const isWorkerAvailable = [];
         this.canvas = canvas;
         this.ctx = ctx;
         this.workers = workers;
-        this.workerScriptPath = workerScriptPath;
-        this.defaultNumberOfWorkers = defaultNumberOfWorkers;
         this.qtree = qtree;
         this.imageParts = imageParts;
         this.canvas.width = 0;
@@ -36,21 +36,28 @@ export default class App {
         this.imageDataBuffer = this.ctx.createImageData(1, 1);
         this.canvasNeedsToUpdate = true;
         this.imageData = this.ctx.getImageData(0, 0, 1, 1);
-        this.workersAvailability = workersAvailability;
+        this.isWorkerAvailable = isWorkerAvailable;
         this.mouse = mouse;
         this.cfg = cfg;
         cfg.cw = window.innerWidth;
         cfg.ch = window.innerHeight;
-        qtree.splitSubTree(4); // 2x2 (4)
+        const NR_OF_SPLITS = 4;
+        // 1 -> progress too slow (not enough regions)
+        // 2 -> could be a little bit fast (not enough regions)
+        // 3 -> maybe a bit more?
+        // 4 -> 
+        // 5 -> slower than 4
+        // 6 -> too slow, too much overhead (too many regions)
+        qtree.splitSubTree(NR_OF_SPLITS); // 2x2 (4)
         let w = Math.ceil(cfg.cw);
         let h = Math.ceil(cfg.ch);
-        for (let i = 0; i < defaultNumberOfWorkers; i += 1) {
+        for (let i = 0; i < DEFAULT_NUMBER_OF_WORKS; i += 1) {
             let imagePart = new ImagePart(w, h, 4);
             imageParts.push(imagePart);
         }
-        for (let i = 0; i < defaultNumberOfWorkers; i++) {
-            workers[i] = new Worker(workerScriptPath, { type: "module" });
-            workersAvailability.push(true);
+        for (let i = 0; i < DEFAULT_NUMBER_OF_WORKS; i += 1) {
+            workers[i] = new Worker(WEB_WORKER_PATH, { type: "module" });
+            isWorkerAvailable.push(true);
         }
         canvas.width = cfg.cw;
         canvas.height = cfg.ch;
@@ -63,18 +70,11 @@ export default class App {
         canvas.addEventListener("mousemove", e => {
             this.mouse.consume(e);
             if (this.mouse.mbdr) {
-                this.refresh();
-                const x = this.mouse.x;
-                const y = this.mouse.y;
-                const px = this.mouse.px;
-                const py = this.mouse.py;
-                let ox = px;
-                let oy = py;
                 let L = Math.min(this.cfg.cw, this.cfg.ch);
                 let z0 = 1 / L;
                 let z = this.cfg.z;
-                let sdx = ox - x;
-                let sdy = oy - y;
+                let sdx = this.mouse.px - this.mouse.cx;
+                let sdy = this.mouse.py - this.mouse.cy;
                 let wx0 = this.cfg.re;
                 let wy0 = this.cfg.im;
                 let wdx = +z * z0 * sdx;
@@ -83,6 +83,7 @@ export default class App {
                 let wy = wy0 + wdy;
                 this.cfg.re = wx;
                 this.cfg.im = wy;
+                this.refresh();
             }
         });
         canvas.addEventListener("mouseup", (e) => {
@@ -92,6 +93,8 @@ export default class App {
             this.mouse.consume(e);
             let dy = this.mouse.wdy;
             let z = this.cfg.z;
+            this.#old_z = z;
+            ;
             let factor = 1;
             let magnitude = 0.2;
             const toggle = false;
@@ -104,6 +107,7 @@ export default class App {
             }
             z *= factor;
             this.cfg.z = z;
+            this.#new_z = z;
             this.refresh();
         });
         canvas.addEventListener("dblclick", (e) => {
@@ -131,6 +135,8 @@ export default class App {
             this.refresh();
         });
     }
+    #old_z;
+    #new_z;
     getRegion(code) {
         let x = 0;
         let y = 0;
@@ -175,8 +181,8 @@ export default class App {
      * to rerender.
      */
     refresh() {
-        // TODO: handle resize (?)
         if (this.canvasNeedsToUpdate) {
+            this.canvasNeedsToUpdate = false;
             const cw = this.cfg.cw;
             const ch = this.cfg.ch;
             this.canvas.width = cw;
@@ -184,107 +190,114 @@ export default class App {
             const ctx = this.canvas.getContext("2d");
             assert(ctx !== null);
             this.ctx = ctx;
-            this.canvasNeedsToUpdate = false;
             for (let i = 0; i < this.imageData.data.length; i += 1) {
                 this.imageDataBuffer.data[i] = this.imageData.data[i];
             }
             this.imageData = this.ctx.getImageData(0, 0, cw, ch);
-            this.imageData = this.ctx.getImageData(0, 0, cw, ch);
         }
+        // Translate | scale image
+        const pan_x = this.mouse.cx - this.mouse.px;
+        const pan_y = this.mouse.cy - this.mouse.py;
         // What we're going to do when we need to redraw the canvas
-        this.ctx.putImageData(this.imageData, 0, 0);
-        this.qtree.forAllPreorder(self => { self.setFlag(false); });
+        // this.ctx.putImageData();
+        const cw = this.cfg.cw;
+        const ch = this.cfg.ch;
+        const old_z = this.#old_z;
+        const new_z = this.#new_z;
+        const sx = 0;
+        const sy = 0;
+        const sw = cw;
+        const sh = ch;
+        const f = old_z / new_z; //new_z / old_z;
+        const dw = f * cw;
+        const dh = f * ch;
+        const dx = pan_x + (cw - dw) / 2;
+        const dy = pan_y + (ch - dh) / 2;
+        this.ctx.drawImage(this.canvas, sx, sy, sw, sh, dx, dy, dw, dh);
+        // Eat this
+        this.#old_z = this.#new_z;
+        this.imageData = this.ctx.getImageData(0, 0, cw, ch);
+        // @ts-ignore
+        if (!window.DEBUG_1) {
+            this.cfg.id = Date.now();
+            this.stopCurrentWork();
+            this.qtree.free();
+            this.makeAllAvailableWorkersWork();
+        }
+    }
+    makeAllAvailableWorkersWork() {
         for (let i = 0; i < this.workers.length; i += 1) {
-            if (this.workersAvailability[i]) {
+            if (this.isWorkerAvailable[i]) {
                 this.requestJob(i);
             }
         }
     }
-    start() {
-        for (let i = 0; i < this.workers.length; i += 1) {
-            this.requestJob(i);
-        }
-    }
     requestJob(workerIndex) {
-        // Searches quad tree for a job
-        let node = this.qtree;
-        let running = true;
-        let count = 0;
-        let threshold = 10000;
-        if (node.isLeaf() || node.getFlag()) {
-            running = false;
+        if (!this.isWorkerAvailable[workerIndex]) {
+            return;
         }
-        while (running && count < threshold) {
-            let n = node.getChildren().length;
-            count += 1;
-            let idxList = [0, 1, 2, 3];
-            shuffle(idxList);
-            for (let i = 0; i < n; i += 1) {
-                let child = node.getChildren()[idxList[i]];
-                if (!child.getFlag()) {
-                    node = child;
-                    if (child.isLeaf()) {
-                        running = false;
-                    }
-                    break;
-                }
-            }
-        }
-        if (count >= threshold - 1) {
-            throw new Error("Something is not right");
-        }
-        if (!running && !node.getFlag()) {
-            node.setFlag(true); // claim this region
-            this.workersAvailability[workerIndex] = false;
+        const node = this.qtree.getAvailableLeaf();
+        if (node !== null) {
+            this.isWorkerAvailable[workerIndex] = false;
             this.scheduleJob(workerIndex, node);
-        }
-        else {
-            // No more jobs for you
         }
     }
     workerCallback(e) {
         const msg = e.data;
-        // TODO: the data received might be stale since the user might have moved 
-        // the viewport and zoomed in or zoomed out.  Should we try to scale up or
-        // scale down the area and redraw it?
-        // TODO: if the data is stale that is being received, maybe discard it
-        // or move it??
         const workerIndex = msg.wi;
         // Mark worker as available.
-        this.workersAvailability[workerIndex] = true;
+        this.isWorkerAvailable[workerIndex] = true;
         const arr = new Uint8ClampedArray(msg.imgPart);
-        /////////////////////////////
-        // Draw region onto canvas //
-        /////////////////////////////
-        // TODO: reposition and rescale region.
-        /** Width of canvas. */
-        const w = this.cfg.cw;
-        /** How many color channels to iterate through. */
-        const channels = 4;
-        const region = this.getRegion(msg.part);
-        for (let y = 0; y < region.h; y += 1) {
-            for (let x = 0; x < region.w; x += 1) {
-                const ic = x + region.x + (y + region.y) * w;
-                const id = x + y * region.w;
-                // Multiply for all 4 color channels.
-                /* Canvas index */
-                const _ic = 4 * ic;
-                /* Data (region) index */
-                const _id = 4 * id;
-                for (let ch = 0; ch < channels; ch += 1) {
-                    this.imageData.data[_ic + ch] = arr[_id + ch];
+        if (msg.done && msg.id === this.cfg.id) {
+            // TODO: the data received might be stale since the user might have moved 
+            // the viewport and zoomed in or zoomed out.  Should we try to scale up or
+            // scale down the area and redraw it?
+            // TODO: if the data is stale that is being received, maybe discard it
+            // or move it??
+            /////////////////////////////
+            // Draw region onto canvas //
+            /////////////////////////////
+            // TODO: reposition and rescale region.
+            /** Width of canvas. */
+            const w = this.cfg.cw;
+            /** How many color channels to iterate through. */
+            const channels = 4;
+            const region = this.getRegion(msg.part);
+            for (let y = 0; y < region.h; y += 1) {
+                for (let x = 0; x < region.w; x += 1) {
+                    const canvas_index = x + region.x + (y + region.y) * w;
+                    const region_index = x + y * region.w;
+                    for (let ch = 0; ch < channels; ch += 1) {
+                        this.imageData.data[4 * canvas_index + ch] = arr[4 * region_index + ch];
+                    }
                 }
             }
+            // Paint
+            this.ctx.putImageData(this.imageData, 0, 0);
+            // this.ctx.drawImage(this.canvas, 0, 0);
         }
-        // Paint
-        this.ctx.putImageData(this.imageData, 0, 0);
+        else {
+            // Aborted I guess
+        }
         this.imageParts[workerIndex].arr = arr;
         this.requestJob(workerIndex);
+        // Check if there is more work to do!
+        this.makeAllAvailableWorkersWork();
+    }
+    stopCurrentWork() {
+        for (let i = 0; i < this.workers.length; i += 1) {
+            const worker = this.workers[i];
+            const message = {
+                type: "stop",
+            };
+            worker.postMessage(message);
+        }
     }
     scheduleJob(workerIndex, node) {
         let region = this.getRegion(node.getPath());
         let imagePart = this.imageParts[workerIndex];
         const message = {
+            type: "work",
             cfg: this.cfg,
             region: region,
             wi: workerIndex,
@@ -295,20 +308,9 @@ export default class App {
                 data: imagePart.getAdditionalData()
             },
         };
-        let transferList = [message.imagePart.buffer];
-        let self = this;
-        App.startJob(this.workers[workerIndex], message, transferList, function (e) {
-            self.workerCallback(e);
-        });
-    }
-    static startJob(worker, message, transferList, callback) {
-        // Message is an object with things that will be COPIED (minus those that
-        // will be moved)
-        // transferList is a list containing things that will be MOVED
-        // This is what the worker sends back.
-        worker.onmessage = callback;
-        // This is what you want the worker to do.
-        worker.postMessage(message, transferList);
+        const worker = this.workers[workerIndex];
+        worker.onmessage = (e) => { this.workerCallback(e); };
+        worker.postMessage(message, [message.imagePart.buffer]);
     }
     resizeCanvas() {
         this.cfg.cw = window.innerWidth;

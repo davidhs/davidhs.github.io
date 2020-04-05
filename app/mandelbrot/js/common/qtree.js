@@ -1,55 +1,81 @@
+import { shuffle, assert } from "./utils.js";
 export default class Qtree {
-    constructor(path, parent) {
-        this.parent = typeof parent !== "undefined" ? parent : null;
-        this.children = [];
-        this.data = {};
-        this.path = typeof path !== "undefined" ? path : "";
-        this.flag = false;
-        this.splits = 0;
+    constructor(parent = null, path = "") {
+        this.#parent = parent;
+        this.#children = [];
+        this.#path = path;
+        this.#claimed = false;
+        this.#splits = 0;
+        this.#childrenClaimed = 0;
+    }
+    #path;
+    #children;
+    #claimed;
+    #splits;
+    #childrenClaimed;
+    #parent;
+    getAvailableLeaf() {
+        if (this.#claimed) {
+            return null;
+        }
+        else {
+            if (this.isLeaf()) {
+                this.#claimed = true;
+                if (this.#parent !== null) {
+                    this.#parent.incrementCount();
+                }
+                return this;
+            }
+            else {
+                const n = this.#children.length;
+                const index_list = [...Array(n).keys()];
+                shuffle(index_list);
+                for (let i = 0; i < n; i += 1) {
+                    const index = index_list[i];
+                    const child = this.#children[index];
+                    if (child.#claimed)
+                        continue;
+                    const leaf = child.getAvailableLeaf();
+                    assert(leaf !== null);
+                    return leaf;
+                }
+                return null;
+            }
+        }
+    }
+    incrementCount() {
+        this.#childrenClaimed += 1;
+        assert(this.#childrenClaimed >= 0 && this.#childrenClaimed <= this.#children.length);
+        if (this.#childrenClaimed === this.#children.length) {
+            this.#claimed = true;
+            if (this.#parent !== null) {
+                this.#parent.incrementCount();
+            }
+        }
+    }
+    free() {
+        const n = this.#children.length;
+        this.#claimed = false;
+        this.#childrenClaimed = 0;
+        for (let i = 0; i < n; i += 1) {
+            const child = this.#children[i];
+            child.free();
+        }
     }
     getPath() {
-        return this.path;
+        return this.#path;
     }
     getDepth() {
-        return this.splits;
-    }
-    setData(data) {
-        this.data = data;
-    }
-    getFlag() {
-        return this.flag;
-    }
-    setFlag(flag) {
-        this.flag = flag;
-        if (this.parent !== null) {
-            this.parent.checkFlagStatus();
-        }
+        return this.#splits;
     }
     /**
      * TODO: maybe implement an iterator for the children?
      */
     getChildren() {
-        return this.children;
-    }
-    checkFlagStatus() {
-        let sum = 0;
-        if (this.children.length === 4) {
-            for (let i = 0; i < this.children.length; i += 1) {
-                let child = this.children[i];
-                if (child.getFlag() === true) {
-                    sum += 1;
-                }
-            }
-            if (sum === 4) {
-                this.setFlag(true);
-                if (this.parent) {
-                    this.parent.checkFlagStatus();
-                }
-            }
-        }
+        return this.#children;
     }
     isLeaf() {
-        return this.children.length === 0;
+        return this.#children.length === 0;
     }
     /**
      * Preorder: do self then children.
@@ -59,8 +85,8 @@ export default class Qtree {
     forAllPreorder(fn) {
         fn(this);
         if (!this.isLeaf()) {
-            for (let i = 0; i < this.children.length; i += 1) {
-                this.children[i].forAllPreorder(fn);
+            for (let i = 0; i < this.#children.length; i += 1) {
+                this.#children[i].forAllPreorder(fn);
             }
         }
     }
@@ -71,27 +97,27 @@ export default class Qtree {
      */
     forPostPreorder(fn) {
         if (!this.isLeaf()) {
-            for (let i = 0; i < this.children.length; i += 1) {
-                this.children[i].forPostPreorder(fn);
+            for (let i = 0; i < this.#children.length; i += 1) {
+                this.#children[i].forPostPreorder(fn);
             }
         }
         fn(this);
     }
     splitSelf() {
-        if (this.children.length === 0) {
-            this.splits += 1;
+        if (this.#children.length === 0) {
+            this.#splits += 1;
             for (let i = 0; i < 4; i += 1) {
-                this.children.push(new Qtree(this.path + (i + 1), this));
+                this.#children.push(new Qtree(this, this.#path + (i + 1)));
             }
         }
     }
     _splitSubTree() {
-        if (this.children.length === 0) {
+        if (this.#children.length === 0) {
             this.splitSelf();
         }
         else {
             for (let i = 0; i < 4; i += 1) {
-                this.children[i]._splitSubTree();
+                this.#children[i]._splitSubTree();
             }
         }
     }

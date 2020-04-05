@@ -10,6 +10,6 @@ async function main() {
         canvas = element;
     }
     const app = new App(canvas);
-    app.start();
+    app.makeAllAvailableWorkersWork();
 }
 main();

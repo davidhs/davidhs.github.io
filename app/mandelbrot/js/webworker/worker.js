@@ -2,6 +2,9 @@
 /// <reference lib="webworker" />
 import { clamp, feq } from "../common/utils.js";
 import * as Palette from "../common/palettes.js";
+let is_working = false;
+let stop_current_work = false;
+let arr;
 function* edgePixels(region) {
     // Edge checking
     const { x, y, w, h } = region;
@@ -64,7 +67,7 @@ function* processMaker(inMsg) {
     // const BAILOUT_RADIUS = 2147483647;
     const bailout_radius = 2 ** 20;
     const { cfg, region, part } = inMsg;
-    const arr = new Uint8ClampedArray(inMsg.imagePart.buffer); // data
+    arr = new Uint8ClampedArray(inMsg.imagePart.buffer); // data
     /** What is the max. iteration we're willing to tolerate. */
     const max_iterations = cfg.max_iter;
     /////////////////////////////////////
@@ -72,11 +75,6 @@ function* processMaker(inMsg) {
     /////////////////////////////////////
     const rgba = [0, 0, 0, 1.0];
     // Reset alpha channel of array
-    {
-        for (let i = 0; i < arr.length; i += 4) {
-            arr[i + 3] = 0;
-        }
-    }
     // Edge checking
     for (const [x, y] of edgePixels(region)) {
     }
@@ -87,9 +85,15 @@ function* processMaker(inMsg) {
     {
     }
     // Color rest
+    // TODO: maybe put the count limit such that it's proportional to region
+    // size?
     let pixelCount = 0;
-    const pixelCountYield = 100;
+    const pixelCountYield = 2000;
     for (const { re: re0, im: im0, idx: idx4 } of pixelsRegion(cfg, region)) {
+        pixelCount += 1;
+        if (pixelCount % pixelCountYield === 0) {
+            yield true;
+        }
         let re = re0;
         let im = im0;
         /** What iteration we are on (fractional)? */
@@ -120,7 +124,6 @@ function* processMaker(inMsg) {
         let re_sq = re * re;
         /** im * im */
         let im_sq = im * im;
-        // TODO: maybe do periodicity checking
         let re_old = 0;
         let im_old = 0;
         let period = 0;
@@ -156,7 +159,6 @@ function* processMaker(inMsg) {
             const nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
             iterations = iterations + 1 - nu;
         }
-        // iterations += 4;
         // NOTE: iterations may be negative.
         // assert(Number.isFinite(iterations));
         Palette.softrainbow(escaped, iterations, rgba);
@@ -164,12 +166,10 @@ function* processMaker(inMsg) {
         arr[idx4 + 1] = clamp(Math.floor(256 * rgba[1]), 0, 255);
         arr[idx4 + 2] = clamp(Math.floor(256 * rgba[2]), 0, 255);
         arr[idx4 + 3] = clamp(Math.floor(256 * rgba[3]), 0, 255);
-        pixelCount += 1;
-        if (pixelCount % pixelCountYield === 0) {
-            yield true;
-        }
     }
     const outMsg = {
+        id: inMsg.cfg.id,
+        done: true,
         part: part,
         imgPart: arr.buffer,
         wi: inMsg.wi,
@@ -181,9 +181,43 @@ function* processMaker(inMsg) {
     return false;
 }
 ;
+function doWork(inMsg) {
+    const process = processMaker(inMsg);
+    is_working = true;
+    while (process.next().value) {
+        if (stop_current_work) {
+            break;
+        }
+    }
+    is_working = false;
+    if (stop_current_work) {
+        stop_current_work = false;
+        const { cfg, part } = inMsg;
+        const outMsg = {
+            id: inMsg.cfg.id,
+            done: false,
+            part: part,
+            imgPart: arr.buffer,
+            wi: inMsg.wi,
+            re: cfg.re,
+            im: cfg.im,
+            z: cfg.z,
+        };
+        postMessage(outMsg, [outMsg.imgPart]);
+    }
+}
+function doStop() {
+    if (is_working) {
+        stop_current_work = true;
+    }
+}
 function messageHandler(e) {
     const inMsg = e.data;
-    const process = processMaker(inMsg);
-    while (process.next().value) { }
+    if (inMsg.type === "work") {
+        doWork(inMsg);
+    }
+    else if (inMsg.type === "stop") {
+        doStop();
+    }
 }
 onmessage = messageHandler;
