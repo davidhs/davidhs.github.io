@@ -3,8 +3,16 @@
 	<head>
 		<meta charset="utf-8"/>
 		<title>JS Stringify</title>
+		<link rel="stylesheet" href="./style.css">
 	</head>
-	<body>
+	<body class="flex flex-col">
+		<textarea id="code-editor-original" class="code-editor grow border-bottom bg-neutral-50 border-neutral-500" placeholder="Original text..."></textarea>
+		<div class="flex bg-green justify-center bg-neutral-300">
+			<button id="button-stringify" class="convert-button mx-8 my-2 rounded-none shadow-none">v Stringify v</button>
+			<button id="button-parse" class="convert-button mx-8 my-2 rounded-none shadow-none">^ Parse ^</button>
+		</div>
+		<textarea id="code-editor-stringified" class="code-editor grow border-top bg-neutral-50 border-neutral-500" placeholder="Stringified text..."></textarea>
+		
 		<script src="./main.js"></script>
 	</body>
 </html>

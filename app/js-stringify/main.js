@@ -1,24 +1,64 @@
-console.clear();
+/**
+ * @type {(condition: any, message?: string) => asserts condition}
+ */
+function assert(condition, message = "") {
+	if (!condition) {
+		throw new Error(`Assertion failed: ${message}`);
+	}
+}
 
-const dom_textarea_input = document.createElement("textarea");
-dom_textarea_input.rows = 10;
-dom_textarea_input.cols = 60;
-document.body.appendChild(dom_textarea_input);
+/**
+ * @template A
+ * @template B
+ * @param {A} x 
+ * @returns {B}
+ */
+function unsafe_transform(x) {
+	return x;
+}
 
-document.body.appendChild(document.createElement("br"));
+/**
+ * @template T
+ * @param {undefined | null | T} x 
+ * @returns {T}
+ */
+function unwrap(x) {
+	assert(x !== undefined && x !== null);
+	return x;
+}
 
-const dom_button = document.createElement("button");
-dom_button.innerText = "Convert";
-document.body.appendChild(dom_button);
 
-document.body.appendChild(document.createElement("br"));
+/** @type {HTMLTextAreaElement} */
+const dom_code_editor_original = unwrap(document.getElementById("code-editor-original"));
 
-const dom_textarea_output = document.createElement("textarea");
-dom_textarea_output.rows = 10;
-dom_textarea_output.cols = 60;
-document.body.appendChild(dom_textarea_output);
+/** @type {HTMLTextAreaElement} */
+const dom_code_editor_stringified = unwrap(document.getElementById("code-editor-stringified"));;
 
-dom_button.onclick = (e) => {
-	const x = dom_textarea_input.value;
-	dom_textarea_output.value = JSON.stringify(dom_textarea_input.value);
+/** @type {HTMLButtonElement} */
+const dom_button_stringify = unwrap(document.getElementById("button-stringify"));;
+
+/** @type {HTMLButtonElement} */
+const dom_button_parse = unwrap(document.getElementById("button-parse"));;
+
+
+dom_button_stringify.onclick = () => {
+	try {
+		const text = dom_code_editor_original.value;
+		const text_stringified = JSON.stringify(text);
+		
+		dom_code_editor_stringified.value = text_stringified;	
+	} catch (e) {
+		alert(e);
+	}
+};
+
+dom_button_parse.onclick = () => {
+	try {
+		const text = dom_code_editor_stringified.value;
+		const text_parsed = JSON.parse(text);
+		
+		dom_code_editor_original.value = text_parsed;
+	} catch (e) {
+		alert(e);
+	}
 };

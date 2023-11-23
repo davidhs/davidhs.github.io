@@ -1,0 +1,134 @@
+html {
+	height: 100%;
+	font-size: 16px;
+}
+
+body {
+	height: 100%;
+	margin: 0;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex-row {
+	flex-direction: row;
+}
+
+.flex-col {
+	flex-direction: column;
+}
+
+.grow {
+	flex-grow: 1;
+}
+
+.justify-center {
+	justify-content: center;
+}
+
+.justify-between {
+	justify-content: space-between;
+}
+
+.px-8 {
+	padding-left: 2rem;
+	padding-right: 2rem;
+}
+
+.mr-8 {
+	margin-right: 2rem;
+}
+
+.mx-8 {
+	margin-left: 2rem;
+	margin-right: 2rem;
+}
+
+.my-2 {
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.rounded-none {
+	border-radius: 0px;
+}
+
+.shadow-none {
+	box-shadow: none;
+}
+
+.code-editor {
+	outline: none;
+	border: none;
+	resize: none;
+	margin: 0;
+}
+
+.convert-button {
+	box-shadow: 1px 1px 0px 0px #878787;
+	background-color: #ebebeb;
+	border: 1px solid #c2c2c2;
+	display: inline-block;
+	cursor: pointer;
+	color: #474747;
+	text-decoration: none;
+}
+
+.convert-button:hover {
+	background-color: #dbdbdb;
+}
+
+.convert-button:active {
+	position: relative;
+	top: 1px;
+}
+
+.border-top {
+	border-top: 1px solid black;
+}
+
+.border-bottom {
+	border-bottom: 1px solid black;
+}
+
+.bg-red {
+	background-color: #F00;
+}
+
+.bg-yellow {
+	background-color: #FF0;
+}
+
+.bg-green {
+	background-color: #0F0;
+}
+
+.bg-cyan {
+	background-color: #0FF;
+}
+
+.bg-blue {
+	background-color: #00F;
+}
+
+.bg-magenta {
+	background-color: #F0F;
+}
+
+.bg-neutral-50 {
+	background-color: rgb(250, 250, 250);
+}
+
+.bg-neutral-300 {
+	background-color: rgb(212, 212, 212);
+}
+
+.border-neutral-500 {
+	border-color: rgb(115, 115, 115);
+}
+
+.bg-red-200 {
+	background-color: rgb(254, 202, 202);
+}
