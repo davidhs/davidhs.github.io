@@ -49,10 +49,17 @@ function unsafe_transmute(x) {
 const dom_regex_flags = unsafe_transmute(unwrap(document.getElementById("regex-flags")));
 /** @type {HTMLTextAreaElement} */
 const dom_regex = unsafe_transmute(unwrap(document.getElementById("regex")));
+/** @type {HTMLInputElement} */
+const dom_split_lines = unsafe_transmute(unwrap(document.getElementById("split-lines")));
 /** @type {HTMLTextAreaElement} */
 const dom_test_string = unsafe_transmute(unwrap(document.getElementById("test-string")));
 /** @type {HTMLTextAreaElement} */
 const dom_results = unsafe_transmute(unwrap(document.getElementById("results")));
+
+
+dom_split_lines.oninput = () => {
+	process();
+};
 
 dom_regex_flags.oninput = () => {
 	process();
@@ -72,9 +79,45 @@ function process() {
 	const regex_string = dom_regex.value;
 	const test_string = dom_test_string.value;
 	
+	/** @type {RegExp} */
+	let regex;
+	
 	try {
-		const regex = new RegExp(regex_string, regex_flags);
-
+		regex = new RegExp(regex_string, regex_flags);
+	} catch (e) {
+		dom_results.value = "Regular Expression Error: " + e;
+		return;
+	}
+	
+	if (dom_split_lines.checked) {
+		dom_results.value = "";
+			
+		/** @type {string[]} */
+		const msg = [];
+		
+		for (const line of test_string.split("\n")) {
+			const match = regex.exec(line);
+			
+			if (match !== null) {
+				const result = {
+					matches: [...match]
+				};
+				
+				if (match.groups) {
+					result.groups = match.groups;
+				}
+				
+				msg.push(JSON.stringify(result, null, 2));
+			}
+		}
+		
+		if (msg.length === 0) {
+			dom_results.value = "No match!";
+		} else {
+			dom_results.value = msg.join("\n");
+		}
+	}
+	else {
 		const match = regex.exec(test_string);
 		
 		if (match !== null) {
@@ -88,10 +131,8 @@ function process() {
 			
 			dom_results.value = JSON.stringify(result, null, 2);
 		} else {
-			dom_results.value = "No match!";	
+			dom_results.value = "No match!";
 		}
-	} catch (e) {
-		dom_results.value = "Error: " + e;
 	}
 }
 
