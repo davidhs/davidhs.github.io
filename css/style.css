@@ -179,3 +179,7 @@ a:hover {
 a:active {
   text-decoration: underline;
 }
+
+.font-bold {
+    font-weight: bold;
+}
