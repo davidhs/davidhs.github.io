@@ -4,6 +4,7 @@ html, body {
     height: 100%;
     background-color: #2B2B2B;
     margin: 0;
+    padding: 0;
 }
 
 #wrapper {
@@ -81,7 +82,6 @@ html, body {
     margin: 0px;
     display: inline-block;
     width: 100%;
-
 }
 
 #banner {
@@ -132,7 +132,7 @@ footer a {
     padding: 10px;
     
     background-color: #D1D1D1;
-    width: 800px;
+    max-width: 800px;
     margin: auto;
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 18px;
