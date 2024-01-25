@@ -23,10 +23,12 @@ import {
 let brush_size = 3;
 let brush_strength = 1000;
 
-let spring_constant = 0.0001;
+//let spring_constant = 0.0001;
+let spring_constant = 0.01;
 
 let displacement_damping = 0.99;
 
+let spring_mass = 10;
 
 
 let canvas_width = 2 ** 8;
@@ -36,8 +38,45 @@ const canvas_scaling = 4;
 
 let eraser_on = false;
 
+let is_brush_oscillating = true;
+let brush_oscillation_frequency = 0.01;
+let brush_time = 0;
 
 
+// Initialize masses
+
+//       x   x + 1
+// y
+// y + 1
+
+/** @type {Particle[][]} */
+const particles = [];
+
+for (let y = 0; y < canvas_height; y++) {
+    /** @type {Particle[]} */
+    const column = [];
+    
+    for (let x = 0; x < canvas_width; x++) {
+        /** @type {Particle} */
+        const particle = {
+            mass: spring_mass,
+            // Position
+            y: 0,
+            // Velocity
+            yv: 0,
+            // Force
+            yf: 0,
+            active: true,
+        };
+        
+        column.push(particle);
+    }
+    
+    particles.push(column);
+}
+
+
+// [ ] Add slider for mass
 
 
 // Displacement damping
@@ -52,6 +91,52 @@ let eraser_on = false;
     
         displacement_damping = repeat_application((x) => Math.log2(x + 1), value, 10);
         slider_value.innerText = "" + displacement_damping;    
+    }
+    
+    slider.oninput = f;
+    f();
+}
+
+// Spring stiffness
+{
+    /** @type {HTMLInputElement} */
+    const slider = unsafe_transmute(unwrap(document.getElementById("spring-stiffness")));
+    /** @type {HTMLSpanElement} */
+    const slider_value = unsafe_transmute(unwrap(document.getElementById("spring-stiffness-value")))
+    
+    function f() {
+        let value = parseFloat(slider.value);
+        
+        value = value;
+        spring_constant = value / 100000;
+        
+        slider_value.innerText = "" + value;    
+    }
+    
+    slider.oninput = f;
+    f();
+}
+
+
+// Spring Mass
+{
+    /** @type {HTMLInputElement} */
+    const slider = unsafe_transmute(unwrap(document.getElementById("spring-mass")));
+    /** @type {HTMLSpanElement} */
+    const slider_value = unsafe_transmute(unwrap(document.getElementById("spring-mass-value")))
+    
+    function f() {
+        let value = parseFloat(slider.value);
+        
+        spring_mass = value;
+        
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = 0; j < particles[i].length; j++) {
+                particles[i][j].mass = spring_mass;
+            }
+        }
+        
+        slider_value.innerText = "" + value;    
     }
     
     slider.oninput = f;
@@ -94,7 +179,6 @@ let eraser_on = false;
     f();
 }
 
-
 // Eraser
 {
     /** @type {HTMLInputElement} */
@@ -105,6 +189,37 @@ let eraser_on = false;
     }
     
     checkbox.oninput = f;
+    f();
+}
+
+// Toggle oscillations
+{
+    /** @type {HTMLInputElement} */
+    const checkbox = unsafe_transmute(unwrap(document.getElementById("oscillating")));
+    
+    function f() {
+        is_brush_oscillating = checkbox.checked;
+    }
+    
+    checkbox.oninput = f;
+    f();
+}
+
+// Oscillation frequency
+{
+    /** @type {HTMLInputElement} */
+    const slider = unsafe_transmute(unwrap(document.getElementById("oscillation-frequency")));
+    /** @type {HTMLSpanElement} */
+    const slider_value = unsafe_transmute(unwrap(document.getElementById("oscillation-frequency-value")))
+    
+    function f() {
+        const value = parseInt(slider.value, 10);
+    
+        brush_oscillation_frequency = value / 10000;
+        slider_value.innerText = "" + value;
+    }
+    
+    slider.oninput = f;
     f();
 }
 
@@ -152,7 +267,8 @@ canvas.addEventListener("mousedown", (e) => {
     if (e.button === 0) {
         offset_kernel(brush_size, (ox, oy) => {
             applyToParticle(x + ox, y + oy, (p) => {
-                p.y = brush_strength;
+                if (is_brush_oscillating) p.y = brush_strength * Math.cos(brush_time * brush_oscillation_frequency)
+                else p.y = brush_strength;
             });
         });
         
@@ -188,7 +304,8 @@ function mouseMoveListener(e) {
             bresenhams_line_algorithm(ox + mouse_xp, oy + mouse_yp, ox + x, oy + y, (x, y) => {
                 if (e.buttons === 1) {
                     applyToParticle(x, y, (p) => {
-                        p.y = brush_strength;
+                        if (is_brush_oscillating) p.y = brush_strength * Math.cos(brush_time * brush_oscillation_frequency)
+                        else p.y = brush_strength;
                     });
                 }
                 else if (e.buttons === 2) {
@@ -234,6 +351,10 @@ document.onkeydown = (e) => {
             }
         }
     }
+    
+    if (e.key === "t") {
+        is_updating = !is_updating;
+    }
 };
 
 
@@ -245,37 +366,7 @@ const image_data = ctx.getImageData(0, 0, canvas_width, canvas_height);
 const { data } = image_data;
 
 
-// Initialize masses
 
-//       x   x + 1
-// y
-// y + 1
-
-/** @type {Particle[][]} */
-const particles = [];
-
-for (let y = 0; y < canvas_height; y++) {
-    /** @type {Particle[]} */
-    const column = [];
-    
-    for (let x = 0; x < canvas_width; x++) {
-        /** @type {Particle} */
-        const particle = {
-            mass: 1,
-            // Position
-            y: 0,
-            // Velocity
-            yv: 0,
-            // Force
-            yf: 0,
-            active: true,
-        };
-        
-        column.push(particle);
-    }
-    
-    particles.push(column);
-}
 
 
 /**
@@ -310,17 +401,17 @@ function applyToOffset(ax, ay, ox, oy, callback) {
     callback(b, distance_squared);
 }
 
+let is_updating = true;
 
-
-animate((dt) => {
-    // Re-apply brush if applicable.
-    if (left_mouse_button_down) {
-        offset_kernel(brush_size, (ox, oy) => {
-            applyToParticle(mouse_xp + ox, mouse_yp + oy, (p) => {
-                p.y = brush_strength;
-            });
-        });
-    }
+/**
+ * Applies physics simulation update.
+ * 
+ * @param {number} dt
+ */
+function update(dt) {
+    if (!is_updating) return;
+    
+    brush_time += dt;
     
     // Compute forces
     for (let y = 0; y < canvas_height; y++) {
@@ -354,6 +445,8 @@ animate((dt) => {
         }
     }
     
+    
+    
     // Apply and reset forces. Draw.
     for (let y = 0; y < canvas_height; y++) {
         for (let x = 0; x < canvas_width; x++) {
@@ -370,25 +463,41 @@ animate((dt) => {
                 
                 // Reset force
                 p.yf = 0;
+            } else {
+                p.yf = 0;
+                p.yv = 0;
+                p.y = 0;
+            }
+        }
+    }
+}
+
+/**
+ * @param {number} dt 
+ */
+function render(dt) {
+    // Apply and reset forces. Draw.
+    for (let y = 0; y < canvas_height; y++) {
+        for (let x = 0; x < canvas_width; x++) {
+            const p = particles[y][x];
+            const i = 4 * (y * canvas_width + x);
+            
+            if (p.active) {
                 
                 // Draw
                 if (p.y > 0) {
                     data[i + 0] = 0;
-                    data[i + 1] = py;
+                    data[i + 1] = p.y;
                     data[i + 2] = 0; // 100 * Math.abs(p.yv);
                     data[i + 3] = 255;
                 }
                 else {
-                    data[i + 0] = -py;
+                    data[i + 0] = -p.y;
                     data[i + 1] = 0;
                     data[i + 2] = 0; // 100 * Math.abs(p.yv);
                     data[i + 3] = 255;
                 }
             } else {
-                p.yf = 0;
-                p.yv = 0;
-                p.y = 0;
-                
                 data[i + 0] = 128;
                 data[i + 1] = 128;
                 data[i + 2] = 128;
@@ -396,7 +505,24 @@ animate((dt) => {
             }
         }
     }
-
     
     ctx.putImageData(image_data, 0, 0);
+}
+
+
+
+
+animate((dt) => {
+    // Re-apply brush if applicable.
+    if (left_mouse_button_down) {
+        offset_kernel(brush_size, (ox, oy) => {
+            applyToParticle(mouse_xp + ox, mouse_yp + oy, (p) => {
+                if (is_brush_oscillating) p.y = brush_strength * Math.cos(brush_time * brush_oscillation_frequency)
+                else p.y = brush_strength;
+            });
+        });
+    }
+    
+    update(dt);
+    render(dt);
 });

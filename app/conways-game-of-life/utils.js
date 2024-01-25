@@ -101,85 +101,6 @@ export function offset_kernel(s, callback) {
 /**
  * @param {(dt: number) => void} callback 
  */
-export function animate(callback) {
-    let pt = 0;
-    
-    let min_frame_duration = Infinity;
-    
-    
-    
-    /** @param {DOMHighResTimeStamp} t */
-    function f(t) {
-        
-        let dt = t - pt;
-        pt = t;
-        
-        if (dt < min_frame_duration) min_frame_duration = dt;
-        
-        dt = clamp(dt, 1, 2 * min_frame_duration);
-        
-        callback(dt);
-        requestAnimationFrame(f);
-    }
-    
-    // First thing we want to do is figure out minimum frame duration.
-    
-    let frame_duration_estimation_iteration = 0;
-    let frame_duration_estimation_iterations_max = 10;
-    
-    /** @param {DOMHighResTimeStamp} t */
-    function f_determine_frame_duration(t) {
-        const dt = t - pt;
-        pt = t;
-        
-        if (dt < min_frame_duration) min_frame_duration = dt;
-        
-        frame_duration_estimation_iteration++;
-        
-        if (frame_duration_estimation_iteration < frame_duration_estimation_iterations_max) {
-            requestAnimationFrame(f_determine_frame_duration);
-        } else {
-            requestAnimationFrame(f);
-        }
-    }
-    
-    
-    requestAnimationFrame((t) => {
-        pt = t;
-        
-        requestAnimationFrame(f_determine_frame_duration);
-    });
-}
-
-/**
- * @param {(x: number) => number} f 
- * @param {number} x0 
- * @param {number} n 
- */
-export function repeat_application(f, x0, n) {
-    let x = x0;
-    
-    for (let i = 0; i < n; i++) {
-        x = f(x);
-    }
-    
-    return x;
-}
-
-/**
- * @param {number} x 
- * @param {number} min 
- * @param {number} max 
- */
-export function clamp(x, min, max) {
-   if (x < min) return min;
-   if (x > max) return max;
-   return x; 
-}
-
-/**
- * @param {(dt: number) => void} callback 
- */
 export function create_animator(callback) {
     let is_running = false;
     
@@ -226,4 +147,30 @@ export function create_animator(callback) {
     animator.start();
     
     return animator;
+}
+
+/**
+ * @param {(x: number) => number} f 
+ * @param {number} x0 
+ * @param {number} n 
+ */
+export function repeat_application(f, x0, n) {
+    let x = x0;
+    
+    for (let i = 0; i < n; i++) {
+        x = f(x);
+    }
+    
+    return x;
+}
+
+/**
+ * @param {number} x 
+ * @param {number} min 
+ * @param {number} max 
+ */
+export function clamp(x, min, max) {
+   if (x < min) return min;
+   if (x > max) return max;
+   return x; 
 }

@@ -1,0 +1,7 @@
+html {
+    background-color: #666;
+}
+
+canvas {
+    image-rendering: crisp-edges;
+}
