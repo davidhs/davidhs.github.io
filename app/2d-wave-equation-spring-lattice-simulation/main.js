@@ -393,12 +393,10 @@ function applyToOffset(ax, ay, ox, oy, callback) {
     const bx = ax + ox;
     const by = ay + oy;
     
-    const distance_squared = ox * ox + oy * oy;
-    
     if (bx < 0 || bx >= canvas_width || by < 0 || by >= canvas_height) return;
     const b = particles[by][bx];
     
-    
+    const distance_squared = ox * ox + oy * oy;
     
     callback(b, distance_squared);
 }
@@ -446,7 +444,6 @@ function update(dt) {
                 const F_damping = -R * a.yv;
                 
                 F_sum += F_damping;
-                
                 
                 a.yf += F_sum;
             };
