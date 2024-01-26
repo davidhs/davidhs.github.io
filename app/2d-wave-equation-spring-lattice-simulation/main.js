@@ -393,10 +393,12 @@ function applyToOffset(ax, ay, ox, oy, callback) {
     const bx = ax + ox;
     const by = ay + oy;
     
+    const distance_squared = ox * ox + oy * oy;
+    
     if (bx < 0 || bx >= canvas_width || by < 0 || by >= canvas_height) return;
     const b = particles[by][bx];
     
-    const distance_squared = ox * ox + oy * oy;
+    
     
     callback(b, distance_squared);
 }
@@ -429,8 +431,24 @@ function update(dt) {
                 
                 const k = spring_constant;
                 
-                // Hooke's law. Only apply to y-component.
-                a.yf += -k * (a.y - b.y) / distance_squared;
+                // Force to apply to mass
+                let F_sum = 0;
+                
+                // Hooke's law. Here we apply the restoring force of the spring
+                // to the displacement.
+                const F_hookes_law = -k * (a.y - b.y); // / distance_squared
+                F_sum += F_hookes_law;
+                
+                // Apply damping. The resistance to motion is directly proportional to the velocity of
+                // the mass and opposes the motion.
+                const damping_factor = 0.15;
+                const R = damping_factor;
+                const F_damping = -R * a.yv;
+                
+                F_sum += F_damping;
+                
+                
+                a.yf += F_sum;
             };
             
             
@@ -459,7 +477,7 @@ function update(dt) {
                 const py = p.y + dt * pyv;
                 
                 p.yv = pyv;
-                p.y = py * displacement_damping;
+                p.y = py; // * displacement_damping;
                 
                 // Reset force
                 p.yf = 0;
