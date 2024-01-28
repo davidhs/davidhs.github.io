@@ -6,43 +6,7 @@
 		<link rel="stylesheet" href="./style.css">
 	</head>
 	<body>
-		<div>
-			<canvas id="canvas"></canvas>
-			<br/>
-			
-			Displacement damping: <input id="damping" type="range" value="0.99" step="0.00001" min="0" max="1">
-			<span id="displacement-damping-value"></span>
-			
-			<br/>
-			
-			Spring stiffness: <input id="spring-stiffness" type="range" value="150" step="1" min="1" max="1000">
-			<span id="spring-stiffness-value"></span>
-			
-			<br/>
-			
-			Spring mass: <input id="spring-mass" type="range" value="10" step="0.1" min="1" max="100">
-			<span id="spring-mass-value"></span>
-			
-			<br/>
-			Brush size: <input id="brush-size" type="range" value="2" step="1" min="1" max="20"><span id="brush-size-value"></span>
-			<br/>
-			Brush strength: <input id="brush-strength" type="range" value="1000" step="1" min="1" max="2000"><span id="brush-strength-value"></span>
-			<br/>
-			Eraser: <input id="eraser" type="checkbox">
-			<br/>
-			Oscillating: <input id="oscillating" type="checkbox">
-			<br/>
-			Oscillation frequency: <input id="oscillation-frequency" type="range" value="80" step="1" min="10" max="200"><span id="oscillation-frequency-value"></span>
-			
-			
-			<ul>
-				<li>Check Eraser or press E to toggle eraser</li>
-				<li>Hold the right-mouse button to draw wall or erase wall.</li>
-				<li>Press C to clear the waves</li>
-				<li>Press T to pause or resume</li>
-			</ul>
-		</div>
-		
+		<div id="root"></div>
 		<script type="module" src="./main.js"></script>
 	</body>
 </html>
