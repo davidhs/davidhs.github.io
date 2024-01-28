@@ -85,7 +85,7 @@ export function App() {
 			<${BooleanController} label="Eraser" start=${simulator.state.eraser_on} callback=${(value) => { simulator.state.eraser_on = value; }} />
 			<${BooleanController} label="Oscillating" start=${simulator.state.is_brush_oscillating} callback=${(value) => { simulator.state.is_brush_oscillating = value; }} />
 
-			<${NumberController} label="Oscillation frequency" start=${simulator.state.brush_oscillation_frequency} min=${10} max=${200} step=${1} callback=${(value) => { simulator.state.brush_oscillation_frequency = value; }} />
+			<${NumberController} label="Oscillation frequency" start=${simulator.state.brush_oscillation_frequency} min=${0.001} max=${0.02} step=${0.0001} callback=${(value) => { simulator.state.brush_oscillation_frequency = value; }} />
 
 			<ul>
 				<li>Check Eraser or press E to toggle eraser</li>

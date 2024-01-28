@@ -6,6 +6,7 @@
 // 
 //
 // TODO: Use web workers to spread load.
+// TODO: Add Gaussian brush
 
 import {
     bresenhams_line_algorithm,
@@ -43,7 +44,7 @@ function createSimulator() {
 		spring_stiffness: 0.001,
 		spring_mass: 10,
 
-		brush_size: 3,
+		brush_size: 2,
 		brush_strength: 1000,
 		
 		
