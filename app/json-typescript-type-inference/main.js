@@ -23,7 +23,9 @@ function App() {
 		
 			const jsonInput = JSON.parse(value);
 			
-			const type = rti.turn_type_into_typescript(rti.sample_value("value", jsonInput));
+			const type = rti.turn_type_into_typescript(rti.sample_value("value", jsonInput, {
+				experimentalInterpretArrayAsArray: true
+			}));
 			
 			setOutput(type);			
 		} catch (e) {
