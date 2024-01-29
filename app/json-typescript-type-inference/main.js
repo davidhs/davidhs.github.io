@@ -2,13 +2,7 @@ import React from "../$lib/3rd/es-react/react.js";
 import jsx from "../$lib/3rd/es-react/jsx.js";
 import ReactDOM from "../$lib/3rd/es-react/react-dom.js";
 
-const { useState, useRef, useEffect } = React;
-
-/*
-
-rti.turn_type_into_typescript(rti.sample_value("foo", { number: "" }) )
-
-*/
+const { useState } = React;
 
 function App() {
 	const [input, setInput] = useState("");
@@ -67,7 +61,6 @@ function App() {
 		</div>
 	`;
 }
-
 
 ReactDOM.render(
 	jsx`<${App} />`,
