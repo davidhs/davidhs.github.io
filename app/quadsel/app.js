@@ -1,5 +1,5 @@
 
-import { unsafe_transmute, unwrap } from "../$lib/utils.js";
+import { unsafe_transmute, unwrap } from "../../js/utils.js";
 import { FourGon } from './four-gon.js';
 import { assert } from './utils.js';
 import { GridMap } from './grid-map.js';

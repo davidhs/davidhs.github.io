@@ -1,5 +1,5 @@
-import React from "../$lib/3rd/es-react/react.js";
-import jsx from "../$lib/3rd/es-react/jsx.js";
+import React from "../../js/3rd/es-react/react.js";
+import jsx from "../../js/3rd/es-react/jsx.js";
 import { createSimulator } from "./simulator.js";
 
 const { useState, useRef, useEffect } = React;

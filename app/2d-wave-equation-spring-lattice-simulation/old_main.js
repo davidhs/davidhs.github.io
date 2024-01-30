@@ -5,8 +5,8 @@
 // In this program we simulate a lattice of masses connected horizontally, vertically, and diagonally to neighbouring masses with springs.
 // 
 // 
-import ReactDOM from "../$lib/3rd/es-react/react-dom.js";
-import jsx from "../$lib/3rd/es-react/jsx.js";
+import ReactDOM from "../../js/3rd/es-react/react-dom.js";
+import jsx from "../../js/3rd/es-react/jsx.js";
 import { App } from "./app.js";
 import {
     animate,
