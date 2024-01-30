@@ -5,20 +5,11 @@ import { Vector } from './vector.js';
 class Matrix {
 
     /**
-     * 
-     * @param {*} matrix 
+     * @param {number[][]} matrix 
      */
-    constructor(matrix=[[]]) {
-
+    constructor(matrix) {
+        /** @type {number[][]} */
         this.m = matrix;
-
-        /*
-        [
-            [1, 2],
-            [3, 4]
-        ]
-
-        */
     }
 
     getRaw() {
@@ -474,7 +465,7 @@ class Matrix {
                 v.push(this.m[i][0]);
             }
 
-            return new Vector();
+            return new Vector(v);
         } else {
             throw new Error();
         }
@@ -510,8 +501,8 @@ class Matrix {
     static getVectorAsColumnVector(v) {
         const matrix = [];
 
-        for (let i = 0; i < v.length; i += 1) {
-            const row = [v[i]];
+        for (let i = 0; i < v.dimensions(); i += 1) {
+            const row = [v.get(i)];
 
             matrix.push(row);
         }
@@ -529,8 +520,8 @@ class Matrix {
 
         const row = [];
 
-        for (let i = 0; i < v.length; i += 1) {
-            row.push(v[i]);
+        for (let i = 0; i < v.dimensions(); i += 1) {
+            row.push(v.get(i));
         }
 
         matrix.push(row);

@@ -1,5 +1,10 @@
 
-
+/**
+ * @param {unknown} condition 
+ * @param {string=} message 
+ * @param {(() => void)=} callback 
+ * @returns {asserts condition}
+ */
 function assert(condition, message, callback) {
     if (!condition) {
         if (callback) {
@@ -27,7 +32,6 @@ function clamp(value, min, max) {
 
 
 /**
- * 
  * @param {number} value 
  * @param {number} min 
  * @param {number} max 

@@ -1,9 +1,7 @@
 import { drawLine, drawCircle } from './gutil.js';
 
 class FourGon {
-
     constructor() {
-
         // Counter clockwise polygon
         this.points = [
             {
@@ -25,11 +23,14 @@ class FourGon {
     }
 
     letGo() {
-
         this.lock = false;
         this.idx = -1;
     }
 
+    /**
+     * @param {number} x 
+     * @param {number} y
+     */
     drag(x, y) {
 
 
@@ -43,6 +44,10 @@ class FourGon {
         point.y = y;
     }
 
+    /**
+     * @param {number} x 
+     * @param {number} y 
+     */
     grab(x, y) {
         if (this.lock) return;
     
@@ -75,6 +80,9 @@ class FourGon {
 
     }
 
+    /**
+     * @param {CanvasRenderingContext2D} ctx 
+     */
     render(ctx) {
 
         var points = this.points;

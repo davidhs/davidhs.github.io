@@ -34,6 +34,7 @@ let _redDur = {
 
 
 let canvas;
+/** @type {CanvasRenderingContext2D} */
 let ctx;
 
 
@@ -766,6 +767,7 @@ function paintStatistics() {
 function circle(x, y, radius) {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.closePath();
 }
 
 
@@ -864,22 +866,16 @@ function fillText(text, x, y, w, h) {
 }
 
 function renderPagePosition() {
-
-
     if (!_hist.hasOwnProperty("tap")) return;
 
     var currentPage = spec.from + getNrOfTaps() - 1;
 
-
     ctx.save();
-
 
     let r = 0;
     let g = 0;
     let b = 0;
     let a = 0.1;
-
-    
     
     ctx.fillStyle = rgba2str(r, g, b, a);
     fillText(currentPage, 0, 0, canvas.width, canvas.height)
@@ -891,31 +887,23 @@ function renderPagePosition() {
 function update() {}
 
 function render() {
-
     clear();
-
     renderPagePosition();
-
     renderPropagationWave();
-
     paintStatistics();
-
 }
 
 var mainloopID;
 
 
 function mainloop(timestamp) {
-
     // Check for user input
-
     update();
 
     // Draw graphics
     render();
 
     // Play sounds
-
 
     mainloopID = window.requestAnimationFrame(mainloop);
 }

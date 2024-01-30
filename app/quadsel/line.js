@@ -68,8 +68,8 @@ class Line {
 
         const G = D_inv.mul(Matrix.getVectorAsColumnVector(dP)).getAsVector();
 
-        const alpha = G[0];
-        const beta = G[1];
+        const alpha = G.get(0);
+        const beta = G.get(1);
 
         console.log(alpha, beta);
 

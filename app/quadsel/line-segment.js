@@ -4,23 +4,30 @@ import { Line } from './line.js';
 
 class LineSegment {
 
+    /**
+     * 
+     * @param  {...any} args 
+     */
     constructor(...args) {
-
         assert(args.length > 0);
 
         if (args.length === 1 && args[0] instanceof LineSegment) {
-
+            /** @type {number[]} */
             this.p1 = args[0].p1.slice();
+            /** @type {number[]} */
             this.p2 = args[0].p2.slice();
-
-        } else if (args.length === 2 && args[0] instanceof Vector && args[1] instanceof Vector) {
-
+        }
+        else if (args.length === 2 && args[0] instanceof Vector && args[1] instanceof Vector) {
+            /** @type {number[]} */
             this.p1 = args[0].getRaw();
+            /** @type {number[]} */
             this.p2 = args[1].getRaw();
+        }
+        else if (args.length >= 4 && args.length % 2 === 0 && typeof args[0] === "number" && typeof args[1] === "number" && typeof args[2] === "number" && typeof args[3] === "number") {
 
-        } else if (args.length >= 4 && args.length % 2 === 0 && typeof args[0] === "number" && typeof args[1] === "number" && typeof args[2] === "number" && typeof args[3] === "number") {
-
+            /** @type {number[]} */
             const p1 = [];
+            /** @type {number[]} */
             const p2 = [];
 
             // left
@@ -49,11 +56,9 @@ class LineSegment {
         assert(this.p1.length === this.p2.length);
     }
 
-
     getDimensions() {
         return this.p1.length;
     }
-
 
     /**
      * Checks if this intersects that
@@ -61,10 +66,8 @@ class LineSegment {
      * @param {LineSegment} that 
      */
     intersects(that) {
-
         assert(this.getDimensions() === 2);
         assert(that.getDimensions() === 2);
-
 
         const p1 = new Vector(this.p1);
         const d1 = (new Vector(this.p2)).minus(new Vector(this.p1));
@@ -82,16 +85,12 @@ class LineSegment {
             const alpha = alpha_beta[0];
             const beta  = alpha_beta[1];
     
-            if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1) {
-                return true;
-            } else {
-                return false;
-            }
+            if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1) return true;
+            else return false;
         } catch (e) {
             console.log(e);
             return false;
         }
-
     }
 
     /**
@@ -100,12 +99,10 @@ class LineSegment {
      * @param {LineSegment} that 
      */
     getIntersection(that) {
-
         assert(this.getDimensions() === 2);
         assert(that.getDimensions() === 2);
 
-
-
+        throw new Error("Unimplemented!");
     }
 }
 

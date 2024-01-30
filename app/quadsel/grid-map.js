@@ -1,15 +1,7 @@
 import { assert } from './utils.js';
 
-
 /**
- * 
- * 
- * 
  * Point P(x1, y1) on grid 1 maps onto point Q(x2, y2) on grid 2.
- * 
- * 
- * 
- * 
  */
 class GridMap {
 

@@ -1,0 +1,38 @@
+
+
+
+
+Gravitational energy
+--------------------
+
+E_g = -G * m_1 * m_2 / d
+
+* E: gravitational potential energy
+* G: gravitational constant
+* m_1: mass of particle 1
+* m_2: mass of particle 2
+* d: distance between particles.
+
+Kinetic energy
+--------------
+
+E_k = (1 / 2) * m * v^2
+
+* m: mass of particle
+* v: speed of particle (magnitude of the velocity)
+
+
+
+
+The total energy of a system is the sum of kinetic and gravitational potential energy, and this total energy is conserved in orbital motion.
+
+We might expect due to numerical rounding issues that the total energy of the system changes as the system evolves. Our solution to that is to measure the total energy of the system when we begin and store that energy. We measure the total energy of the system each iteration. We have a choice to adjust the potential energy or the kinetic energy. I'm going with adjusting the kinetic energy. So we must adjust the velocities of the system such that its total energy matches what we expected.
+
+TODO: what if we omit the kinetic energy that the current gravitational potential energy of the system is still too high?
+
+
+
+E_st: total energy of the system
+
+
+E_st = sum E_g + E_k

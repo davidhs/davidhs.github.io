@@ -1,13 +1,9 @@
+
+import { unsafe_transmute, unwrap } from "../$lib/utils.js";
 import { FourGon } from './four-gon.js';
 import { assert } from './utils.js';
 import { GridMap } from './grid-map.js';
-
-import {
-    clearRect,
-    getPixel,
-    setPixel,
-    drawLine
-} from './gutil.js';
+import { clearRect, getPixel, setPixel, drawLine } from './gutil.js';
 import { Vector } from './vector.js';
 import { LineSegment } from './line-segment.js';
 
@@ -22,26 +18,31 @@ const zoom_speed = 0.001;
 
 let init = false;
 
-var dom_file = document.getElementById('file');
+/** @type {HTMLInputElement} */
+var dom_file = unsafe_transmute(unwrap(document.getElementById('file')));
 
-dom_file.addEventListener('change', (evt) => {
+dom_file.addEventListener('change', () => {
+    assert(dom_file.files !== null);
+    assert(dom_file.files.length === 1);
 
     var file = dom_file.files[0];
     var reader = new FileReader();
-    reader.onloadend = function () {
 
-        
-        g_image.target.src = reader.result;
+    reader.onloadend = function () {
+        const reader_result = reader.result;
+        assert(typeof reader_result === "string");
+
+        g_image.target.src = reader_result;
 
         g_image.target.onload = () => {
 
-init = true;
+            init = true;
 
             console.log(g_image.target);
 
 
             g_canvas0 = getImageAsCanvas(g_image.target);
-            g_ctx0 = g_canvas0.getContext('2d');
+            g_ctx0 = unwrap(g_canvas0.getContext('2d'));
             g_ctx0.imageSmoothingEnabled = false;
 
             setup();
@@ -49,16 +50,9 @@ init = true;
 
             render();
         };
-
-
-
-
-
-    }
-    if (file) {
-        reader.readAsDataURL(file);
     }
 
+    if (file) reader.readAsDataURL(file);
 }, true);
 
 
@@ -66,47 +60,49 @@ init = true;
 const grid_map = new GridMap();
 
 
-let g_canvas0;
-let g_ctx0;
+let g_canvas0 = document.createElement("canvas");
+let g_ctx0 = unwrap(g_canvas0.getContext("2d"));
 
-
-var g_canvas1 = document.getElementById("canvas1");
-var g_ctx1 = g_canvas1.getContext("2d");
+/** @type {HTMLCanvasElement} */
+const g_canvas1 = unsafe_transmute(unwrap(document.getElementById("canvas1")));
+const g_ctx1 = unwrap(g_canvas1.getContext("2d"));
 g_ctx1.imageSmoothingEnabled = false;
 
-var g_canvas2 = document.getElementById("canvas2");
-var g_ctx2 = g_canvas2.getContext("2d");
+/** @type {HTMLCanvasElement} */
+const g_canvas2 = unsafe_transmute(unwrap(document.getElementById("canvas2")));
+const g_ctx2 = unwrap(g_canvas2.getContext("2d"));
 g_ctx2.imageSmoothingEnabled = false;
 
-
-var g_canvas3 = document.getElementById("canvas3");
-var g_ctx3 = g_canvas3.getContext("2d");
+/** @type {HTMLCanvasElement} */
+const g_canvas3 = unsafe_transmute(unwrap(document.getElementById("canvas3")));
+const g_ctx3 = unwrap(g_canvas3.getContext("2d"));
 g_ctx3.imageSmoothingEnabled = false;
 
-var g_image = {};
 
-g_image.target = new Image();
+const g_image = {
+    target: new Image(),
+};
 
-var g_mouse = {
+const g_mouse = {
     wheel: {
         y: 1
     },
-    down: false
+    down: false,
+    x: 0,
+    y: 0,
 };
 
 
 /**
- * 
- * @param {Image} image 
+ * @param {HTMLImageElement} image 
  */
 function getImageAsCanvas(image) {
-
     const canvas = document.createElement('canvas');
 
     canvas.width = image.width;
     canvas.height = image.height;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = unwrap(canvas.getContext('2d'));
 
     ctx.drawImage(image, 0, 0);
 
@@ -156,7 +152,7 @@ window.addEventListener('mousedown', (evt) => {
 });
 
 
-window.addEventListener('mousemove', evt => {
+window.addEventListener('mousemove', (evt) => {
     var rect = g_canvas1.getBoundingClientRect();
 
     var x = evt.clientX - rect.left;

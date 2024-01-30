@@ -1,22 +1,10 @@
 import { assert } from './utils.js';
 
-
-
-const DO_UNIT_TESTS = true;
-
-
-/**
- * 
- */
-class Vector {
-
-
+export class Vector {
     /**
-     * 
-     * @param {number|number[]} x 
+     * @param {number | number[]} x 
      */
     constructor(x) {
-
         assert(typeof x === "number" || Array.isArray(x));
 
         if (typeof x === "number") {
@@ -25,20 +13,28 @@ class Vector {
             for (let i = 0; i < n; i += 1) {
                 v.push(0);
             }
+            /** @type {number[]} */
             this.arr = v;
         } else if (Array.isArray(x)) {
+            /** @type {number[]} */
             this.arr = x;
         } else {
             throw new Error("Don't understand: " + x);
         }
     }
 
-
+    /**
+     * @param {number} i 
+     */
     get(i) {
         assert(i >= 0 && i < this.arr.length);
         return this.arr[i];
     }
 
+    /**
+     * @param {number} i 
+     * @param {number} value 
+     */
     set(i, value) {
         assert(i >= 0 && i < this.arr.length);
         this.arr[i] = value;
@@ -48,10 +44,7 @@ class Vector {
         return this.arr.slice();
     }
 
-
     /**
-     *
-     * @param {Vector} that
      * @returns {Vector}
      */
     neg() {
@@ -92,9 +85,6 @@ class Vector {
     minus(that) {
         return this.sub(that);
     }
-
-
-
 
     /**
      *
@@ -175,13 +165,12 @@ class Vector {
         assert(this.dimensions() === 3);
 
         const c = [
-            this.arr[1] * that.arr[2] - this.c[2] * that.arr[1],
-            this.arr[2] * that.arr[0] - this.c[0] * that.arr[2],
-            this.arr[0] * that.arr[1] - this.c[1] * that.arr[0]
+            this.arr[1] * that.arr[2] - this.arr[2] * that.arr[1],
+            this.arr[2] * that.arr[0] - this.arr[0] * that.arr[2],
+            this.arr[0] * that.arr[1] - this.arr[1] * that.arr[0]
         ];
 
         return new Vector(c);
-
     }
 
 
@@ -210,7 +199,7 @@ class Vector {
             arr[i] = this.arr[i] / len;
         }
 
-        return new Vector(c);
+        return new Vector(arr);
     }
 
 
@@ -248,7 +237,7 @@ class Vector {
         assert(that instanceof Vector);
         assert(this.dimensions() === that.dimensions(), "Incompatible vectors");
 
-        return that.scalar(this.dot(that) / that.dot(that));
+        return that.scale(this.dot(that) / that.dot(that));
     }
 
 
@@ -280,7 +269,7 @@ class Vector {
         assert(that instanceof Vector);
         assert(this.dimensions() === that.dimensions(), "Incompatible vectors");
 
-        return that.sub(this.project(that).scalar(2));
+        return that.sub(this.project(that).scale(2));
     }
 
 
@@ -311,14 +300,3 @@ class Vector {
         return d;
     }
 }
-
-export { Vector };
-
-
-
-if (DO_UNIT_TESTS) {
-
-
-}
-
-
