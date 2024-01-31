@@ -7,23 +7,19 @@ const { useState } = React;
 function App() {
 	const [input, setInput] = useState("");
 	const [output, setOutput] = useState("");
+	const [flagFmt, setFlatFmt] = useState(false);
 	
-	function handleInputChange(e) {
-		const value = e.target.value;
-		setInput(value);
-		
+	function updateOutput(input, flagFmt) {
 		try {
 			rti.forget();
 		
-			const jsonInput = JSON.parse(value);
-			
-			
+			const jsonInput = JSON.parse(input);
 			
 			const type = rti.turn_type_into_typescript(
 				rti.sample_value("value", jsonInput, {
 					experimentalInterpretArrayAsArray: true
 				}), {
-					fmt: false
+					fmt: flagFmt
 				}
 			);
 			
@@ -31,6 +27,18 @@ function App() {
 		} catch (e) {
 			setOutput("Invalid JSON")
 		}
+	}
+	
+	function handleInputChange(e) {
+		const input = e.target.value;
+		setInput(input);
+		updateOutput(input, flagFmt);
+	}
+	
+	function handleCheckFormat(e) {
+		const flagFmt = e.target.checked;
+		setFlatFmt(flagFmt);
+		updateOutput(input, flagFmt);
 	}
 
 	return jsx`
@@ -50,6 +58,7 @@ function App() {
 			
 			
 			Output (TypeScript)
+			${" "} <input type="checkbox" onChange=${handleCheckFormat}/> Format
 			<br/>
 			<textarea
 				cols=80
