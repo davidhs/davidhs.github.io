@@ -23,7 +23,7 @@ function App() {
 				}
 			);
 			
-			setOutput(type);			
+			setOutput(`type T = ${type}`);
 		} catch (e) {
 			setOutput("Invalid JSON")
 		}
