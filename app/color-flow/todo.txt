@@ -1,0 +1,1 @@
+[ ] Use canvas element and use dithering between colors. Dithering should be stable between resizing and time.

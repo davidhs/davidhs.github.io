@@ -50,9 +50,20 @@ const dom_body = document.body;
 
 let hue = 360 * Math.random();
 const hue_direction = Math.random() > 0.5 ? 1 : -1;
-const hue_change = hue_direction * 0.1;
+const hue_change = hue_direction * 0.005;
 
 let pt = 0;
+
+/**
+ * @param {number} x 
+ * @param {number} min 
+ * @param {number} max 
+ */
+function clamp(x, min, max) {
+	if (x < min) return min;
+	if (x > max) return max;
+	return x;
+}
 
 
 /**
@@ -65,7 +76,7 @@ function animate(t) {
 	pt = t;
 	
 	if (pt !== 0) {
-		hue = (hue + hue_change * dt * 0.05) % 360;
+		hue = (hue + hue_change * dt) % 360;
 		dom_body.style.backgroundColor = `hsl(${Math.floor(hue)}, 100%, 50%)`;
 	}
 	

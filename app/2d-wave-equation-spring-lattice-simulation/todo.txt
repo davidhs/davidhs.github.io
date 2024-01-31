@@ -1,3 +1,4 @@
+[ ] When you press down and let go the change is instantaneous. Smooth the attack and decay.
 [ ] Add probe (sample waveform)
 [ ] Stretch / shrink waveform
 [ ] Convert waveform into audio
