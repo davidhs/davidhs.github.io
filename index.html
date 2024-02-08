@@ -20,18 +20,15 @@
 	</head>
 	<body>
 		<div id="root"></div>
-		<script>
-			(async () => {
-				const ReactDOM = (await import("./js/3rd/es-react/react-dom.js")).default;
-				const jsx = (await import("./js/3rd/es-react/jsx.js")).default;
-
-				const Page = (await import("./src/pages/index.js")).default;
-
-				ReactDOM.render(
-					jsx`<${Page} />`,
-					document.getElementById("root")
-				);
-			})();
+		<script type="module">
+			import ReactDOM from "./js/3rd/es-react/react-dom.js";
+			import jsx from "./js/3rd/es-react/jsx.js";
+			import Page from "./src/pages/index.js";
+			
+			ReactDOM.render(
+				jsx`<${Page}/>`,
+				document.getElementById("root")
+			);
 		</script>
 	</body>
 </html>

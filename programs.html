@@ -1,77 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Reiknirit</title>
 
-<head>
-	<meta charset="utf-8">
-	<title>Reiknirit</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+		<link rel="manifest" href="icon/manifest.json">
+		<link rel="mask-icon" href="icon/safari-pinned-tab.svg" color="#5bbad5">
+		<link rel="shortcut icon" href="icon/favicon.ico">
 
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
-	<link rel="manifest" href="icon/manifest.json">
-	<link rel="mask-icon" href="icon/safari-pinned-tab.svg" color="#5bbad5">
-	<link rel="shortcut icon" href="icon/favicon.ico">
+		<meta name="msapplication-config" content="icon/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+	</head>
+	<body>
+		<script type="module">
+			import { render } from "./js/3rd/solid/web.js";
+			import Page from "./src/pages/program.js";
 
-	<meta name="msapplication-config" content="icon/browserconfig.xml">
-	<meta name="theme-color" content="#ffffff">
-</head>
-
-<body>
-	<div id="wrapper">
-		<div class="nav">
-			<div id="qr1">
-				<img src="img/icon-rr.png" /><span>Reiknirit</span>
-			</div>
-			<ul style="float: right">
-				<li><a href="./index.html">About</a></li>
-				<li><a style="font-weight: bold;" href="./programs.html">Programs</a></li>
-				<li><a href="./links.html">Links</a></li>
-			</ul>
-		</div>
-		<div class="page">
-			<div id="banner"></div>
-			<div id="outer">
-				<div id="inner">
-					<ul class="list-group dark">
-						<li><a href="app/2d-wave-equation-spring-lattice-simulation/index.html">2D wave equation spring-lattice simulation</a></li>
-						<li><a href="app/bnfgen/index.html">Backus-Naur form generator</a></li>
-						<li><a href="app/clock/index.html">Clock</a></li>
-						<li><a href="app/color-flow/index.html">Color Flow</a></li>
-						<li><a href="app/conways-game-of-life/index.html">Conway's Game of Life</a></li>
-						<li><a href="app/f4hacker/index.html">Fallout 4 Terminal Hacker</a></li>
-						<li><a href="app/graphical-task-manager/index.html">Graphical Task Manager</a></li>
-						<li><a href="app/gravitation/index.html">Gravitation</a></li>
-						<li><a href="app/graphinter/index.html">Interactive Graph</a></li>
-						<li><a href="app/iphone-kasina/index.html">iPhone Kasina</a></li>
-						<li><a href="app/js-regex-checker/index.html">JavaScript Regular Expression Checker</a></li>
-						<li><a href="app/json-sort/index.html">JSON Sort</a></li>
-						<li><a href="app/json-stringify/index.html">JSON Stringify & Parse</a></li>
-						<li><a href="app/json-typescript-type-inference/index.html">JSON TypeScript Type Inference</a></li>
-						<li><a href="app/ll1-grammar/index.html">LL(1) assistant: FIRST, FOLLOW, parsing table and syntax diagram</a></li>
-						<li><a href="app/tol308lokaverkefni/index.html">Lokaverkefni í Tölvuleikjaforritun</a></li>
-						<li><a href="app/mandelbrot/index.html">Mandelbrot Set</a></li>
-						<li><a href="app/noise/index.html">Noise</a></li>
-						<li><a href="app/okjst/index.html">Open Kattis JavaScript Tester</a></li>
-						<li><a href="app/page-tracker/index.html">Page Tracker</a></li>
-						<li><a href="app/passphrase/index.html">Passphrase</a></li>
-						<li><a href="app/pcctdg/index.html">Perceptual Color Contrast Training Data Generator</a></li>
-						<li><a href="app/quadsel/index.html">Quadrilateral Selection Tool</a></li>
-						<li><a href="app/r6s-mouse/index.html">Rainbow Six Siege: mouse settings</a></li>
-						<li><a href="app/tapper/index.html">Tapper</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<footer class="footer">
-			© 2015 - 2024
-			<a href="mailto:david@reiknir.it">Davíð Helgason</a>
-			All rights reserved.
-		</footer>
-	</div>
-</body>
-
+			render(Page, document.body);
+		</script>
+	</body>
 </html>

@@ -20,7 +20,7 @@ function Footer() {
 			© 2015 - 2024
 			${" "}
 			<a
-				${{
+				style=${{
 					textDecoration: "none",
 					color: "#D4D4D4",
 					fontWeight: "bold",
