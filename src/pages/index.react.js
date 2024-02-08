@@ -1,5 +1,5 @@
 import jsx from "../../js/3rd/es-react/jsx.js";
-import { Helmet } from "../components/helmet.js";
+import { Helmet } from "../components/helmet.react.js";
 
 function Footer() {
 	return jsx`

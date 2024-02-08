@@ -1,7 +1,11 @@
 import { For } from "../../js/3rd/solid/solid.js";
 import html from "../../js/3rd/solid/html.js";
+import { PageFooter } from "../components/page-footer.solid.js";
+import { PageHeader } from "../components/page-header.solid.js";
+import { PageBody } from "../components/page-body.solid.js";
+import { PageContent } from "../components/page-content.solid.js";
 
-const links = [
+const app_links = [
 	{
 		url: "app/2d-wave-equation-spring-lattice-simulation/index.html",
 		name: "2D wave equation spring-lattice simulation",
@@ -104,82 +108,18 @@ const links = [
 	},
 ];
 
-
-function Footer() {
-	return html`
-		<footer style=${{
-			"background-color": "#1C1C1C",
-			width: "100%",
-			
-			height: "50px", // size of footer
-			
-			"font-family": "'Source Sans Pro', sans-serif",
-			"font-size": "16px",
-			"font-weight": "lighter",
-			color: "#C4C4C4",
-			"text-align": "center",
-			"vertical-align": "middle",
-			"line-height": "50px",
-		}}>
-			© 2015 - 2024
-			${" "}
-			<a
-				style=${{
-					"text-decoration": "none",
-					color: "#D4D4D4",
-					"font-weight": "bold",
-				}}
-				href="mailto:david@reiknir.it"
-			>
-				Davíð Helgason
-			</a>
-			${" "}
-			All rights reserved.
-		</footer>
-	`;
-}
-
-
 export default function PagePrograms() {
 	return html`
-		<div style=${{
-			"background-color": "#D1D1D1",
-			"display": "flex",
-			"flex-direction": "column",
-			"min-height": "100%",
-		}}>
-			<div class="nav"
-				style=${{
-					"box-shadow": "0px 4px 2px 0px rgba(0, 0, 0, 0.3)"
-				}}
-			>
-				<div id="qr1">
-					<span>Reiknirit</span>
-				</div>
-				<ul style=${{ "float": "right" }}>
-					<li><a href="./index.html">About</a></li>
-					<li><a href="./programs.html" style=${{ "font-weight": "bold" }}>Programs</a></li>
-					<li><a href="./links.html">Links</a></li>
-				</ul>
-			</div>
-			<div style=${{
-				"padding-top": "10px",
-				"padding-bottom": "10px",
-				"margin-left": "auto",
-				"margin-right": "auto",
-				"max-width": "800px",
-				flex: 1,
-				"font-family": "'Source Sans Pro', sans-serif",
-				"font-size": "18px",
-				color: "#303030",
-			}}>
+		<${PageBody}>
+			<${PageHeader} select="Programs"/>
+			<${PageContent}>
 				<ul class="list-group dark">
-					<${For} each=${links}>${(link) => 
+					<${For} each=${app_links}>${(link) => 
 						html`<li><a href=${link.url}>${link.name}</a></li>`
 					}<//>
 				</ul>
-			</div>
-			<${Footer}/>
-		</div>
+			<//>
+			<${PageFooter}/>
+		<//>
 	`;
 }
