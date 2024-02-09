@@ -25,8 +25,7 @@
 
 		<meta name="msapplication-config" content="icon/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
-	</head>
-	<body>
+		
 		<script type="module">
 			import "./js/3rd/solid/solid.js";
 			import "./js/3rd/solid/html.js";
@@ -34,9 +33,11 @@
 			
 			import Page from "./src/pages/program.solid.js";
 			
-			window.addEventListener('load', () => {
+			document.addEventListener("DOMContentLoaded", () => {
 				render(Page, document.body);
 			});
 		</script>
+	</head>
+	<body>
 	</body>
 </html>
