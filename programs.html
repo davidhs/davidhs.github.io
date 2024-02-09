@@ -3,6 +3,22 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Reiknirit</title>
+		
+		<link rel="preload" href="./js/3rd/solid/solid.js" as="script" type="module">
+		<link rel="preload" href="./js/3rd/solid/html.js" as="script" type="module">
+		<link rel="preload" href="./js/3rd/solid/web.js" as="script" type="module">
+		
+		<script async type="module">
+			import "./js/3rd/solid/solid.js";
+			import "./js/3rd/solid/html.js";
+			import { render } from "./js/3rd/solid/web.js";
+			
+			import Page from "./src/pages/program.solid.js";
+			
+			window.addEventListener('load', (event) => {
+				render(Page, document.body);
+			});
+		</script>
 
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 
@@ -19,14 +35,6 @@
 		<meta name="theme-color" content="#ffffff">
 	</head>
 	<body>
-		<script type="module">
-			import "./js/3rd/solid/solid.js";
-			import "./js/3rd/solid/html.js";
-			import { render } from "./js/3rd/solid/web.js";
-			
-			import Page from "./src/pages/program.solid.js";
 
-			render(Page, document.body);
-		</script>
 	</body>
 </html>
