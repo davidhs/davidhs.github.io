@@ -13,10 +13,6 @@
 		<link rel="modulepreload" href="./src/components/page-header.solid.js"/>
 		<link rel="modulepreload" href="./src/components/page-body.solid.js"/>
 		<link rel="modulepreload" href="./src/components/page-content.solid.js"/>
-		
-		<script async type="module" src="./programs.js"></script>
-
-		
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
@@ -31,6 +27,16 @@
 		<meta name="theme-color" content="#ffffff">
 	</head>
 	<body>
-
+		<script type="module">
+			import "./js/3rd/solid/solid.js";
+			import "./js/3rd/solid/html.js";
+			import { render } from "./js/3rd/solid/web.js";
+			
+			import Page from "./src/pages/program.solid.js";
+			
+			window.addEventListener('load', () => {
+				render(Page, document.body);
+			});
+		</script>
 	</body>
 </html>
