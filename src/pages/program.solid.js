@@ -63,6 +63,10 @@ const app_links = [
 		name: "JSON TypeScript Type Inference",
 	},
 	{
+		url: "app/3rd/kevin-decker-jsdiff-2024-02-29/index.html",
+		name: "Kevin Decker's jsdiff (2024-02-29)"
+	},
+	{
 		url: "app/ll1-grammar/index.html",
 		name: "LL(1) assistant: FIRST, FOLLOW, parsing table and syntax diagram",
 	},
