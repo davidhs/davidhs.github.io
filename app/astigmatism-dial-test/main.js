@@ -64,8 +64,6 @@ function render() {
 
   const start_radius = 0.1 * short_radius;
   const end_radius = 0.65 * short_radius;
-  // 4, 8, 12, 16
-  // 4 * k
 
   const nr_of_spokes = 8 * core_nr_of_spokes;
 
@@ -107,9 +105,12 @@ function render() {
     ctx.restore();
   }
 
-  // Draw pointer
-  {
-    let angle = Math.atan2(my - cy, mx - cx);
+  /**
+   * @param {number} angleOffset
+   * @param {string} color
+   */
+  function drawPointer(angleOffset, color) {
+    let angle = angleOffset + Math.atan2(my - cy, mx - cx);
 
     let displayed_angle;
 
@@ -127,7 +128,7 @@ function render() {
 
     ctx.save();
 
-    ctx.fillStyle = "#f00";
+    ctx.fillStyle = color;
 
     ctx.beginPath();
     ctx.arc(px, py, 3, 0, 2 * Math.PI);
@@ -138,6 +139,11 @@ function render() {
 
     ctx.restore();
   }
+
+  drawPointer((0 * 2 * Math.PI) / 4, "#ff0000"); // mouse
+  drawPointer((-1 * 2 * Math.PI) / 4, "#0000ff"); // 90°
+  drawPointer((-2 * 2 * Math.PI) / 4, "#ff8000"); // mouse antipode
+  drawPointer((-3 * 2 * Math.PI) / 4, "#8000ff"); // 90° antipode
 }
 
 render();
