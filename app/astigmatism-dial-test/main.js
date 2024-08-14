@@ -21,12 +21,30 @@ function getMousePosition(canvas, event) {
   return { x, y };
 }
 
+/**
+ * @param {number} x 
+ * @param {number} min 
+ * @param {number} max 
+ */
+function wrapNumber(x, min, max) {
+  // Assumes min < max
+  const span = max - min;
+
+  const ox = x - min;
+
+  const owx = ((ox % span) + span) % span;
+
+  const wx = owx + min;
+
+  return wx;
+}
+
 console.log("Hello world!");
 
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById("canvas");
-canvas.width = 500;
-canvas.height = 500;
+canvas.width = 600;
+canvas.height = 600;
 
 const ctx = unwrap(canvas.getContext("2d"));
 
@@ -60,10 +78,10 @@ function render() {
   const cx = canvas.width / 2;
   const cy = canvas.height / 2;
 
-  const short_radius = Math.min(cx, cy);
+  //const short_radius = Math.min(cx, cy);
 
-  const start_radius = 0.1 * short_radius;
-  const end_radius = 0.65 * short_radius;
+  const start_radius = 25; // 0.1 * short_radius;
+  const end_radius = 162.5; // 0.65 * short_radius;
 
   const nr_of_spokes = 8 * core_nr_of_spokes;
 
@@ -112,13 +130,10 @@ function render() {
   function drawPointer(angleOffset, color) {
     let angle = angleOffset + Math.atan2(my - cy, mx - cx);
 
-    let displayed_angle;
+    // Displayed angle, mirrored around x-axis.
+    const d_angle = wrapNumber(-angle, 0, 2 * Math.PI);
 
-    {
-      let fixed_angle = -angle;
-      if (fixed_angle < 0) fixed_angle = fixed_angle + 2 * Math.PI;
-      displayed_angle = ((fixed_angle * 180) / Math.PI).toFixed(3);
-    }
+    const d_angle_deg = d_angle * 180 / Math.PI;
 
     const dx = Math.cos(angle);
     const dy = Math.sin(angle);
@@ -135,7 +150,15 @@ function render() {
     ctx.fill();
 
     ctx.font = "14px sans-serif";
-    ctx.fillText(`${displayed_angle}°`, px, py - 10);
+    
+    if (d_angle_deg <= 180) {
+      ctx.fillText(`${d_angle_deg.toFixed(3)}°`, px, py - 10);
+    } else {
+      ctx.fillText(`${d_angle_deg.toFixed(3)}° [-${(360 - d_angle_deg).toFixed(3)}°]`, px, py - 10);
+    }
+
+    
+    
 
     ctx.restore();
   }
