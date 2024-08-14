@@ -39,6 +39,9 @@ function wrapNumber(x, min, max) {
   return wx;
 }
 
+const PI = Math.PI;
+const TAU = 2 * PI;
+
 console.log("Hello world!");
 
 /** @type {HTMLCanvasElement} */
@@ -103,7 +106,7 @@ function render() {
     ctx.lineWidth = 2;
 
     for (let i = 0; i < nr_of_spokes; i++) {
-      const angle = (i * 2 * Math.PI) / nr_of_spokes;
+      const angle = (i * TAU) / nr_of_spokes;
 
       const dx = Math.cos(angle);
       const dy = Math.sin(angle);
@@ -131,9 +134,9 @@ function render() {
     let angle = angleOffset + Math.atan2(my - cy, mx - cx);
 
     // Displayed angle, mirrored around x-axis.
-    const d_angle = wrapNumber(-angle, 0, 2 * Math.PI);
+    const d_angle = wrapNumber(-angle, 0, TAU);
 
-    const d_angle_deg = d_angle * 180 / Math.PI;
+    const d_angle_deg = d_angle * 180 / PI;
 
     const dx = Math.cos(angle);
     const dy = Math.sin(angle);
@@ -146,7 +149,7 @@ function render() {
     ctx.fillStyle = color;
 
     ctx.beginPath();
-    ctx.arc(px, py, 3, 0, 2 * Math.PI);
+    ctx.arc(px, py, 3, 0, TAU);
     ctx.fill();
 
     ctx.font = "14px sans-serif";
@@ -163,10 +166,15 @@ function render() {
     ctx.restore();
   }
 
-  drawPointer((0 * 2 * Math.PI) / 4, "#ff0000"); // mouse
-  drawPointer((-1 * 2 * Math.PI) / 4, "#0000ff"); // 90°
-  drawPointer((-2 * 2 * Math.PI) / 4, "#ff8000"); // mouse antipode
-  drawPointer((-3 * 2 * Math.PI) / 4, "#8000ff"); // 90° antipode
+  drawPointer((-1 / 8) * TAU, "#808080");
+  drawPointer((-3 / 8) * TAU, "#808080");
+  drawPointer((-5 / 8) * TAU, "#808080");
+  drawPointer((-7 / 8) * TAU, "#808080");
+
+  drawPointer(( 0 / 8) * TAU, "#ff0000"); // mouse
+  drawPointer((-2 / 8) * TAU, "#0000ff"); // 90°
+  drawPointer((-4 / 8) * TAU, "#ff8000"); // mouse antipode
+  drawPointer((-6 / 8) * TAU, "#8000ff"); // 90° antipode
 }
 
 render();
