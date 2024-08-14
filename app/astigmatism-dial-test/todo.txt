@@ -1,0 +1,2 @@
+[ ] Show antipodal points, and 90° points
+[ ] Get bounding box of text

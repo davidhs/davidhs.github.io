@@ -110,7 +110,17 @@ const app_links = [
 		url: "app/tapper/index.html",
 		name: "Tapper",
 	},
+	{
+		url: "app/astigmatism-dial-test/index.html",
+		name: "Astigmatism: Dial Test",
+	},
 ];
+
+// sort by name
+
+app_links.sort((a, b) => {
+	return a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase());
+});
 
 export default function PagePrograms() {
 	return html`
