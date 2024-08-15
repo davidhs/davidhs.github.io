@@ -7,7 +7,7 @@
 
 	const word_list_2 = [
 		{
-			name: "English alphabet",
+			id: "rl-english-alphabet",
 			data: (() => {
 				const l1 = _english_alphabet.split("");
 				const l2 = _english_alphabet.split("").map((x) => x.toUpperCase());
@@ -15,67 +15,67 @@
 			})()
 		},
 		{
-			name: "English alphabet (lower-case)",
+			id: "rl-english-alphabet-lower-case",
 			data: (() => {
 				return _english_alphabet.split("");
 			})()
 		},
 		{
-			name: "English alphabet (upper-case)",
+			id: "rl-english-alphabet-upper-case",
 			data: (() => {
 				return _english_alphabet.split("").map((x) => x.toUpperCase());
 			})()
 		},
 		{
-			name: "Binary numbers",
+			id: "rl-binary-numbers",
 			data: (() => {
 				return _binary_numbers.split("");
 			})()
 		},
 		{
-			name: "Decimal numbers",
+			id: "rl-decimal-numbers",
 			data: (() => {
 				return _decimal_numbers.split("");
 			})()
 		},
 		{
-			name: "Lower-case hexadecimal numbers",
+			id: "rl-hexadecimal-numbers-lower-case",
 			data: (() => {
 				return _hex_numbers.split("");
 			})()
 		},
 		{
-			name: "Upper-case hexadecimal numbers",
+			id: "rl-hexadecimal-numbers-upper-case",
 			data: (() => {
 				return _hex_numbers.toUpperCase().split("");
 			})()
 		},
 		{
-			name: "Lower-case alphanumeric",
+			id: "rl-alphanumeric-lower-case",
 			data: (() => {
 				return (_english_alphabet + _decimal_numbers).split("");
 			})()
 		},
 		{
-			name: "Upper-case alphanumeric",
+			id: "rl-alphanumeric-upper-case",
 			data: (() => {
 				return (_english_alphabet.toUpperCase() + _decimal_numbers).split("");
 			})()
 		},
 		{
-			name: "Alphanumeric",
+			name: "rl-alphanumeric",
 			data: (() => {
 				return (_english_alphabet + _english_alphabet.toUpperCase() + _decimal_numbers).split("");
 			})()
 		},
 		{
-			name: "Special symbols",
+			id: "rl-special-symbols",
 			data: (() => {
 				return _special_symbols.split("");
 			})()
 		},
 		{
-			name: "Alphanumeric with special symbols",
+			id: "rl-alphanumeric-with-special-symbols",
 			data: (() => {
 				return (_english_alphabet + _english_alphabet.toUpperCase() + _decimal_numbers + _special_symbols).split("");
 			})()
@@ -86,6 +86,39 @@
 
 	let words = [];
 
+
+
+	/** Radio (button) group IDs */
+	const rg = [
+		"rl-custom",
+
+		"rl-diceware",
+
+		"rl-eff-long",
+		"rl-eff-short-general",
+		"rl-eff-short-unique-3-prefix",
+
+		"rl-my-big-list",
+
+		"rl-english-alphabet",
+		"rl-english-alphabet-lower-case",
+		"rl-english-alphabet-upper-case",
+
+		"rl-binary-numbers",
+		"rl-decimal-numbers",
+
+		"rl-hexadecimal-numbers-lower-case",
+		"rl-hexadecimal-numbers-upper-case",
+
+		"rl-alphanumeric",
+		"rl-alphanumeric-lower-case",
+		"rl-alphanumeric-upper-case",
+
+		"rl-special-symbols",
+
+		"rl-alphanumeric-with-special-symbols",
+	];
+
 	const dom = {
 		file: document.getElementById("file"),
 		list_size: document.getElementById("list_size"),
@@ -94,51 +127,35 @@
 		generate: document.getElementById("generate"),
 		symbol_entropy: document.getElementById("symbol_entropy"),
 		passphrase_entropy: document.getElementById("passphrase_entropy"),
-		symbol_separator: document.getElementById("symbol_seperator")
-	};
+		symbol_separator: document.getElementById("symbol_seperator"),
 
-	dom.rl = [
-		[document.getElementById("rl1"), "__custom__"],
-		[document.getElementById("rl2"), "diceware_wordlist"],
-		[document.getElementById("rl3"), "eff_large_wordlist"],
-		[document.getElementById("rl4"), "eff_short_wordlist_1"],
-		[document.getElementById("rl5"), "eff_short_wordlist_2_0"],
-		[document.getElementById("rl6"), "my_big_list"],
-		[document.getElementById("rl7"), "Lower-case english alphabet"],
-		[document.getElementById("rl8"), "Upper-case english alphabet"],
-		[document.getElementById("rl9"), "English alphabet"],
-		[document.getElementById("rl10"), "Binary numbers"],
-		[document.getElementById("rl11"), "Decimal numbers"],
-		[document.getElementById("rl12"), "Lower-case hexadecimal numbers"],
-		[document.getElementById("rl13"), "Upper-case hexadecimal numbers"],
-		[document.getElementById("rl14"), "Lower-case alphanumeric"],
-		[document.getElementById("rl15"), "Upper-case alphanumeric"],
-		[document.getElementById("rl16"), "Alphanumeric"],
-		[document.getElementById("rl17"), "Special symbols"],
-		[document.getElementById("rl18"), "Alphanumeric with special symbols"]
-	];
+		rl: rg.map((id) => {
+			const dom_input = document.getElementById(id);
+			if (dom_input === undefined || dom_input === null) throw new Error();
+			return [dom_input, id];
+		}),
+	};
 
 	/**
 	 * @returns Name of selected list
 	 * @throws If no selected list is found.
 	 */
 	function getSelectedList() {
-		for (const [dom_input, name] of dom.rl) {
-			if (dom_input.checked) return name;
+		for (const [dom_input, id] of dom.rl) {
+			if (dom_input.checked) return id;
 		}
 
 		throw new Error("No selected list!");
 	}
 
-	/** @param {string} selectedName */
-	function selectList(selectedName) {
-		const the_name = selectedName;
-
-		if (the_name !== "__custom__") {
+	/** @param {string} id */
+	function selectList(id) {
+		if (id !== "__custom__") {
 			let found = false;
+
 			for (let j = 0; j < window.word_list.length; j += 1) {
 				const wl = window.word_list[j];
-				if (wl.name === the_name) {
+				if (wl.id === id) {
 					updateList(wl.data);
 					found = true;
 					break;
@@ -148,7 +165,7 @@
 			if (!found) {
 				for (let j = 0; j < word_list_2.length; j += 1) {
 					const wl = word_list_2[j];
-					if (wl.name === the_name) {
+					if (wl.id === id) {
 						updateList(wl.data);
 						found = true;
 						break;
@@ -163,10 +180,11 @@
 	for (let i = 0; i < dom.rl.length; i += 1) {
 		const pair = dom.rl[i];
 		const rl = pair[0];
-		const name = pair[1];
+		const id = pair[1];
 
 		rl.onclick = () => {
-			selectList(name);
+			selectList(id);
+			generatePassphrase();
 		};
 	}
 
