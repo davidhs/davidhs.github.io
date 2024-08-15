@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Passcode Generator</title>
+	<style>
+		body {
+  			font-family: monospace;
+		}
+		input {
+			font-family: monospace;
+		}
+	</style>
+</head>
+<body>
+<!-- START OF BODY -->
+
+<h1>Passcode Generator</h1>
+
+<br>
+
+<form>
+	Upload list file: <input id="file" type="file">
+	<br>
+	<br>
+	<form>
+		<input id="rl1" type="radio" name="lists" >Custom<br>
+		<input id="rl2" type="radio" name="lists">Diceware<br>
+		<input id="rl3" type="radio" name="lists">EFF's long word list (for use with five dice)<br>
+		<input id="rl4" type="radio" name="lists">EFF's general short word list (for use with four dice)<br>
+		<input id="rl5" type="radio" name="lists">EFF's short word list (with words that have unique three-character prefixed)<br>
+		<input id="rl6" type="radio" name="lists">My Big List<br>
+		
+		<input id="rl7" type="radio" name="lists">Lower-case english alphabet<br>
+		<input id="rl8" type="radio" name="lists">Upper-case english alphabet<br>
+		<input id="rl9" type="radio" name="lists">English alphabet<br>
+		<input id="rl10" type="radio" name="lists">Binary numbers<br>
+		<input id="rl11" type="radio" name="lists">Decimal numbers<br>
+		<input id="rl12" type="radio" name="lists">Lower-case hexadecimal numbers<br>
+		<input id="rl13" type="radio" name="lists">Upper-case hexadecimal numbers<br>
+		<input id="rl14" type="radio" name="lists">Lower-case alphanumeric<br>
+		<input id="rl15" type="radio" name="lists">Upper-case alphanumeric<br>
+		<input id="rl16" type="radio" name="lists">Alphanumeric<br>
+		<input id="rl17" type="radio" name="lists">Special symbols<br>
+		<input id="rl18" type="radio" name="lists" checked>Alphanumeric with special symbols<br>
+	</form>
+	<br>
+	List size: <span id="list_size">0</span>
+	<br>
+	Entropy per symbol: <span id="symbol_entropy">0</span>
+	<br>
+	<br>
+	Symbol separator: <input id="symbol_seperator" type="text" value="">
+	<br>
+	<br>
+	Nr. of symbols: <input id="words" type="number" min="0" step="1" value="20">
+	<br>
+	Passphrase: <input id="passphrase" type="text" size="120" readonly="true">
+	<br><br>
+	Passphrase entropy: <span id="passphrase_entropy">0</span>
+	<br><br>
+	<input id="generate" type="button" value="Generate">
+</form>
+
+<br/><br/>
+
+<h2>Targets</h2>
+
+<ul>
+	<li>1 bit of entropy: you'd at most have to guess twice, not very secure.</li>
+	<li>39.86 bits of entropy: NSA would be able to guess at least in one second (1 trillion guesses per second).  They probably have more computational power.</li>
+	<li>72.094 bits of entropy: cracked on average in 80 years at 1 trillion guesses per second </li>
+	<li>278.4 bits of entropy: cracked on average in 80 years at 1 trillion guesses per second and guessing rate continuosly doubling every year for 80 years.</li>
+	<li>301.1 bits of entropy: uncrackable by any classical computer for 100 years.</li>
+	<li>602.2 bits of entropy: uncrackable by any classical or quantum computer for 100 years.</li>
+	<li>626.65 bits of entropy: uncrackable by any classical computer until Dark age of universe.</li>
+	<li>1253 bits of entropy: uncrackable by any classical or quantum quantum until Dark age of universe.</li>
+</ul>
+
+<br/><br/>
+
+<h2>Notes</h2>
+
+<ul>
+	<li>Don't reuse your password / passphrase</li>
+	<li>The quality of the passwords / passphrases on this site hinges on the quality of my code (*gulp*) and the quality of the random number generator source of <code>window.crypto.getRandomValues</code></li>
+	<li>Don't make up your own passwords / passphrases if you don't have to.  It's really tough to measure the strength of such a password / passphrase.</li>
+	<li>Don't trust this site.</li>
+	<li>Each bit of entropy doubles the strength of the password on a classical computer and two bits doubles the strength on a quantum computer.</li>
+	<li>How strong does your password / passphrase need to be?  It depends on your potential adversary
+		<ul>
+			<li>Let's say your adversary is capable of 1 trillion guesses per second, that is 10<sup>12</sup> guesses per second, and you want your password to go uncracked for 80 years assuming guessing rate doesn't change, how strong does your password need to be? Let E be the bits of entropy that are required to withstand G guesses (on average), then E = 1 + log<sub>2</sub>(G), and guessing at that rate for 80 years would total about 2.52 * 10<sup>21</sup> guesses, E would be 72.094 bits of entropy</li>
+			
+			<li>Let's say the guessing rate G<sub>r</sub> is G<sub>r</sub>(t) = 2<sup>&alpha; * (t - &beta;)</sup> * &gamma;, where &alpha; is the doubling rate, t is the time, &beta; is the time-offset, and &gamma; is the guessing rate at time t = &beta;. If time is measured in years and the doubling rate is &alpha; = 2, i.e. guessing rate doubles every year (continuously), and the guessing rate in 2018 of our adversary is 10<sup>18</sup> guesses per second, i.e. G<sub>r</sub>(2018) = 10<sup>18</sup> guesses per second, how many guesses can we expect to take place in 80 years?  The answer is &int;<sub>a</sub><sup>b</sup> G<sub>r</sub>(t) dt, where a is 2018 and b = 2018 + 80 = 2098.  G(t) = &int; G<sub>r</sub>(t) dt = G<sub>r</sub>(t) / (&alpha; * log(2)).  The number of guesses, G, would be G = G(2098) - G(2018) = 1.054 * 10<sup>60</sup> guesses, which is significantly more than in the example above.  E = 1 + log<sub>2</sub>(G) = 139.2 bits of entropy, and twice that on a quantum computer (i.e. 278.4 bits)</li>
+			
+			<li>What might the fundamental limit be?  In the visible universe there between 10<sup>78</sup> to 10<sup>82</sup> atoms, so to be conservative let's say 10<sup>82</sup> atoms.  Let's say each atom is capable of making a guess in one Planck time, i.e. t<sub>p</sub> = 5.39 * 10<sup>-44</sup>s, or f<sub>p</sub> = 1.86 * 10<sup>43</sup> guesses per second.  We want our passphrase to be secure until the universe enters the Dark era, roughly T = 10<sup>100</sup> years.  How many bits of entropy does our passphrase need to have?  The number of guesses would be G = T * C<sub>ys</sub> * f<sub>p</sub>, where C<sub>ys</sub> = 3.16 * 10<sup>6</sup> or how many seconds in a year, and we'd need E = 1 + log<sub>2</sub>(G) = 636.65 bits of entropy.  A 100 charachter alphanumeric password with special symbols would suffice.  Double that to resist quantum computer, i.e. 1253.3 bits of entropy.  You will never need a password with more than 1253 bits of entropy forever.</li>
+		</ul>
+	</li>
+</ul>
+
+
+<script type="text/javascript" src="js/lists.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+</script>
+</body>
+</html>

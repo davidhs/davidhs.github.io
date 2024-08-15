@@ -1,93 +1,86 @@
 (() => {
-
-	/*
-		<input id="rl7" type="radio" name="lists">Lower-case english alphabet<br>
-		<input id="rl8" type="radio" name="lists">Upper-case english alphabet<br>
-		<input id="rl9" type="radio" name="lists">English alphabet<br>
-		<input id="rl10" type="radio" name="lists">Binary numbers<br>>
-		<input id="rl11" type="radio" name="lists">Decimal numbers<br>>
-		<input id="rl12" type="radio" name="lists">Lower-case hexadecimal numbers<br>
-		<input id="rl13" type="radio" name="lists">Upper-case hexadecimal numbers<br>
-		<input id="rl14" type="radio" name="lists">Lower-case alphanumeric<br>
-		<input id="rl15" type="radio" name="lists">Upper-case alphanumeric<br>
-		<input id="rl16" type="radio" name="lists">Alphanumeric<br>
-		<input id="rl17" type="radio" name="lists">Special symbols<br>
-		<input id="rl18" type="radio" name="lists">Alphanumeric with special symbols<br>
-	*/
-
 	const _english_alphabet = "abcdefghijklmnopqrstuvwxyz";
 	const _binary_numbers = "01";
 	const _decimal_numbers = "0123456789";
 	const _hex_numbers = "0123456789abcdef";
-	const _special_symbols = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-
+	const _special_symbols = " !\"#$%&'()*+,-./:;<=>?@[]^_`{|}~";
 
 	const word_list_2 = [
 		{
-			name: "Lower-case english alphabet", 
-			data: (() => {
-				return _english_alphabet.split("");
-			})()
-		}, {
-			name: "Upper-case english alphabet", 
-			data: (() => {
-				return _english_alphabet.split("").map((x) => x.toUpperCase());
-			})()
-		}, {
-			name: "English alphabet", 
+			name: "English alphabet",
 			data: (() => {
 				const l1 = _english_alphabet.split("");
 				const l2 = _english_alphabet.split("").map((x) => x.toUpperCase());
 				return l1.concat(l2);
 			})()
-		}, {
-			name: "Binary numbers", 
+		},
+		{
+			name: "English alphabet (lower-case)",
+			data: (() => {
+				return _english_alphabet.split("");
+			})()
+		},
+		{
+			name: "English alphabet (upper-case)",
+			data: (() => {
+				return _english_alphabet.split("").map((x) => x.toUpperCase());
+			})()
+		},
+		{
+			name: "Binary numbers",
 			data: (() => {
 				return _binary_numbers.split("");
 			})()
-		}, {
-			name: "Decimal numbers", 
+		},
+		{
+			name: "Decimal numbers",
 			data: (() => {
 				return _decimal_numbers.split("");
 			})()
-		}, {
-			name: "Lower-case hexadecimal numbers", 
+		},
+		{
+			name: "Lower-case hexadecimal numbers",
 			data: (() => {
 				return _hex_numbers.split("");
 			})()
-		}, {
-			name: "Upper-case hexadecimal numbers", 
+		},
+		{
+			name: "Upper-case hexadecimal numbers",
 			data: (() => {
 				return _hex_numbers.toUpperCase().split("");
 			})()
-		}, {
-			name: "Lower-case alphanumeric", 
+		},
+		{
+			name: "Lower-case alphanumeric",
 			data: (() => {
 				return (_english_alphabet + _decimal_numbers).split("");
 			})()
-		}, {
-			name: "Upper-case alphanumeric", 
+		},
+		{
+			name: "Upper-case alphanumeric",
 			data: (() => {
 				return (_english_alphabet.toUpperCase() + _decimal_numbers).split("");
 			})()
-		}, {
-			name: "Alphanumeric", 
+		},
+		{
+			name: "Alphanumeric",
 			data: (() => {
 				return (_english_alphabet + _english_alphabet.toUpperCase() + _decimal_numbers).split("");
 			})()
-		}, {
-			name: "Special symbols", 
+		},
+		{
+			name: "Special symbols",
 			data: (() => {
 				return _special_symbols.split("");
 			})()
-		}, {
-			name: "Alphanumeric with special symbols", 
+		},
+		{
+			name: "Alphanumeric with special symbols",
 			data: (() => {
 				return (_english_alphabet + _english_alphabet.toUpperCase() + _decimal_numbers + _special_symbols).split("");
 			})()
 		}
 	];
-
 
 	let custom_list = [];
 
@@ -101,30 +94,71 @@
 		generate: document.getElementById("generate"),
 		symbol_entropy: document.getElementById("symbol_entropy"),
 		passphrase_entropy: document.getElementById("passphrase_entropy"),
-		symbol_separator: document.getElementById('symbol_seperator')
-		
+		symbol_separator: document.getElementById("symbol_seperator")
 	};
 
 	dom.rl = [
-		[ document.getElementById("rl1"), "__custom__"],
-		[ document.getElementById("rl2"), "diceware_wordlist"],
-		[ document.getElementById("rl3"), "eff_large_wordlist"],
-		[ document.getElementById("rl4"), "eff_short_wordlist_1"],
-		[ document.getElementById("rl5"), "eff_short_wordlist_2_0"],
-		[ document.getElementById("rl6"), "my_big_list"],
-		[ document.getElementById("rl7"), "Lower-case english alphabet"],
-		[ document.getElementById("rl8"), "Upper-case english alphabet"],
-		[ document.getElementById("rl9"), "English alphabet"],
-		[ document.getElementById("rl10"), "Binary numbers"],
-		[ document.getElementById("rl11"), "Decimal numbers"],
-		[ document.getElementById("rl12"), "Lower-case hexadecimal numbers"],
-		[ document.getElementById("rl13"), "Upper-case hexadecimal numbers"],
-		[ document.getElementById("rl14"), "Lower-case alphanumeric"],
-		[ document.getElementById("rl15"), "Upper-case alphanumeric"],
-		[ document.getElementById("rl16"), "Alphanumeric"],
-		[ document.getElementById("rl17"), "Special symbols"],
-		[ document.getElementById("rl18"), "Alphanumeric with special symbols"],
+		[document.getElementById("rl1"), "__custom__"],
+		[document.getElementById("rl2"), "diceware_wordlist"],
+		[document.getElementById("rl3"), "eff_large_wordlist"],
+		[document.getElementById("rl4"), "eff_short_wordlist_1"],
+		[document.getElementById("rl5"), "eff_short_wordlist_2_0"],
+		[document.getElementById("rl6"), "my_big_list"],
+		[document.getElementById("rl7"), "Lower-case english alphabet"],
+		[document.getElementById("rl8"), "Upper-case english alphabet"],
+		[document.getElementById("rl9"), "English alphabet"],
+		[document.getElementById("rl10"), "Binary numbers"],
+		[document.getElementById("rl11"), "Decimal numbers"],
+		[document.getElementById("rl12"), "Lower-case hexadecimal numbers"],
+		[document.getElementById("rl13"), "Upper-case hexadecimal numbers"],
+		[document.getElementById("rl14"), "Lower-case alphanumeric"],
+		[document.getElementById("rl15"), "Upper-case alphanumeric"],
+		[document.getElementById("rl16"), "Alphanumeric"],
+		[document.getElementById("rl17"), "Special symbols"],
+		[document.getElementById("rl18"), "Alphanumeric with special symbols"]
 	];
+
+	/**
+	 * @returns Name of selected list
+	 * @throws If no selected list is found.
+	 */
+	function getSelectedList() {
+		for (const [dom_input, name] of dom.rl) {
+			if (dom_input.checked) return name;
+		}
+
+		throw new Error("No selected list!");
+	}
+
+	/** @param {string} selectedName */
+	function selectList(selectedName) {
+		const the_name = selectedName;
+
+		if (the_name !== "__custom__") {
+			let found = false;
+			for (let j = 0; j < window.word_list.length; j += 1) {
+				const wl = window.word_list[j];
+				if (wl.name === the_name) {
+					updateList(wl.data);
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				for (let j = 0; j < word_list_2.length; j += 1) {
+					const wl = word_list_2[j];
+					if (wl.name === the_name) {
+						updateList(wl.data);
+						found = true;
+						break;
+					}
+				}
+			}
+		} else {
+			updateList(custom_list);
+		}
+	}
 
 	for (let i = 0; i < dom.rl.length; i += 1) {
 		const pair = dom.rl[i];
@@ -132,34 +166,7 @@
 		const name = pair[1];
 
 		rl.onclick = () => {
-			const the_name = name;
-
-			if (the_name !== "__custom__") {
-
-				let found = false;
-				for (let j = 0; j < window.word_list.length; j += 1) {
-					const wl = window.word_list[j];
-					if (wl.name === the_name) {
-						updateList(wl.data);
-						found = true;
-						break;
-					}
-				}
-
-				if (!found) {
-					for (let j = 0; j < word_list_2.length; j += 1) {
-						const wl = word_list_2[j];
-						if (wl.name === the_name) {
-							updateList(wl.data);
-							found = true;
-							break;
-						}
-					}
-				}
-
-			} else {
-				updateList(custom_list);
-			}
+			selectList(name);
 		};
 	}
 
@@ -171,9 +178,8 @@
 		let bytes;
 
 		function getNext32() {
-
 			if (used >= BATCH_SIZE) {
-				used = 0;	
+				used = 0;
 				bytes = new Uint32Array(BATCH_SIZE);
 				window.crypto.getRandomValues(bytes);
 			}
@@ -186,8 +192,7 @@
 
 		// From from (inclusive) to to (exclusive)
 		function getSecureInt(from, to) {
-
-			if (!Number.isSafeInteger(from)) { 
+			if (!Number.isSafeInteger(from)) {
 				throw new Error("from value is not a safe integer: " + from);
 			}
 
@@ -231,13 +236,11 @@
 		return getSecureInt;
 	})();
 
-
 	dom.generate.onclick = () => {
 		generatePassphrase();
 	};
 
 	dom.file.onchange = (evt) => {
-
 		const files = evt.target.files;
 
 		if (!files) return;
@@ -246,7 +249,6 @@
 			const f = files[i];
 			const r = new FileReader();
 			r.onload = (evt2) => {
-				
 				const text = evt2.target.result;
 
 				custom_list = processText(text);
@@ -264,9 +266,7 @@
 
 		const nr_of_symbols = +dom.words.value;
 
-
 		const symbol_separator = dom.symbol_separator.value;
-
 
 		let passphrase = "";
 
@@ -279,24 +279,30 @@
 
 		dom.passphrase.value = passphrase;
 
-
 		const symbol_entropy = Math.log2(words.length);
 		const passphrase_entropy = nr_of_symbols * symbol_entropy;
 		dom.passphrase_entropy.innerText = passphrase_entropy;
-
 	}
 
 	function processText(text) {
-		return text.split("\n").map((x) => x.trim()).filter((x) => x.length > 0);
+		return text
+			.split("\n")
+			.map((x) => x.trim())
+			.filter((x) => x.length > 0);
 	}
 
 	function updateList(word_list) {
-
 		dom.passphrase_entropy.innerText = 0;
 
 		words = word_list;
 		dom.list_size.innerText = words.length;
-		const symbol_entropy = (words.length > 0) ? Math.log2(words.length) : 0;
+		const symbol_entropy = words.length > 0 ? Math.log2(words.length) : 0;
 		dom.symbol_entropy.innerText = symbol_entropy;
 	}
+
+	
+	setTimeout(() => {
+		selectList(getSelectedList());
+		generatePassphrase();
+	}, 1);
 })();

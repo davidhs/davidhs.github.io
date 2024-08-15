@@ -91,8 +91,8 @@ const app_links = [
 		name: "Page Tracker",
 	},
 	{
-		url: "app/passphrase/index.html",
-		name: "Passphrase",
+		url: "app/passcode-generator/index.html",
+		name: "Passcode Generator",
 	},
 	{
 		url: "app/pcctdg/index.html",
