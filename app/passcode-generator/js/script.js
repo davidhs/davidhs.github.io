@@ -136,6 +136,14 @@
 		}),
 	};
 
+	dom.symbol_separator.addEventListener("input", () => {
+		generatePassphrase();
+	});
+
+	dom.words.addEventListener("input", () => {
+		generatePassphrase();
+	});
+
 	/**
 	 * @returns Name of selected list
 	 * @throws If no selected list is found.
