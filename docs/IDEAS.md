@@ -1,6 +1,6 @@
 # Ideas
 
-## Perceptually uniform color wheel
+## Perceptually Uniform Color Wheel
 
 Keywords: Color wheel, color circle, color appearance model (CAM), uniform color space (UCS), perceptually uniform color wheel.
 
@@ -17,3 +17,18 @@ Concerns:
 - <https://bottosson.github.io/posts/oklab/>
 - <https://en.wikipedia.org/wiki/Oklab_color_space>
 - <https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklab>
+
+## Pseudo-English Word Generator
+
+Keywords: .
+
+Create a relatively simple pseudo-English word generator model that can create English looking words.
+
+### References
+
+- <https://safjan.com/understanding-differences-gpt-transformers-markov-models/>
+- <https://en.wikipedia.org/wiki/Markov_chain>
+- <https://en.wikipedia.org/wiki/Markov_model>
+- <https://en.wikipedia.org/wiki/Markov_property>
+- <https://en.wikipedia.org/wiki/N-gram>
+- <https://en.wikipedia.org/wiki/Word_n-gram_language_model>
