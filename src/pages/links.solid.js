@@ -9,6 +9,19 @@ export default function PageLinks() {
 		<${PageBody}>
 			<${PageHeader} select="Links"/>
 			<${PageContent}>
+				<span>2024-08-27</span>
+				<ul class="list-group dark">
+					<li>
+						<a href="https://www.cheetahhouse.org/">
+							Cheetah House
+						</a>
+					</li>
+					<li>
+						<a href="https://www.perception.foundation/">
+							Perception Restoration Foundation
+						</a>
+					</li>
+				</ul>
 				<span>2024-08-22</span>
 				<ul class="list-group dark">
 					<li>
