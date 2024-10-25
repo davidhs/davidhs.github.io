@@ -20,6 +20,12 @@ Concerns:
 - <https://en.wikipedia.org/wiki/Oklab_color_space>
 - <https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklab>
 
+## JSON Format & Sort
+
+Keywords: .
+
+A simple web app that formats JSON code and sorts object entries by keys (depending on selected locale).
+
 ## Pseudo-English Word Generator
 
 Keywords: .
