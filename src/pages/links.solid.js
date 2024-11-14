@@ -9,6 +9,14 @@ export default function PageLinks() {
 		<${PageBody}>
 			<${PageHeader} select="Links"/>
 			<${PageContent}>
+   				<span>2024-11-14</span>
+				<ul class="list-group dark">
+					<li>
+						<a href="https://gallantlab.org/brain-viewers/">
+							GallantLab.org: Interactive brain viewers made with Pycortex
+						</a>
+					</li>
+				</ul>
 				<span>2024-08-27</span>
 				<ul class="list-group dark">
 					<li>
