@@ -9,6 +9,14 @@ export default function PageLinks() {
 		<${PageBody}>
 			<${PageHeader} select="Links"/>
 			<${PageContent}>
+				<span>2024-12-27</span>
+				<ul class="list-group dark">
+					<li>
+						<a href="https://augmentingcognition.com/ltm.html">
+							Augmenting Long-term Memory, by Michael Nielsen
+						</a>
+					</li>
+				</ul>
    				<span>2024-11-14</span>
 				<ul class="list-group dark">
 					<li>
