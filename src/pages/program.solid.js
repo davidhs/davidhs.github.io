@@ -114,6 +114,10 @@ const app_links = [
 		url: "app/astigmatism-dial-test/index.html",
 		name: "Astigmatism: Dial Test",
 	},
+	{
+		url: "app/fovea-detector/index.html",
+		name: "Fovea Detector",
+	},
 ];
 
 // sort by name
