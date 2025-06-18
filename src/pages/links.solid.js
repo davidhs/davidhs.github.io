@@ -9,8 +9,16 @@ export default function PageLinks() {
 		<${PageBody}>
 			<${PageHeader} select="Links"/>
 			<${PageContent}>
+   				<span>2025-06-18</span>
+				<ul class="list-group dark">
+					<li>
+						<a href="https://www.susanrigetti.com/physics">
+							So You Want to Learn Physics... (Second Edition), by Susan Rigetti
+						</a>
+					</li>
+				</ul>
    				<span>2025-03-25</span>
-       				<ul class="list-group dark">
+       			<ul class="list-group dark">
 					<li>
 						<a href="https://www.youtube.com/watch?v=Otvcbw6k4eo">
 							I can prove I’ve solved this Sudoku without revealing it (Zero-Knowledge Proofs), by Polylog
