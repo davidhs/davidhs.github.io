@@ -9,6 +9,14 @@ export default function PageLinks() {
 		<${PageBody}>
 			<${PageHeader} select="Links"/>
 			<${PageContent}>
+				<span>2025-06-19</span>
+				<ul class="list-group dark">
+					<li>
+						<a href="https://cimc.ai/">
+							California Institute for Machine Consciousness
+						</a>
+					</li>
+				</ul>
    				<span>2025-06-18</span>
 				<ul class="list-group dark">
 					<li>
