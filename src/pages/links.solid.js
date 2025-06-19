@@ -16,6 +16,11 @@ export default function PageLinks() {
 							California Institute for Machine Consciousness
 						</a>
 					</li>
+					<li>
+						<a href="https://jakelazaroff.com/words/homomorphically-encrypted-crdts/">
+							Homomorphically Encrypting CRDTs
+						</a>
+					</li>
 				</ul>
    				<span>2025-06-18</span>
 				<ul class="list-group dark">
