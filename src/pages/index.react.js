@@ -17,7 +17,7 @@ function Footer() {
 			verticalAlign: "middle",
 			lineHeight: "50px",
 		}}>
-			© 2015 - 2024
+			© 2015 - 2025
 			${" "}
 			<a
 				style=${{
@@ -52,9 +52,10 @@ export default function PageIndex() {
 					<span>Reiknirit</span>
 				</div>
 				<ul style=${{ float: "right" }}>
-					<li><a href="./index.html" style=${{ fontWeight: "bold" }}>About</a></li>
+					<li><a href="./index.html" style=${{ fontWeight: "bold" }}>Home</a></li>
 					<li><a href="./programs.html">Programs</a></li>
 					<li><a href="./links.html">Links</a></li>
+					<li><a href="./thoughts.html">Thoughts</a></li>
 				</ul>
 			</div>
 			<div style=${{
@@ -68,7 +69,11 @@ export default function PageIndex() {
 				fontSize: "18px",
 				color: "#303030",
 			}}>
-				${"<Tómt/>"}
+				<p>Hi 👋</p>
+
+				<p>My name is Davíð and welcome to my web site.</p>
+
+				<p>This web site contains an assortment of "fun" programs, links to subjects/topics I enjoy, and my disjointed and meandering thoughts written in text.</p>
 			</div>
 			<${Footer}/>
 		</div>

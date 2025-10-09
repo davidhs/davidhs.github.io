@@ -9,6 +9,20 @@ export default function PageLinks() {
 		<${PageBody}>
 			<${PageHeader} select="Links"/>
 			<${PageContent}>
+				<p>Here is a list of links to subjects/topics I have enjoyed:</p>
+				
+				<h2>Links</h2>
+
+				<span>2025-10-09</span>
+				<ul class="list-group dark">
+					<li><a href="https://www.reddit.com/r/CureAphantasia/">reddit.com/r/CureAphantasia: a subreddit dedicated to documenting "curing" of Aphantasia</a></li>
+					<li><a href="https://truevisualizationforever.wordpress.com/">TrueVisualization</a></li>
+					<li><a href="https://docs.google.com/document/d/1iZul6Hg1o5qNfaHAPIgKp4Pl0M1_YwHAlfGHeIKnXbI/">Michael Stroe's NSE/Stream entry/Fetters 1-3 guide</a></li>
+					<li><a href="https://www.simplytheseen.com/">Kevin Schanilec's information on (Buddhist) awakening (by working through the fetters)</a></li>
+					<li><a href="https://www.amazon.com/Finding-Awakening-No-Nonsense-Buddhist-Suffering-ebook/dp/B09Q37VMR4">Finding Awakening: A No-Nonsense Buddhist Path to Peace and the End of Suffering, by Christiane Michelberger</a></li>
+					<li><a href="https://www.amazon.com/How-See-Through-Self-Illusion-Instruction/dp/3982421810">How to See Through the Self-Illusion: Instruction Manual, by Christiane Michelberger</a></li>
+				</ul>
+
 				<span>2025-06-19</span>
 				<ul class="list-group dark">
 					<li>
@@ -22,6 +36,7 @@ export default function PageLinks() {
 						</a>
 					</li>
 				</ul>
+
    				<span>2025-06-18</span>
 				<ul class="list-group dark">
 					<li>
@@ -30,14 +45,16 @@ export default function PageLinks() {
 						</a>
 					</li>
 				</ul>
+
    				<span>2025-03-25</span>
        			<ul class="list-group dark">
 					<li>
 						<a href="https://www.youtube.com/watch?v=Otvcbw6k4eo">
-							I can prove I’ve solved this Sudoku without revealing it (Zero-Knowledge Proofs), by Polylog
+							I can prove I've solved this Sudoku without revealing it (Zero-Knowledge Proofs), by Polylog
 						</a>
 					</li>
 				</ul>
+
 				<span>2024-12-27</span>
 				<ul class="list-group dark">
 					<li>
@@ -46,6 +63,7 @@ export default function PageLinks() {
 						</a>
 					</li>
 				</ul>
+
    				<span>2024-11-14</span>
 				<ul class="list-group dark">
 					<li>
@@ -54,6 +72,7 @@ export default function PageLinks() {
 						</a>
 					</li>
 				</ul>
+				
 				<span>2024-08-27</span>
 				<ul class="list-group dark">
 					<li>
@@ -67,6 +86,7 @@ export default function PageLinks() {
 						</a>
 					</li>
 				</ul>
+
 				<span>2024-08-22</span>
 				<ul class="list-group dark">
 					<li>
@@ -114,15 +134,18 @@ export default function PageLinks() {
 						</a>
 					</li>
 				</ul>
+
 				<span>2024-01-12</span>
 				<ul class="list-group dark">
 					<li><a href="https://deconstructingyourself.com/dy-001-mindful-right-now-guest-kenneth-folk.html">A very interesting podcast between Michael W. Taft and Kenneth Folk talking about mindfulness (or satipaṭṭhāna)": <span class="font-bold">Deconstructing yourself: Am I Mindful Right Now? with guest Kenneth Folk"</span></a></li>
 				</ul>
+
 				<span>2023-10-20</span>
 				<ul class="list-group dark">
 					<li><a href="https://neuroticgradientdescent.blogspot.com/2020/01/mistranslating-buddha.html">Neurotic Gradient Descent: (mis)Translating the Buddha</a></li>
 					<li><a href="https://acko.net/">Acko.net: Hackery, Math & Design</a></li>
-					<li><a href="https://www.gorcdc.com/post/visualization-training-mega-guide">AphantasiaMeow: Visualization Training Mega Guide</a></li>
+					<li><a href="https://www.alecfigueroa.com/post/visualization-training-mega-guide">Alec Figueroa's Visualization Training Mega Guide</a></li>
+					<li style="text-decoration: line-through;"><a href="https://www.gorcdc.com/post/visualization-training-mega-guide">AphantasiaMeow: Visualization Training Mega Guide</a></li>
 				</ul>
 			<//>
 			<${PageFooter}/>

@@ -4,7 +4,7 @@ import { For } from "../../js/3rd/solid/solid.js";
 const nav_links = [
 	{
 		url: "./index.html",
-		name: "About",
+		name: "Home",
 	},
 	{
 		url: "./programs.html",
@@ -13,6 +13,10 @@ const nav_links = [
 	{
 		url: "./links.html",
 		name: "Links",
+	},
+	{
+		url: "./thoughts.html",
+		name: "Thoughts",
 	},
 ];
 

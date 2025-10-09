@@ -1,4 +1,4 @@
-# Mind's eye exercise: Meditation with eyes open to notice random mind's eye images appearing (2025-10-08)
+# Mind's eye exercise: Meditation with eyes open to notice random mind's eye images appearing
 
 I think I may have accidentally discovered a mind's eye exercise.
 

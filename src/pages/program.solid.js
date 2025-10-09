@@ -131,6 +131,8 @@ export default function PagePrograms() {
 		<${PageBody}>
 			<${PageHeader} select="Programs"/>
 			<${PageContent}>
+				<p>Here is a list of small fun programs, some of which I wrote:</p>
+
 				<ul class="list-group dark">
 					<${For} each=${app_links}>${(link) => 
 						html`<li><a href=${link.url}>${link.name}</a></li>`
