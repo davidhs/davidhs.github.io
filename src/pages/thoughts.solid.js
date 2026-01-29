@@ -10,6 +10,10 @@ const page_links = [
 		url: "./thoughts/2025-10-08 - Mind's eye exercise - Meditation with eyes open.md",
 		name: "(2025-10-08) Mind's eye exercise: Meditation with eyes open to notice random mind's eye images appearing",
 	},
+	{
+		url: "./thoughts/2026-01-29 - Journaling, autobiographical memory, memory streaming.md",
+		name: "(2026-01-29) Journaling to strengthen one's autobiographical memory, and memory streaming",
+	},
 ];
 
 page_links.sort((a, b) => {

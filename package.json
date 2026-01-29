@@ -1,0 +1,9 @@
+{
+	"type": "module",
+	"scripts": {
+		"update-thoughts": "node scripts/update.ts"
+	},
+	"devDependencies": {
+		"@types/node": "^25.1.0"
+	}
+}

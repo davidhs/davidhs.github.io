@@ -17,7 +17,7 @@ function Footer() {
 			verticalAlign: "middle",
 			lineHeight: "50px",
 		}}>
-			© 2015 - 2025
+			© 2015 - 2026
 			${" "}
 			<a
 				style=${{
