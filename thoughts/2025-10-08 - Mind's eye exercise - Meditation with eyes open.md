@@ -13,6 +13,6 @@ So I sat there, with stable eyes, calming my entire being.
 
 I noticed that random vague mental images would pop up every now and again. So I reoriented myself and set the intention to notice any mental imagery when it would randomly pop up.
 
-Every once in a while a random mental image would pop up. Then I'd set the intention to see the food I prepared this moment. Nothing happened for a while and then and image popped up.
+Every once in a while a random mental image would pop up.
 
 The images that popped up were very vague since I have hypophantasia, but the longer I did it, the more I could persist the images and explore the mind's eye scene.
