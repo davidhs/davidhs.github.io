@@ -14,6 +14,10 @@ const page_links = [
 		url: "./thoughts/2026-01-29 - Journaling, autobiographical memory, memory streaming.md",
 		name: "(2026-01-29) Journaling to strengthen one's autobiographical memory, and memory streaming",
 	},
+	{
+		url: "./thoughts/2026-02-10 - Dream journaling, REM interruption, and visualization.md",
+		name: "(2026-02-10) Dream journal and dream-interruption induced visualization",
+	},
 ];
 
 page_links.sort((a, b) => {
