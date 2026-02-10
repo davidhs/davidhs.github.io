@@ -16,6 +16,10 @@ const page_links = [
 		name: "(2026-01-29) Journaling to strengthen one's autobiographical memory, and memory streaming",
 	},
 	{
+		url: "./thoughts/2026-02-10 - Cravings and chewing gum.md",
+		name: "(2026-02-10) Cravings and chewing gum",
+	},
+	{
 		url: "./thoughts/2026-02-10 - Dream journaling, REM interruption, and visualization.md",
 		name: "(2026-02-10) Dream journal and dream-interruption induced visualization",
 	},
