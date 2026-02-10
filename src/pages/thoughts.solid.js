@@ -5,6 +5,7 @@ import { PageHeader } from "../components/page-header.solid.js";
 import { PageBody } from "../components/page-body.solid.js";
 import { PageContent } from "../components/page-content.solid.js";
 
+// TODO: Add `date` field to sort by.
 const page_links = [
 	{
 		url: "./thoughts/2025-10-08 - Mind's eye exercise - Meditation with eyes open.md",
@@ -20,8 +21,9 @@ const page_links = [
 	},
 ];
 
+// TODO: In the future, sort by date in descending order.
 page_links.sort((a, b) => {
-	return a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase());
+	return b.name.toLocaleLowerCase().localeCompare(a.name.toLocaleLowerCase());
 });
 
 export default function PagePrograms() {
