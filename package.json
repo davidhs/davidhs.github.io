@@ -4,6 +4,6 @@
 		"update-thoughts": "node scripts/update.ts"
 	},
 	"devDependencies": {
-		"@types/node": "^25.1.0"
+		"@types/node": "^25.9.1"
 	}
 }
