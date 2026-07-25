@@ -37,19 +37,14 @@ function Footer() {
 
 export default function PageIndex() {
 	return jsx`
-		<div style=${{
-			backgroundColor: "#D1D1D1",
-			display: "flex",
-			flexDirection: "column",
-			minHeight: "100%",
-		}}>
+		<div className="page-body">
 			<div className="nav"
 				style=${{
 					boxShadow: "0px 4px 2px 0px rgba(0, 0, 0, 0.3)"
 				}}
 			>
 				<div id="qr1">
-					<span>Reiknirit</span>
+					<img src="./img/logo.svg" alt="Reiknirit"/>
 				</div>
 				<ul style=${{ float: "right" }}>
 					<li><a href="./index.html" style=${{ fontWeight: "bold" }}>Home</a></li>
