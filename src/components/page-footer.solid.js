@@ -6,7 +6,7 @@ export function PageFooter() {
 			"background-color": "#1C1C1C",
 			width: "100%",
 			
-			height: "50px", // size of footer
+			"min-height": "50px", // size of footer; grows instead of clipping when it wraps
 			
 			"font-family": "'Source Sans Pro', sans-serif",
 			"font-size": "16px",
@@ -16,7 +16,7 @@ export function PageFooter() {
 			"vertical-align": "middle",
 			"line-height": "50px",
 		}}>
-			© 2015 - 2024
+			© 2015 - 2026
 			${" "}
 			<a
 				style=${{

@@ -7,7 +7,7 @@ function Footer() {
 			backgroundColor: "#1C1C1C",
 			width: "100%",
 			
-			height: "50px", // size of footer
+			minHeight: "50px", // size of footer; grows instead of clipping when it wraps
 			
 			fontFamily: "'Source Sans Pro', sans-serif",
 			fontSize: "16px",
@@ -58,12 +58,11 @@ export default function PageIndex() {
 					<li><a href="./thoughts.html">Thoughts</a></li>
 				</ul>
 			</div>
-			<div style=${{
+			<div className="page-content page-content-wide" style=${{
 				paddingTop: "10px",
 				paddingBottom: "10px",
 				marginLeft: "auto",
 				marginRight: "auto",
-				maxWidth: "800px",
 				flex: 1,
 				fontFamily: "'Source Sans Pro', sans-serif",
 				fontSize: "18px",

@@ -13,6 +13,11 @@ export default function PageLinks() {
 				
 				<h2>Links</h2>
 
+				<span>2026-07-25</span>
+				<ul class="list-group dark">
+					<li><a href="https://www.youtube.com/watch?v=aXItOY0sLRY">YouTube video (2016-02-13): "Paced breathing" meditation exercise</a></li>
+				</ul>
+
 				<span>2025-10-09</span>
 				<ul class="list-group dark">
 					<li><a href="https://www.reddit.com/r/CureAphantasia/">reddit.com/r/CureAphantasia: a subreddit dedicated to documenting "curing" of Aphantasia</a></li>

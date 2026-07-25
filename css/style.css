@@ -5,6 +5,10 @@ html, body, #root {
     background-color: #2B2B2B;
     margin: 0;
     padding: 0;
+
+    /* Stop iOS Safari inflating text in the narrow mobile column. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 #wrapper {
@@ -17,9 +21,16 @@ html, body, #root {
 .nav {
     margin: 0;
     background: #636363;
-    height: 50px;
+
+    /* The brand and the link list are 424px wide together, so on a phone the
+       list drops onto its own row instead of forcing the page wider than the
+       screen. Floats below are inert on flex items, which is what lets this
+       one rule fix both the React homepage and the Solid pages. */
+    display: flex;
+    flex-wrap: wrap;
+
+    min-height: 50px;
     line-height: 50px;
-    min-width: 420px;
     color: #ddd;
 }
 
@@ -54,14 +65,24 @@ html, body, #root {
 
 .nav ul {
     list-style-type: none;
-    margin: 0;
+    margin: 0 0 0 auto; /* auto margin does the job float: right used to */
     padding: 0;
     padding-right: 20px;
+
+    /* The li's are rendered without whitespace between them, so the list has no
+       soft-wrap opportunity of its own and has to wrap as flex items. */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    /* Match the link font so the row is exactly 50px, not 51px. */
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
 }
 
 .nav ul li {
     display: inline;
-    padding: 10px;
+    padding: 0 10px; /* vertical padding was always inert, and grows the row now */
 }
 
 .nav ul li a {
@@ -69,11 +90,41 @@ html, body, #root {
     font-size: 18px;
     color: #ddd;
     text-decoration: none;
-    display: inline;
+    display: block; /* makes the whole 50px row a tap target */
+    white-space: nowrap;
+}
 
+/* Below ~329px the four links no longer fit on one row; tighten them so the bar
+   stays two rows instead of three. */
+@media (max-width: 374px) {
+    .nav ul {
+        padding-right: 12px;
+    }
+
+    .nav ul li {
+        padding: 0 8px;
+    }
 }
 
 /* body */
+
+/* The centred text column. border-box so the gutter is carved out of the width
+   rather than added to it, which is what lets the same rule be a fixed column on
+   a desktop and a full-width-minus-gutter block on a phone. The max-widths are
+   the old text-column widths plus the two 16px gutters, so desktop is unchanged. */
+.page-content {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 632px; /* 600px of text */
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow-wrap: break-word;
+}
+
+/* The homepage runs a wider column than the list pages. */
+.page-content-wide {
+    max-width: 832px; /* 800px of text */
+}
 
 .page {
     margin: 0;
