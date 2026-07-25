@@ -94,9 +94,11 @@ html, body, #root {
     white-space: nowrap;
 }
 
-/* Below ~329px the four links no longer fit on one row; tighten them so the bar
-   stays two rows instead of three. */
-@media (max-width: 374px) {
+/* The five links need 382px at the normal spacing, which is just over a 375px
+   phone, so they would wrap to a second row and make the bar three rows tall.
+   Tightening the spacing on phones brings them back to 354px and keeps the bar
+   at two rows: brand, then links. */
+@media (max-width: 479px) {
     .nav ul {
         padding-right: 12px;
     }
@@ -124,6 +126,110 @@ html, body, #root {
 /* The homepage runs a wider column than the list pages. */
 .page-content-wide {
     max-width: 832px; /* 800px of text */
+}
+
+/* Pages whose content is a wide data table rather than prose. */
+.page-content-table {
+    max-width: 1132px; /* 1100px of table */
+}
+
+/* Data tables. The wrapper is the scroll container, so a table too wide for the
+   screen scrolls inside its own box instead of widening the whole page. */
+.table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* On a phone the table scrolls sideways, but a touch device draws no scrollbar
+   until you already started dragging, so there is nothing to tell you the table
+   continues past the edge. These are soft shadows over the edge you can still
+   scroll towards; they fade in only when there is actually more table that way,
+   so on a wide screen where everything fits neither is ever shown. */
+.table-frame {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.table-frame::before,
+.table-frame::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 150ms linear;
+}
+
+.table-frame::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0));
+}
+
+.table-frame::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0));
+}
+
+.table-frame.can-scroll-left::before,
+.table-frame.can-scroll-right::after {
+    opacity: 1;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.data-table th,
+.data-table td {
+    border: 1px solid #B0B0B0;
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.data-table th {
+    background-color: #C0C0C0;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #C9C9C9;
+}
+
+/* A cell holding links. Bulleted so several links in one cell read as separate
+   items rather than one run-on block of text. */
+.cell-links {
+    list-style-type: disc;
+    margin: 0;
+    padding-left: 1.1em;
+}
+
+.cell-links li {
+    margin-bottom: 2px;
+}
+
+/* Column proportions for the compilation table. Left to size themselves the
+   URLs win, because a single ResearchGate link is longer than any title, and the
+   titles get squeezed into a narrow ribbon. Fixing the layout hands the space to
+   the Name column and lets the URLs wrap instead. */
+.compilation-table {
+    table-layout: fixed;
+    min-width: 600px;
+}
+
+.compilation-table th:nth-child(1),
+.compilation-table td:nth-child(1) {
+    width: 6.5em; /* Date */
+}
+
+.compilation-table th:nth-child(3),
+.compilation-table td:nth-child(3) {
+    width: 32%; /* URL(s); the Name column takes whatever is left */
 }
 
 .page {

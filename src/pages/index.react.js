@@ -56,6 +56,7 @@ export default function PageIndex() {
 					<li><a href="./programs.html">Programs</a></li>
 					<li><a href="./links.html">Links</a></li>
 					<li><a href="./thoughts.html">Thoughts</a></li>
+					<li><a href="./misc.html">Misc</a></li>
 				</ul>
 			</div>
 			<div className="page-content page-content-wide" style=${{

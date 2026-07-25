@@ -18,6 +18,10 @@ const nav_links = [
 		url: "./thoughts.html",
 		name: "Thoughts",
 	},
+	{
+		url: "./misc.html",
+		name: "Misc",
+	},
 ];
 
 
