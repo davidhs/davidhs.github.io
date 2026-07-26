@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- viewport-fit=cover lets the background run under the notch and home
+     indicator; the CSS pads content back off them with env(safe-area-inset-*). -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Colored Noise Generator</title>
+<meta name="theme-color" content="#0c0e13">
+
+<!-- Added to the Home Screen, launch without browser chrome. The apple-* pair
+     is what iOS actually honours; mobile-web-app-capable is the standard name. -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Colored Noise Generator">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+
+<!-- Browsers that support an SVG icon get a crisp mark at any size; the PNGs are
+     the fallback for those that don't. -->
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="icons/icon-16.png" type="image/png" sizes="16x16">
+
+<link rel="manifest" href="manifest.webmanifest">
+
+<link rel="stylesheet" href="css/noise.css">
+<script type="module" src="js/main.js"></script>
+</head>
+<body>
+<div class="app">
+  <div class="notice" id="fileWarning" hidden>
+    <strong>Serve this over HTTP.</strong> The page is loaded from a
+    <code>file://</code> URL, and browsers refuse to load ES modules that way, so
+    nothing below will work. Serve the folder — VS Code's Live Server, or
+    <code>python -m http.server 8000</code> — then open
+    <code>http://localhost:8000/</code>.
+  </div>
+
+  <div class="panel">
+    <div class="scope">
+      <canvas id="scope"></canvas>
+      <button id="scopeToggle" class="scope-toggle" type="button" aria-pressed="false"
+              aria-label="Animate spectrum" title="Animate spectrum">
+        <svg viewBox="0 0 12 12" aria-hidden="true">
+          <path class="icon-play" d="M3.5 2.2 L9.6 6 L3.5 9.8 Z"/>
+          <rect class="icon-pause" x="3.4" y="2.4" width="2.2" height="7.2" rx="0.6"/>
+          <rect class="icon-pause" x="6.9" y="2.4" width="2.2" height="7.2" rx="0.6"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="transport">
+      <button id="power" type="button">Play</button>
+      <div class="readout">
+        <div class="name" id="colorName">Pink</div>
+        <div class="meta" id="colorMeta">α = 1.00 · -3.0 dB/octave</div>
+      </div>
+    </div>
+
+    <div class="ctrl">
+      <label for="color">Color</label>
+      <input type="range" id="color" min="-200" max="400" step="1" value="100"
+             aria-label="Noise color, violet through brown to black">
+      <div class="ticks">
+        <button type="button" data-alpha="-2">Violet</button>
+        <button type="button" data-alpha="-1">Blue</button>
+        <button type="button" data-alpha="0">White</button>
+        <button type="button" data-alpha="1">Pink</button>
+        <button type="button" data-alpha="2">Brown</button>
+        <button type="button" data-alpha="4">Black</button>
+      </div>
+    </div>
+
+    <div class="ctrl">
+      <label for="lowCut">Low cut <span class="value" id="lowCutValue">30 Hz</span></label>
+      <input type="range" id="lowCut" min="0" max="100" step="1" value="18"
+             aria-label="Low cut frequency">
+      <p class="hint">
+        Deep colors put most of their power below 40 Hz, which small speakers turn
+        into distortion rather than sound. Raise this if brown sounds strained.
+      </p>
+    </div>
+
+    <div class="ctrl">
+      <label for="volume">Volume</label>
+      <input type="range" id="volume" min="0" max="100" step="1" value="60" aria-label="Volume">
+    </div>
+
+    <p class="status" id="status"></p>
+  </div>
+
+</div>
+
+<script>
+  // Classic inline script on purpose: it still runs when module loading is
+  // blocked, which is exactly the case this warning is for.
+  if (location.protocol === 'file:') {
+    document.getElementById('fileWarning').hidden = false;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+/*
+ * Colored noise generator — presentation.
+ *
+ * The --accent variable is rewritten from JavaScript as the colour slider
+ * moves, so the readout, transport button and spectrum curve all track the
+ * noise colour currently selected.
+ */
+
+:root {
+  --bg: #0c0e13;
+  --panel: #14171f;
+  --line: #242938;
+  --text: #e6e9f0;
+  --dim: #8a91a4;
+  --accent: #ff8fb0;   /* pink, matching the default colour before JS runs */
+}
+
+* { box-sizing: border-box; }
+
+/* min-height, not height: a fixed 100% stops the body growing with its content,
+   which collapses the bottom padding and leaves the panel flush against the
+   bottom of the screen on short viewports. */
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;   /* don't inflate text when rotating */
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+
+  /* The body's background propagates to the page canvas, but it is sized against
+     the ROOT box — which is one viewport tall — and then painted over the whole
+     scrollable area. Left to repeat (the default), a document taller than the
+     viewport shows the top of a second copy of the gradient as a bright band
+     across the bottom. So: draw it once, and let a matching background-color
+     cover everything below it. The gradient already resolves to --bg well before
+     its edge, so the join is invisible. */
+  background-color: var(--bg);
+  background-image: radial-gradient(1200px 700px at 50% -10%, #171b26 0%, var(--bg) 60%);
+  background-repeat: no-repeat;
+
+  color: var(--text);
+  font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+
+  /* Feel like an app rather than a document: no double-tap zoom, no grey flash
+     on tap, and no rubber-band bounce past the ends of the page. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+
+  /* Keep clear of the notch and home indicator when launched full-screen. The
+     max() lines are ignored where env() is unsupported, leaving the shorthand. */
+  padding: 32px 20px 60px;
+  padding-top: max(32px, env(safe-area-inset-top));
+  padding-bottom: max(60px, env(safe-area-inset-bottom));
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+}
+
+/* Controls shouldn't select or show the copy/define callout on long press.
+   The hint and status text stay selectable — there is nothing to gain by
+   locking those. */
+button,
+label,
+.ticks,
+.readout,
+.scope,
+input[type="range"] {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.app {
+  width: 100%;
+  max-width: 720px;
+}
+
+/* Shown only when the page is opened straight off the filesystem, where the
+   browser refuses to load ES modules. */
+.notice {
+  border: 1px solid #4a3a1a;
+  background: #1d1710;
+  color: #e8d5a8;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+
+.notice code {
+  background: #0d0b07;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 18px 50px -30px #000;
+}
+
+/* -------------------------------------------------------------- spectrum */
+
+.scope {
+  position: relative;
+  height: 210px;
+  margin-bottom: 20px;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 10px;
+  background: #0a0c11;
+}
+
+/* Starts the live spectrum. Off by default: animating costs main-thread time
+   every frame, and the idealised line already shows what the color slider does. */
+.scope-toggle {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(14, 17, 24, 0.75);
+  color: var(--dim);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.scope-toggle:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.scope-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.scope-toggle svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+.scope-toggle .icon-pause { display: none; }
+
+.scope-toggle[aria-pressed="true"] { color: var(--accent); }
+
+.scope-toggle[aria-pressed="true"] .icon-play { display: none; }
+
+.scope-toggle[aria-pressed="true"] .icon-pause { display: inline; }
+
+/* ------------------------------------------------------------- transport */
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+#power {
+  flex: none;
+  width: 108px;
+  padding: 11px 0;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--accent);
+  color: #0c0e13;
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: filter 0.15s, background 0.35s;
+}
+
+#power:hover { filter: brightness(1.08); }
+
+#power:disabled { opacity: 0.6; cursor: default; }
+
+#power.on {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.readout { min-width: 0; }
+
+.readout .name {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--accent);
+  transition: color 0.35s;
+}
+
+.readout .meta {
+  font-size: 12.5px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------- sliders */
+
+.ctrl { margin-bottom: 22px; }
+
+.ctrl:last-child { margin-bottom: 0; }
+
+.ctrl label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 10px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+  display: block;
+
+  /* Resolve the touch ambiguity explicitly: a vertical swipe that happens to
+     start on a slider scrolls the page, a horizontal drag moves the slider.
+     Left to the default, the browser has to guess. */
+  touch-action: pan-y;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--track, #2b3145);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--track, #2b3145);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #0c0e13;
+  box-shadow: 0 0 0 1px #4b5268, 0 2px 8px #0008;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #0c0e13;
+  box-shadow: 0 0 0 1px #4b5268, 0 2px 8px #0008;
+}
+
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+/* Stops sit at each colour's true position on the −2…+4 range. */
+#color {
+  --track: linear-gradient(90deg,
+    #a06bff 0%, #4aa8ff 16.667%, #e8ecf2 33.333%,
+    #ff8fb0 50%, #c9743a 66.667%, #4a2a12 100%);
+}
+
+/* Ticks are positioned from JavaScript by exponent, not spaced evenly. */
+.ticks {
+  position: relative;
+  height: 22px;
+  margin-top: 2px;
+}
+
+.ticks button {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  padding: 4px 2px;
+  cursor: pointer;
+  color: var(--dim);
+  font: inherit;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+.ticks button:first-child { transform: translateX(0); }
+
+.ticks button:last-child { transform: translateX(-100%); }
+
+.ticks button:hover { color: var(--text); }
+
+.ctrl label .value {
+  float: right;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--dim);
+  max-width: 58ch;
+}
+
+/* Which audio path is running. Empty until playback starts, because the backend
+   isn't known until the graph is built — the height is reserved so that filling
+   it in doesn't shift the layout. */
+.status {
+  margin: 0;
+  line-height: 1.5;
+  min-height: 1.5em;      /* matches one filled line, so nothing moves */
+  font-size: 11.5px;
+  color: #5c6377;
+  font-variant-numeric: tabular-nums;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.92em;
+  color: #b9c0d4;
+}
+
+/* ----------------------------------------------------------------- phones */
+
+@media (max-width: 480px) {
+  body {
+    padding: 14px 12px 28px;
+    padding-top: max(14px, env(safe-area-inset-top));
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .panel {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  /* Shorter scope: 210px is most of a phone screen, and fewer pixels to fill. */
+  .scope {
+    height: 150px;
+    margin-bottom: 16px;
+  }
+
+  .transport {
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  #power {
+    width: 92px;
+    padding: 10px 0;
+  }
+
+  .readout .name { font-size: 16px; }
+
+  .ctrl { margin-bottom: 18px; }
+
+  /* Six labels across ~300px need the tighter setting or Violet runs into Blue. */
+  .ticks button {
+    font-size: 10px;
+    letter-spacing: 0;
+    padding: 4px 0;
+  }
+
+  .hint { font-size: 11.5px; }
+}

@@ -7,6 +7,10 @@ import { PageContent } from "../components/page-content.solid.js";
 
 const app_links = [
 	{
+		url: "app/llm-colored-noise-generator/index.html",
+		name: "(LLM) Colored Noise Generator",
+	},
+	{
 		url: "app/2d-wave-equation-spring-lattice-simulation/index.html",
 		name: "2D wave equation spring-lattice simulation",
 	},
