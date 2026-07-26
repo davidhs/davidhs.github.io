@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 type PageLink = {
 	url: string;
@@ -7,9 +8,13 @@ type PageLink = {
 };
 
 /** Absolute path to the thoughts directory containing markdown files. */
-const THOUGHTS_DIR = path.resolve("thoughts");
+const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
+/** Absolute path to the repository root, relative to this script. */
+const REPO_ROOT = path.resolve(SCRIPT_DIR, "..");
+/** Absolute path to the thoughts directory containing markdown files. */
+const THOUGHTS_DIR = path.resolve(REPO_ROOT, "thoughts");
 /** Absolute path to the page file that contains the page_links array. */
-const PAGE_FILE = path.resolve("src/pages/thoughts.solid.js");
+const PAGE_FILE = path.resolve(REPO_ROOT, "src/pages/thoughts.solid.js");
 
 /**
  * Recursively collect all markdown file paths under the given directory.

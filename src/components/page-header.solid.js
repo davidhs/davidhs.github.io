@@ -18,6 +18,10 @@ const nav_links = [
 		url: "./thoughts.html",
 		name: "Thoughts",
 	},
+	{
+		url: "./misc.html",
+		name: "Misc",
+	},
 ];
 
 
@@ -29,7 +33,7 @@ export function PageHeader({ select }) {
 			}}
 		>
 			<div id="qr1">
-				<span>Reiknirit</span>
+				<img src="./img/logo.svg" alt="Reiknirit"/>
 			</div>
 			<ul style=${{ "float": "right" }}>
 				<${For} each=${nav_links}>${

@@ -1,0 +1,3 @@
+# Mind as a subset of software
+
+TODO: ...

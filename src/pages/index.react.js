@@ -7,7 +7,7 @@ function Footer() {
 			backgroundColor: "#1C1C1C",
 			width: "100%",
 			
-			height: "50px", // size of footer
+			minHeight: "50px", // size of footer; grows instead of clipping when it wraps
 			
 			fontFamily: "'Source Sans Pro', sans-serif",
 			fontSize: "16px",
@@ -37,33 +37,28 @@ function Footer() {
 
 export default function PageIndex() {
 	return jsx`
-		<div style=${{
-			backgroundColor: "#D1D1D1",
-			display: "flex",
-			flexDirection: "column",
-			minHeight: "100%",
-		}}>
+		<div className="page-body">
 			<div className="nav"
 				style=${{
 					boxShadow: "0px 4px 2px 0px rgba(0, 0, 0, 0.3)"
 				}}
 			>
 				<div id="qr1">
-					<span>Reiknirit</span>
+					<img src="./img/logo.svg" alt="Reiknirit"/>
 				</div>
 				<ul style=${{ float: "right" }}>
 					<li><a href="./index.html" style=${{ fontWeight: "bold" }}>Home</a></li>
 					<li><a href="./programs.html">Programs</a></li>
 					<li><a href="./links.html">Links</a></li>
 					<li><a href="./thoughts.html">Thoughts</a></li>
+					<li><a href="./misc.html">Misc</a></li>
 				</ul>
 			</div>
-			<div style=${{
+			<div className="page-content page-content-wide" style=${{
 				paddingTop: "10px",
 				paddingBottom: "10px",
 				marginLeft: "auto",
 				marginRight: "auto",
-				maxWidth: "800px",
 				flex: 1,
 				fontFamily: "'Source Sans Pro', sans-serif",
 				fontSize: "18px",
